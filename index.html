@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHM 205 & 207 Study Assistant</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+  
+  header {
+    background: linear-gradient(135deg, #1e3a5f, #0f2942);
+    padding: 20px 24px 16px;
+    border-bottom: 2px solid #2563eb;
+    text-align: center;
+  }
+  header h1 { font-size: 1.4rem; color: #60a5fa; font-weight: 700; }
+  header p { font-size: 0.8rem; color: #94a3b8; margin-top: 4px; }
+
+  .tabs {
+    display: flex;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+    overflow-x: auto;
+    gap: 2px;
+    padding: 8px 12px 0;
+  }
+  .tab-btn {
+    background: none; border: none; color: #94a3b8;
+    padding: 9px 14px; cursor: pointer; font-size: 0.8rem;
+    border-radius: 6px 6px 0 0; white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: #263451; color: #cbd5e1; }
+  .tab-btn.active { color: #60a5fa; border-bottom-color: #2563eb; background: #1e3a5f; }
+
+  .section { display: none; padding: 16px; }
+  .section.active { display: block; }
+
+  /* TOPICS */
+  .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .topic-card {
+    background: #1e293b; border: 1px solid #334155;
+    border-radius: 10px; padding: 14px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .topic-card:hover { border-color: #2563eb; background: #1e3a5f; }
+  .topic-card h3 { font-size: 0.82rem; color: #60a5fa; margin-bottom: 4px; }
+  .topic-card p { font-size: 0.72rem; color: #94a3b8; }
+  .topic-detail { display: none; background: #1e293b; border: 1px solid #2563eb; border-radius: 10px; padding: 16px; }
+  .topic-detail.open { display: block; }
+  .topic-detail h2 { color: #60a5fa; font-size: 1rem; margin-bottom: 10px; }
+  .topic-detail p, .topic-detail li { font-size: 0.82rem; color: #cbd5e1; line-height: 1.6; }
+  .topic-detail ul { padding-left: 18px; margin: 8px 0; }
+  .topic-detail .formula { background: #0f2942; border-left: 3px solid #2563eb; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; color: #93c5fd; margin: 8px 0; }
+  .back-btn { background: none; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-bottom: 12px; }
+  .back-btn:hover { border-color: #60a5fa; color: #60a5fa; }
+  .course-badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; }
+  .badge-205 { background: #1d4ed8; color: #bfdbfe; }
+  .badge-207 { background: #065f46; color: #a7f3d0; }
+  .sub-heading { color: #f59e0b; font-size: 0.85rem; font-weight: 600; margin: 10px 0 4px; }
+
+  /* FLASHCARDS */
+  .fc-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .fc-controls select { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
+  .fc-counter { font-size: 0.78rem; color: #94a3b8; }
+  .flashcard {
+    background: #1e293b; border: 1px solid #334155; border-radius: 14px;
+    min-height: 200px; padding: 28px 20px; text-align: center;
+    cursor: pointer; position: relative; margin-bottom: 16px;
+    transition: transform 0.15s;
+  }
+  .flashcard:active { transform: scale(0.98); }
+  .fc-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 12px; }
+  .fc-q { font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; }
+  .fc-a { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid #334155; font-size: 0.82rem; color: #86efac; line-height: 1.6; }
+  .fc-a.show { display: block; }
+  .fc-hint { font-size: 0.7rem; color: #475569; margin-top: 10px; }
+  .fc-nav { display: flex; gap: 10px; justify-content: center; }
+  .fc-nav button {
+    background: #1e3a5f; border: 1px solid #2563eb; color: #60a5fa;
+    padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.82rem;
+  }
+  .fc-nav button:hover { background: #2563eb; color: white; }
+  .progress-bar { background: #1e293b; border-radius: 4px; height: 6px; margin-bottom: 10px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, #2563eb, #7c3aed); height: 100%; border-radius: 4px; transition: width 0.3s; }
+
+  /* QUIZ */
+  .quiz-setup { text-align: center; padding: 20px 0; }
+  .quiz-setup h2 { color: #60a5fa; margin-bottom: 16px; font-size: 1rem; }
+  .quiz-setup select, .quiz-setup input[type=number] {
+    background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+    padding: 8px 12px; border-radius: 8px; font-size: 0.85rem;
+    display: block; width: 100%; max-width: 300px; margin: 8px auto;
+  }
+  .start-btn {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white; border: none; padding: 12px 32px;
+    border-radius: 10px; font-size: 0.9rem; cursor: pointer; margin-top: 16px;
+  }
+  .quiz-question { background: #1e293b; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+  .quiz-question p { font-size: 0.88rem; color: #e2e8f0; margin-bottom: 14px; line-height: 1.5; }
+  .option-btn {
+    display: block; width: 100%; text-align: left;
+    background: #0f172a; border: 1px solid #334155; color: #cbd5e1;
+    padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 0.82rem;
+    margin-bottom: 8px; transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) { border-color: #2563eb; color: #60a5fa; }
+  .option-btn.correct { background: #064e3b; border-color: #10b981; color: #6ee7b7; }
+  .option-btn.wrong { background: #450a0a; border-color: #ef4444; color: #fca5a5; }
+  .quiz-result { text-align: center; padding: 24px; }
+  .quiz-result h2 { font-size: 1.3rem; margin-bottom: 10px; }
+  .score-circle { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #2563eb; display: flex; align-items: center; justify-content: center; margin: 16px auto; font-size: 1.5rem; font-weight: 700; color: #60a5fa; }
+  .explanation { background: #0f2942; border-radius: 8px; padding: 10px 12px; font-size: 0.78rem; color: #93c5fd; margin-top: 10px; display: none; }
+  .explanation.show { display: block; }
+
+  /* ASK AI */
+  .chat-area { height: 340px; overflow-y: auto; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+  .msg { margin-bottom: 12px; }
+  .msg.user .bubble { background: #1e3a5f; border-radius: 12px 12px 4px 12px; padding: 10px 14px; font-size: 0.82rem; color: #bfdbfe; display: inline-block; max-width: 85%; float: right; clear: both; }
+  .msg.ai .bubble { background: #1e293b; border-radius: 12px 12px 12px 4px; padding: 10px 14px; font-size: 0.82rem; color: #e2e8f0; display: inline-block; max-width: 90%; float: left; clear: both; line-height: 1.6; }
+  .msg.ai .bubble code { background: #0f2942; padding: 2px 6px; border-radius: 4px; font-size: 0.78rem; color: #93c5fd; }
+  .chat-input-row { display: flex; gap: 8px; }
+  .chat-input {
+    flex: 1; background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
+    padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; outline: none;
+  }
+  .chat-input:focus { border-color: #2563eb; }
+  .send-btn {
+    background: #2563eb; border: none; color: white;
+    padding: 10px 18px; border-radius: 10px; cursor: pointer; font-size: 0.85rem;
+  }
+  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .quick-asks { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .quick-ask { background: #1e293b; border: 1px solid #334155; color: #94a3b8; padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 0.72rem; }
+  .quick-ask:hover { border-color: #2563eb; color: #60a5fa; }
+  .typing { color: #475569; font-size: 0.78rem; padding: 4px 0; }
+
+  /* PAST Q */
+  .pq-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .pq-card h3 { font-size: 0.82rem; color: #f59e0b; margin-bottom: 8px; }
+  .pq-card p { font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 8px; }
+  .show-ans-btn { background: none; border: 1px solid #334155; color: #94a3b8; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; }
+  .show-ans-btn:hover { border-color: #2563eb; color: #60a5fa; }
+  .pq-answer { background: #0f2942; border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 0.78rem; color: #93c5fd; line-height: 1.6; display: none; }
+  .pq-answer.show { display: block; }
+  .pq-filter { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .pq-filter button { background: #1e293b; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; }
+  .pq-filter button.active { background: #1e3a5f; border-color: #2563eb; color: #60a5fa; }
+
+  .clearfix::after { content: ''; display: table; clear: both; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚗️ CHM 205 & 207 Study Assistant</h1>
+  <p>Delta State University, Abraka • 2024/2025</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('topics')">📚 Topics</button>
+  <button class="tab-btn" onclick="showTab('flashcards')">🃏 Flashcards</button>
+  <button class="tab-btn" onclick="showTab('quiz')">🧠 Quiz</button>
+  <button class="tab-btn" onclick="showTab('pastq')">📝 Past Q</button>
+  <button class="tab-btn" onclick="showTab('askai')">🤖 Ask AI</button>
+</div>
+
+<!-- TOPICS -->
+<div id="topics" class="section active">
+  <div id="topic-list">
+    <div class="topic-grid">
+      <div class="topic-card" onclick="showTopic('intro_chem')"><h3>Analytical Chemistry Intro</h3><p>CHM 205 • Scope, branches, applications</p></div>
+      <div class="topic-card" onclick="showTopic('errors')"><h3>Theory of Errors</h3><p>CHM 205 • Types, accuracy, precision, sig figs</p></div>
+      <div class="topic-card" onclick="showTopic('stats')"><h3>Statistical Treatment</h3><p>CHM 205 • Mean, SD, ANOVA, t-test</p></div>
+      <div class="topic-card" onclick="showTopic('sampling')"><h3>Theory of Sampling</h3><p>CHM 205 • Techniques, sample prep, errors</p></div>
+      <div class="topic-card" onclick="showTopic('volumetric')"><h3>Volumetric Analysis</h3><p>CHM 205 • Titrations, indicators, calculations</p></div>
+      <div class="topic-card" onclick="showTopic('spectro')"><h3>Optical & Spectroscopy</h3><p>CHM 205 • UV-Vis, AAS, IR, Beer-Lambert</p></div>
+      <div class="topic-card" onclick="showTopic('separation')"><h3>Separation Methods</h3><p>CHM 205 • Chromatography, extraction, electrophoresis</p></div>
+      <div class="topic-card" onclick="showTopic('rubber_intro')"><h3>Rubber Science Intro</h3><p>CHM 207 • Natural vs synthetic, latex, properties</p></div>
+      <div class="topic-card" onclick="showTopic('compounding')"><h3>Rubber Compounding</h3><p>CHM 207 • Additives, fillers, vulcanization</p></div>
+      <div class="topic-card" onclick="showTopic('mixing')"><h3>Rubber Mixing & Moulding</h3><p>CHM 207 • Internal, open mill, tandem, compression</p></div>
+      <div class="topic-card" onclick="showTopic('fibres')"><h3>Fibre Science</h3><p>CHM 207 • Natural, man-made, properties, classification</p></div>
+      <div class="topic-card" onclick="showTopic('spinning')"><h3>Spinning & Yarn</h3><p>CHM 207 • Wet, dry, melt spinning, yarn types</p></div>
+    </div>
+  </div>
+  <div id="topic-detail" class="topic-detail"></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="flashcards" class="section">
+  <div class="fc-controls">
+    <select id="fc-filter" onchange="loadCards()">
+      <option value="all">All Topics</option>
+      <option value="205">CHM 205 Only</option>
+      <option value="207">CHM 207 Only</option>
+    </select>
+    <span class="fc-counter" id="fc-counter">Card 1 of 40</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="fc-progress" style="width:2.5%"></div></div>
+  <div class="flashcard" onclick="toggleAnswer()">
+    <div class="fc-label" id="fc-label">Question</div>
+    <div class="fc-q" id="fc-q">Loading...</div>
+    <div class="fc-a" id="fc-a"></div>
+    <div class="fc-hint">Tap to reveal answer</div>
+  </div>
+  <div class="fc-nav">
+    <button onclick="prevCard()">← Prev</button>
+    <button onclick="shuffleCards()">🔀 Shuffle</button>
+    <button onclick="nextCard()">Next →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="section">
+  <div id="quiz-setup-view" class="quiz-setup">
+    <h2>🧠 Test Your Knowledge</h2>
+    <select id="quiz-course">
+      <option value="all">All Courses</option>
+      <option value="205">CHM 205 - Analytical Chemistry</option>
+      <option value="207">CHM 207 - Rubber & Fibre</option>
+    </select>
+    <select id="quiz-num">
+      <option value="5">5 Questions</option>
+      <option value="10" selected>10 Questions</option>
+      <option value="15">15 Questions</option>
+    </select>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+  </div>
+  <div id="quiz-play-view" style="display:none"></div>
+  <div id="quiz-result-view" style="display:none" class="quiz-result"></div>
+</div>
+
+<!-- PAST QUESTIONS -->
+<div id="pastq" class="section">
+  <div class="pq-filter">
+    <button class="active" onclick="filterPQ('all', this)">All</button>
+    <button onclick="filterPQ('205', this)">CHM 205</button>
+    <button onclick="filterPQ('207', this)">CHM 207</button>
+  </div>
+  <div id="pq-list"></div>
+</div>
+
+<!-- ASK AI -->
+<div id="askai" class="section">
+  <p style="font-size:0.78rem;color:#64748b;margin-bottom:10px;">Ask anything about CHM 205 or CHM 207 topics from your lecture notes.</p>
+  <div class="quick-asks">
+    <span class="quick-ask" onclick="quickAsk('What is vulcanization and who discovered it?')">Vulcanization</span>
+    <span class="quick-ask" onclick="quickAsk('Explain Beer-Lambert law with the formula')">Beer-Lambert</span>
+    <span class="quick-ask" onclick="quickAsk('Difference between systematic and random errors')">Error types</span>
+    <span class="quick-ask" onclick="quickAsk('What are the types of fibres and their properties?')">Fibre types</span>
+    <span class="quick-ask" onclick="quickAsk('How do you calculate molarity from a liquid stock solution?')">Molarity calc</span>
+    <span class="quick-ask" onclick="quickAsk('Explain ANOVA and how to compute the F-ratio')">ANOVA</span>
+  </div>
+  <div class="chat-area" id="chat-area">
+    <div class="msg ai"><div class="bubble">👋 Hi! I'm your CHM 205 & 207 tutor. Ask me anything about your lecture notes — analytical chemistry, rubber science, fibre technology, or solving past questions!</div></div>
+  </div>
+  <div id="typing-indicator" class="typing" style="display:none">AI is thinking...</div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" placeholder="Ask about your notes..." onkeydown="if(event.key==='Enter') sendMsg()">
+    <button class="send-btn" id="send-btn" onclick="sendMsg()">Send</button>
+  </div>
+</div>
+
+<script>
+// ===== TAB SWITCHING =====
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===== TOPIC CONTENT =====
+const topics = {
+  intro_chem: {
+    course: '205', title: 'Introduction to Analytical Chemistry',
+    content: `
+      <p>Analytical chemistry is the science of obtaining, processing, and communicating information about the <strong>composition and structure of matter</strong>.</p>
+      <div class="sub-heading">Two Main Branches</div>
+      <ul>
+        <li><strong>Qualitative Analysis</strong> – Identifies what is present (which elements/compounds)</li>
+        <li><strong>Quantitative Analysis</strong> – Determines how much is present (amounts/concentrations)</li>
+      </ul>
+      <div class="sub-heading">Methods</div>
+      <ul>
+        <li><strong>Classical Methods</strong> – Based on chemical reactions (volumetric, gravimetric)</li>
+        <li><strong>Instrumental Methods</strong> – Based on physical properties (spectroscopy, chromatography)</li>
+      </ul>
+      <div class="sub-heading">Applications</div>
+      <ul><li>Environmental monitoring</li><li>Clinical diagnostics</li><li>Food & drug analysis</li><li>Industrial quality control</li><li>Forensic science</li></ul>
+    `
+  },
+  errors: {
+    course: '205', title: 'Theory of Errors',
+    content: `
+      <p>Error = difference between the measured value and the true (actual) value.</p>
+      <div class="sub-heading">Types of Errors</div>
+      <ul>
+        <li><strong>Systematic (Determinate) Errors</strong> – Reproducible, can be corrected. Types: Instrumental, Method, Personal errors.</li>
+        <li><strong>Random (Indeterminate) Errors</strong> – Scatter randomly; cannot be eliminated. Caused by temperature, electrical noise, analyst fatigue.</li>
+      </ul>
+      <div class="sub-heading">Accuracy vs Precision</div>
+      <ul>
+        <li><strong>Accuracy</strong> – How close to true value. E = xᵢ − xₜ (absolute error)</li>
+        <li><strong>Precision</strong> – How close measurements are to each other (reproducibility)</li>
+        <li>⚠️ High precision does NOT guarantee high accuracy!</li>
+      </ul>
+      <div class="sub-heading">Significant Figures Rules</div>
+      <ul>
+        <li>All non-zero digits are significant</li>
+        <li>Zeros between non-zero digits are significant</li>
+        <li>Leading zeros are NOT significant (0.0045 → 2 sig figs)</li>
+        <li>Trailing zeros after decimal ARE significant (100.0 → 4 sig figs)</li>
+      </ul>
+      <div class="sub-heading">Error Propagation</div>
+      <div class="formula">Addition/Subtraction: Absolute uncertainty = √(σ₁² + σ₂²)</div>
+      <div class="formula">Multiplication/Division: Relative uncertainty = √[(σ₁/x₁)² + (σ₂/x₂)²]</div>
+    `
+  },
+  stats: {
+    course: '205', title: 'Statistical Treatment of Data',
+    content: `
+      <div class="sub-heading">Mean (x̄)</div>
+      <div class="formula">x̄ = (Σxᵢ) / n</div>
+      <div class="sub-heading">Standard Deviation (σ or s)</div>
+      <div class="formula">s = √[ Σ(xᵢ − x̄)² / (n − 1) ]</div>
+      <p>Small s = data close to mean (precise). Large s = data scattered.</p>
+      <div class="sub-heading">ANOVA (Analysis of Variance)</div>
+      <p>Used to compare means of <strong>3 or more groups</strong>. Computes an F-ratio:</p>
+      <div class="formula">F = MSB / MSW = (SSB/dfB) / (SSW/dfW)</div>
+      <ul>
+        <li><strong>SSB</strong> = Sum of Squares Between groups = Σ nᵢ(x̄ᵢ − x̄)²</li>
+        <li><strong>SSW</strong> = Sum of Squares Within groups</li>
+        <li><strong>dfB</strong> = k − 1 (k = number of groups)</li>
+        <li><strong>dfW</strong> = N − k (N = total observations)</li>
+        <li>If F > F-critical → reject null hypothesis → means differ significantly</li>
+      </ul>
+      <div class="sub-heading">One-way vs Two-way ANOVA</div>
+      <ul>
+        <li><strong>One-way</strong>: One independent variable</li>
+        <li><strong>Two-way</strong>: Two independent variables (e.g., programme type & gender)</li>
+      </ul>
+    `
+  },
+  sampling: {
+    course: '205', title: 'Theory of Sampling',
+    content: `
+      <p>The analysis result is only as good as the sample. A <strong>representative sample</strong> must have the same composition as the bulk material.</p>
+      <div class="sub-heading">Sample Types</div>
+      <ul>
+        <li><strong>Gross Sample</strong> – Large initial sample from the lot</li>
+        <li><strong>Laboratory Sample</strong> – Smaller portion from gross sample</li>
+        <li><strong>Analytical Sample</strong> – Final small portion used in analysis</li>
+      </ul>
+      <div class="sub-heading">Sampling Techniques</div>
+      <ul>
+        <li><strong>Random Sampling</strong> – Every part has equal chance</li>
+        <li><strong>Systematic Sampling</strong> – Regular intervals</li>
+        <li><strong>Stratified Sampling</strong> – Subgroups represented</li>
+        <li><strong>Grab Sampling</strong> – Quick single-point (least representative)</li>
+      </ul>
+      <div class="sub-heading">Sample Size Formula</div>
+      <div class="formula">n = 4σ² / E²  (n = min sample size, E = acceptable error)</div>
+      <div class="sub-heading">Sample Preparation Steps</div>
+      <ul><li>Drying → Grinding → Mixing → Quartering → Storage</li></ul>
+    `
+  },
+  volumetric: {
+    course: '205', title: 'Volumetric Analysis',
+    content: `
+      <p>Measures the <strong>volume of a standard solution</strong> needed to completely react with the analyte.</p>
+      <div class="sub-heading">Key Terms</div>
+      <ul>
+        <li><strong>Standard Solution</strong> – Known concentration</li>
+        <li><strong>Primary Standard</strong> – ≥99.9% purity, stable, high MW</li>
+        <li><strong>Equivalence Point</strong> – Moles titrant = moles analyte (stoichiometrically)</li>
+        <li><strong>End Point</strong> – Indicator colour change</li>
+      </ul>
+      <div class="sub-heading">Concentration Calculations</div>
+      <div class="formula">Molarity (M) = mass / (molar mass × Volume in L)</div>
+      <div class="formula">Dilution: C₁V₁ = C₂V₂</div>
+      <div class="sub-heading">Acid-Base Titration Formula</div>
+      <div class="formula">MₐVₐ/nₐ = M_bV_b/n_b</div>
+      <div class="sub-heading">Common Indicators</div>
+      <ul>
+        <li><strong>Phenolphthalein</strong> – pH 8.3–10.0: colourless → pink</li>
+        <li><strong>Methyl orange</strong> – pH 3.1–4.4: red → yellow</li>
+        <li><strong>Bromothymol blue</strong> – pH 6.0–7.6: yellow → blue</li>
+      </ul>
+      <div class="sub-heading">Stock Solution Molarity (liquid)</div>
+      <div class="formula">C = (% purity × density × 1000) / molar mass</div>
+      <p>Example: HCl (37%, density 1.18 g/mL, MW 36.46) → C ≈ 12 M</p>
+    `
+  },
+  spectro: {
+    course: '205', title: 'Optical Methods & Spectroscopy',
+    content: `
+      <div class="sub-heading">Beer-Lambert Law (UV-Vis)</div>
+      <div class="formula">A = εbc</div>
+      <p>Where: A = absorbance, ε = molar absorptivity, b = path length (cm), c = concentration (mol/L)</p>
+      <div class="formula">A = log(I₀/I) = −log T</div>
+      <div class="sub-heading">UV-Vis Components</div>
+      <ul>
+        <li>Light source (tungsten for visible, deuterium for UV)</li>
+        <li>Monochromator → Sample cuvette → Detector → Readout</li>
+      </ul>
+      <div class="sub-heading">Other Methods</div>
+      <ul>
+        <li><strong>Flame Photometry</strong> – Emission intensity when sample atomized in flame. Used for Na⁺, K⁺, Ca²⁺</li>
+        <li><strong>AAS (Atomic Absorption Spectroscopy)</strong> – Absorption by free atoms. Very sensitive (ppb). Uses hollow cathode lamp. 70+ elements.</li>
+        <li><strong>IR Spectroscopy</strong> – Molecular vibrations. Identifies functional groups and fingerprint region.</li>
+        <li><strong>Fluorescence</strong> – 1000× more sensitive than UV-Vis. Measures emitted light after excitation.</li>
+      </ul>
+    `
+  },
+  separation: {
+    course: '205', title: 'Separation Methods',
+    content: `
+      <div class="sub-heading">Solvent Extraction</div>
+      <div class="formula">Distribution Coefficient: K_D = C_organic / C_aqueous</div>
+      <div class="formula">Extraction Efficiency: E = (K_D × V_org) / (K_D × V_org + V_aq) × 100%</div>
+      <div class="sub-heading">Chromatography Types</div>
+      <ul>
+        <li><strong>Paper</strong> – Simple, separates amino acids, sugars</li>
+        <li><strong>TLC</strong> – Faster, better resolution than paper. Silica gel stationary phase.</li>
+        <li><strong>Column</strong> – Adsorption, partition, ion-exchange, gel filtration</li>
+        <li><strong>GC (Gas Chromatography)</strong> – Volatile samples, uses carrier gas (He, N₂)</li>
+        <li><strong>HPLC</strong> – Non-volatile compounds; reversed phase most common</li>
+      </ul>
+      <div class="formula">Retention Factor: Rᶠ = distance substance / distance solvent</div>
+      <div class="sub-heading">Electrophoresis</div>
+      <p>Movement of charged particles in electric field. Used for protein/DNA separation. Types: paper, gel (PAGE, SDS-PAGE), capillary.</p>
+    `
+  },
+  rubber_intro: {
+    course: '207', title: 'Introduction to Rubber Science',
+    content: `
+      <p>Rubber is an elastic polymeric material (elastomer). Available as natural or synthetic.</p>
+      <div class="sub-heading">Natural Rubber</div>
+      <ul>
+        <li>Source: <em>Hevea brasiliensis</em> (rubber tree)</li>
+        <li>Chemical composition: cis-1,4-polyisoprene, formula (C₅H₈)n</li>
+        <li>Monomer: isoprene (2-methyl-1,3-butadiene)</li>
+        <li>Rubber content in latex ≈ 30%</li>
+        <li>Tapping: scoring bark at 30° angle, every ~2 days</li>
+        <li>Coagulation: with formic acid → rolled into sheets → dried</li>
+        <li>Preservation: ammonia prevents bacterial growth (pre-vulcanization)</li>
+      </ul>
+      <div class="sub-heading">Synthetic Rubber</div>
+      <ul>
+        <li>Made from petroleum byproducts</li>
+        <li>Most common: <strong>SBR</strong> (styrene-butadiene rubber)</li>
+        <li>Others: Polyisoprene, Neoprene (2-chlorobutadiene), Nitrile rubber, Butyl rubber</li>
+        <li>Superior: thermal stability, oil/oxidation resistance vs natural rubber</li>
+      </ul>
+      <div class="sub-heading">Natural vs Vulcanized Rubber</div>
+      <ul>
+        <li>Natural: sticky, low strength</li>
+        <li>Vulcanized: cross-linked with sulfur, stronger, non-sticky, elastic</li>
+      </ul>
+    `
+  },
+  compounding: {
+    course: '207', title: 'Rubber Compounding & Vulcanization',
+    content: `
+      <p>Rubber compounding is the science of mixing rubber with additives before vulcanization/curing.</p>
+      <div class="sub-heading">Compounding Steps</div>
+      <p>Compounding → Mixing → Shaping → Vulcanization/Curing</p>
+      <div class="sub-heading">Key Additives</div>
+      <ul>
+        <li><strong>Fillers</strong> – Carbon Black (most important reinforcing filler; also antiozonant). White clays, mineral fillers for coloured compounds.</li>
+        <li><strong>Plasticizers</strong> – Decrease viscosity, increase flexibility</li>
+        <li><strong>Processing Aids</strong> – Oils prevent sticking, reduce viscosity</li>
+        <li><strong>Antioxidants</strong> – Absorb free radicals, protect at high temps</li>
+        <li><strong>Antiozonants</strong> – Create impenetrable barrier against ozone</li>
+        <li><strong>Curing Agents</strong> – Form cross-links. Sulfur is most common. Peroxide is alternative.</li>
+      </ul>
+      <div class="sub-heading">Vulcanization</div>
+      <ul>
+        <li>Reaction of rubber with sulfur + heat → cross-links formed</li>
+        <li>Discovered by <strong>Charles Goodyear in 1839</strong></li>
+        <li><strong>Accelerators</strong> (ZnO, stearic acid) – Speed up vulcanization from hours to minutes</li>
+        <li><strong>Retarders</strong> – Delay crosslinking until rubber reaches curing temperature (prevent scorching)</li>
+      </ul>
+    `
+  },
+  mixing: {
+    course: '207', title: 'Rubber Mixing & Moulding',
+    content: `
+      <div class="sub-heading">Types of Mixers</div>
+      <ul>
+        <li><strong>Internal Mixer</strong> – Closed chamber with two rotors; generates shear forces. Best for dispersion and distribution.</li>
+        <li><strong>Open Mill</strong> – Two horizontal rolls rotating in opposite directions. Rubber bonds to front roll; back roll slower → shear forces.</li>
+        <li><strong>Tandem Mixer</strong> – Two mixers in series. First disperses; second distributes. Optimises both tasks.</li>
+      </ul>
+      <div class="sub-heading">Types of Moulding</div>
+      <ul>
+        <li><strong>Compression Moulding</strong> – Oldest method. Inexpensive, little waste. Pre-formed rubber placed into mold; pressure + heat cures it.</li>
+        <li><strong>Injection Moulding</strong> – Heated rubber forced into pressurized cavity via screw/barrel. Cost-effective, precise.</li>
+        <li><strong>Extrusion Moulding</strong> – For fixed cross-section products (hoses, pipes). Rubber forced through a die. Cold feed or hot feed.</li>
+      </ul>
+    `
+  },
+  fibres: {
+    course: '207', title: 'Fibre Science & Classification',
+    content: `
+      <p>Fibres are thin, long, flexible thread-like structures. A fibre's length must be ≥100× its diameter.</p>
+      <div class="sub-heading">Classification</div>
+      <ul>
+        <li><strong>Natural Fibres</strong>
+          <ul>
+            <li>Plant fibres: cotton, jute, bamboo, flax</li>
+            <li>Animal fibres: wool (sheep, camel, goat), silk (silkworm)</li>
+            <li>Mineral fibres: Asbestos (fire/acid resistant)</li>
+          </ul>
+        </li>
+        <li><strong>Man-Made Fibres</strong>
+          <ul>
+            <li>Regenerated (semi-synthetic): viscose rayon, acetate, triacetate</li>
+            <li>Synthetic: polyester, nylon, acrylic</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="sub-heading">Key Fibre Properties</div>
+      <ul>
+        <li><strong>Specific Gravity</strong> – Mass relative to equal volume of water at 4°C. Nylon/acrylics: low density. Cotton/rayon: high density.</li>
+        <li><strong>Strength</strong> – Withstands stress without tearing</li>
+        <li><strong>Elasticity</strong> – Returns to original length after tension. Wool has excellent elasticity.</li>
+        <li><strong>Resilience</strong> – Returns to shape after deformation. Wool has good resilience.</li>
+        <li><strong>Absorbency</strong> – Hydrophilic (natural fibres + rayon) vs Hydrophobic (most synthetics)</li>
+        <li><strong>Luster</strong> – Silk has highest natural sheen; cotton has minimum</li>
+        <li><strong>Heat Conductivity</strong> – Cotton: high (good for summer). Wool: low (warm in winter)</li>
+      </ul>
+      <div class="sub-heading">Filament vs Staple</div>
+      <ul>
+        <li><strong>Filaments</strong> – Continuous length (length:width ≥1000). Silk is only natural filament.</li>
+        <li><strong>Staples</strong> – Short (¾ to 18 inches). Cotton, wool, jute.</li>
+      </ul>
+    `
+  },
+  spinning: {
+    course: '207', title: 'Spinning & Yarn Types',
+    content: `
+      <p>Spinning is the process of converting fibres/filaments into yarn.</p>
+      <div class="sub-heading">Types of Spinning</div>
+      <ul>
+        <li><strong>Mechanical Spinning</strong> – Used for natural fibres (cotton). Produces staple yarn.</li>
+        <li><strong>Chemical Spinning</strong> – Three types:
+          <ul>
+            <li><strong>Wet Spinning</strong> – Polymer pumped through spinneret into chemical bath. Example: Viscose Rayon, Acrylic, Spandex.</li>
+            <li><strong>Dry Spinning</strong> – Polymer pumped into air chamber. Example: Acetate, Triacetate, Acrylic, Spandex.</li>
+            <li><strong>Melt Spinning</strong> – Polymer chips melted, pumped through spinneret into air. Example: Polyester, Nylon.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="sub-heading">Yarn Types</div>
+      <ul>
+        <li><strong>Simple Yarns</strong> – Twisted together; uniform appearance; great strength. Types: Single, Ply, Cable/Cord.</li>
+        <li><strong>Novelty/Fancy Yarns</strong> – Irregular size or colour for special appearance. Has core yarn + effect yarn + binder yarn. Examples: Slub, Boucle, Chenille, Corkscrew.</li>
+        <li><strong>Textured Yarns</strong> – Greater apparent volume than conventional yarn. Types: Stretch yarns & Bulk yarns.</li>
+      </ul>
+    `
+  }
+};
+
+function showTopic(id) {
+  const t = topics[id];
+  document.getElementById('topic-list').style.display = 'none';
+  const det = document.getElementById('topic-detail');
+  det.innerHTML = `
+    <button class="back-btn" onclick="backToTopics()">← Back</button>
+    <span class="course-badge badge-${t.course}">CHM ${t.course}</span>
+    <h2>${t.title}</h2>
+    ${t.content}
+  `;
+  det.classList.add('open');
+}
+
+function backToTopics() {
+  document.getElementById('topic-list').style.display = '';
+  document.getElementById('topic-detail').classList.remove('open');
+}
+
+// ===== FLASHCARDS =====
+const allCards = [
+  {c:'205', q:'What is the difference between accuracy and precision?', a:'Accuracy is how close a measurement is to the true value. Precision is how close measurements are to each other. High precision does NOT guarantee high accuracy.'},
+  {c:'205', q:'Give the formula for standard deviation of a sample.', a:'s = √[ Σ(xᵢ − x̄)² / (n − 1) ] where x̄ is the mean and n is the number of measurements.'},
+  {c:'205', q:'What are the 3 types of systematic errors?', a:'(1) Instrumental errors – faulty equipment. (2) Method errors – non-ideal chemical behaviour. (3) Personal errors – bias in reading or technique.'},
+  {c:'205', q:'State Beer-Lambert Law.', a:'A = εbc, where A = absorbance, ε = molar absorptivity (L/mol·cm), b = path length (cm), c = concentration (mol/L). Also: A = log(I₀/I).'},
+  {c:'205', q:'What is the difference between equivalence point and end point?', a:'Equivalence point: moles of titrant stoichiometrically equal moles of analyte. End point: when indicator changes colour. Ideally they should be the same.'},
+  {c:'205', q:'What colour change does phenolphthalein show and at what pH range?', a:'Colourless to pink at pH 8.3–10.0. Used in alkaline titrations.'},
+  {c:'205', q:'Give the dilution formula for preparing solutions from a stock.', a:'C₁V₁ = C₂V₂. C₁ = initial concentration, V₁ = volume to take, C₂ = desired concentration, V₂ = final volume.'},
+  {c:'205', q:'What is ANOVA used for and how is the F-ratio computed?', a:'ANOVA compares means of 3+ groups. F = MSB/MSW = (SSB/dfB)/(SSW/dfW). If F > F-critical, reject null hypothesis (means differ significantly).'},
+  {c:'205', q:'What is a primary standard?', a:'A highly pure substance (≥99.9%) used to prepare standard solutions. Must be stable, have high molecular weight, and be readily available.'},
+  {c:'205', q:'What is the Rₑ formula in chromatography?', a:'Rᶠ = distance traveled by substance / distance traveled by solvent front. Used in paper and TLC chromatography.'},
+  {c:'205', q:'Distinguish between hydrophilic and hydrophobic fibres.', a:'Hydrophilic fibres absorb water (natural fibres, rayon, acetate). Hydrophobic fibres do not absorb water (most synthetics like polyester, nylon).'},
+  {c:'205', q:'What is the principle of AAS?', a:'Atomic Absorption Spectroscopy measures absorption of light by free atoms in the gaseous state. Uses element-specific hollow cathode lamp. Very sensitive (ppb levels), applicable to 70+ elements.'},
+  {c:'205', q:'What are the 4 steps in sample preparation?', a:'(1) Drying – remove moisture. (2) Grinding – reduce particle size. (3) Mixing – ensure homogeneity. (4) Quartering – reduce size while maintaining representativeness.'},
+  {c:'205', q:'What is the sample size formula?', a:'n = 4σ²/E² where n = minimum sample size, σ = standard deviation, E = acceptable error.'},
+  {c:'205', q:'How is molarity of a stock liquid acid calculated?', a:'C = (% purity × density × 1000) / molar mass. Example: HCl (37%, 1.18 g/mL, MW 36.46) → C ≈ 12 M.'},
+  {c:'205', q:'What is the principle of fluorescence spectroscopy and its advantage?', a:'Measures emitted light after molecular excitation. It is ~1000× more sensitive than UV-Vis spectroscopy.'},
+  {c:'205', q:'Name three types of column chromatography.', a:'(1) Adsorption chromatography – polar stationary phase. (2) Ion-exchange – charged stationary phase. (3) Gel filtration – size exclusion. Also: partition chromatography.'},
+  {c:'205', q:'What does HPLC stand for and when is it preferred over GC?', a:'High-Performance Liquid Chromatography. Preferred for non-volatile and thermally unstable compounds. Most common type is reversed-phase HPLC.'},
+  {c:'207', q:'What is the chemical composition of natural rubber?', a:'Natural rubber is cis-1,4-polyisoprene with formula (C₅H₈)n. It is made by polymerization of isoprene (2-methyl-1,3-butadiene). Also called an elastomer.'},
+  {c:'207', q:'Who discovered vulcanization and in what year?', a:'Charles Goodyear discovered vulcanization in 1839. It involves reacting natural rubber with sulfur in the presence of heat.'},
+  {c:'207', q:'What is rubber compounding?', a:'The science of mixing a specific rubber formulation (rubber + additives) before vulcanization. Additives include fillers, plasticizers, antioxidants, curing agents.'},
+  {c:'207', q:'What is the role of Carbon Black in rubber compounding?', a:'Primary reinforcing filler in rubber. Improves strength, has antiozonant properties, absorbs UV, and provides conductivity. Made by incomplete combustion.'},
+  {c:'207', q:'Distinguish between accelerators and retarders in vulcanization.', a:'Accelerators (e.g. ZnO, stearic acid) speed up vulcanization from hours to minutes. Retarders delay crosslinking until the rubber reaches the curing temperature, preventing scorching.'},
+  {c:'207', q:'What is the difference between an internal mixer and an open mill?', a:'Internal mixer: closed chamber with two rotors that generate shear forces. Open mill: two exposed horizontal rolls rotating in opposite directions; rubber bonds to front roll.'},
+  {c:'207', q:'Name and describe the three types of rubber moulding.', a:'(1) Compression – pre-formed rubber in metal mold, pressure + heat cures it. (2) Injection – heated rubber forced into mold via pressurized screw barrel. (3) Extrusion – rubber forced through a die for continuous cross-section (hoses, pipes).'},
+  {c:'207', q:'Classify natural fibres.', a:'Natural fibres are classified as: (1) Plant fibres – cotton, jute, flax, bamboo. (2) Animal fibres – wool (sheep, goat, camel) and silk (silkworm). (3) Mineral fibres – Asbestos.'},
+  {c:'207', q:'What is the difference between filament and staple fibres?', a:'Filaments are continuous fibres (length:width ratio ≥1000). Silk is the only natural filament. Staples are short fibres (¾ to 18 inches) like cotton, wool, and jute.'},
+  {c:'207', q:'Describe the three types of chemical spinning.', a:'(1) Wet spinning – spinneret into chemical bath (Rayon, Acrylic, Spandex). (2) Dry spinning – spinneret into air chamber (Acetate, Acrylic). (3) Melt spinning – melted polymer into air (Polyester, Nylon).'},
+  {c:'207', q:'What are the three types of yarn?', a:'(1) Simple yarns – twisted, uniform, strong. Types: single, ply, cable. (2) Novelty/Fancy yarns – irregular for special effects (Slub, Boucle, Chenille). (3) Textured yarns – greater volume; types: stretch and bulk.'},
+  {c:'207', q:'What is resilience in fibres?', a:'The ability of a fibre to return to its original shape after compression, bending, or creasing. Closely related to wrinkle recovery. Wool has excellent resilience.'},
+  {c:'207', q:'What is the source of natural rubber and how is it tapped?', a:'From Hevea brasiliensis tree. Bark is scored at 30° angle for half the trunk circumference. Milky latex flows out; tapped every ~2 days. Trees produce from age 5-6 years.'},
+  {c:'207', q:'Name three synthetic rubbers and their monomers.', a:'(1) SBR – styrene + butadiene copolymer. (2) Neoprene – polymerization of 2-chlorobutadiene. (3) Nitrile rubber – cyanobutadiene + butadiene. (4) Polyisoprene – polymerization of isoprene.'},
+  {c:'207', q:'What are regenerated fibres? Give examples.', a:'Also called semi-synthetic fibres. Cellulose from plants is purified and processed into fibres. Examples: viscose rayon, acetate, triacetate.'},
+  {c:'207', q:'What is specific gravity of a fibre?', a:'Ratio of mass of the fibre to an equal volume of water at 4°C. Indicates density relative to water. Nylon/acrylics have low specific gravity; cotton/rayon have higher density.'},
+  {c:'207', q:'How does coagulation work in rubber processing?', a:'After tapping, formic acid is added to the latex, causing the rubber particles to coagulate (clump like curds). The coagulated mass is then rolled through rollers to remove excess water, creating thin sheets.'},
+];
+
+let filteredCards = [...allCards];
+let currentCard = 0;
+
+function loadCards() {
+  const f = document.getElementById('fc-filter').value;
+  filteredCards = f === 'all' ? [...allCards] : allCards.filter(c => c.c === f);
+  currentCard = 0;
+  updateCard();
+}
+
+function updateCard() {
+  const card = filteredCards[currentCard];
+  document.getElementById('fc-q').textContent = card.q;
+  document.getElementById('fc-a').textContent = card.a;
+  document.getElementById('fc-a').classList.remove('show');
+  document.getElementById('fc-label').textContent = `CHM ${card.c} — Question`;
+  document.getElementById('fc-counter').textContent = `Card ${currentCard + 1} of ${filteredCards.length}`;
+  document.getElementById('fc-progress').style.width = ((currentCard + 1) / filteredCards.length * 100) + '%';
+}
+
+function toggleAnswer() {
+  document.getElementById('fc-a').classList.toggle('show');
+  const label = document.getElementById('fc-label');
+  label.textContent = label.textContent.includes('Question') ? `CHM ${filteredCards[currentCard].c} — Answer` : `CHM ${filteredCards[currentCard].c} — Question`;
+}
+
+function nextCard() { currentCard = (currentCard + 1) % filteredCards.length; updateCard(); }
+function prevCard() { currentCard = (currentCard - 1 + filteredCards.length) % filteredCards.length; updateCard(); }
+function shuffleCards() { filteredCards.sort(() => Math.random() - 0.5); currentCard = 0; updateCard(); }
+
+updateCard();
+
+// ===== QUIZ =====
+const quizBank = [
+  {c:'205', q:'Beer-Lambert Law states A = εbc. What does ε represent?', opts:['Path length','Molar absorptivity','Concentration','Absorbance'], ans:1, exp:'ε (epsilon) is the molar absorptivity constant, measured in L/mol·cm. It is characteristic of the substance at a given wavelength.'},
+  {c:'205', q:'Which type of error can be discovered and corrected?', opts:['Random error','Indeterminate error','Systematic error','Sampling error'], ans:2, exp:'Systematic (determinate) errors are reproducible and can be identified and corrected, e.g. a balance reading consistently high.'},
+  {c:'205', q:'What is the Rf value in chromatography?', opts:['Rate of flow of mobile phase','Ratio of distances (substance vs solvent)','Retention factor of column','Relative frequency'], ans:1, exp:'Rf = distance traveled by substance / distance traveled by solvent front. It ranges from 0 to 1.'},
+  {c:'205', q:'In ANOVA, the degrees of freedom between groups (dfB) equals:', opts:['N − k','k − 1','n − 1','k + 1'], ans:1, exp:'dfB = k − 1 where k is the number of groups. dfW = N − k where N is total observations.'},
+  {c:'205', q:'Which indicator is used for strong acid / strong base titrations?', opts:['Starch solution','Phenolphthalein','Methyl orange','Any of the above'], ans:3, exp:'For strong acid/strong base titrations, the large pH jump near equivalence point means any of these indicators can work. Phenolphthalein (pH 8.3-10) and methyl orange (pH 3.1-4.4) are both commonly used.'},
+  {c:'205', q:'What is the formula for minimum sample size?', opts:['n = 2σ²/E','n = σ/E²','n = 4σ²/E²','n = σ²/4E'], ans:2, exp:'n = 4σ²/E² where σ = standard deviation and E = acceptable error. Larger allowed error means fewer samples needed.'},
+  {c:'205', q:'AAS uses what type of lamp?', opts:['Tungsten lamp','Deuterium lamp','Hollow cathode lamp','Mercury lamp'], ans:2, exp:'AAS uses a hollow cathode lamp that is element-specific. It emits light at wavelengths absorbed by the target element\'s free atoms.'},
+  {c:'205', q:'What does HPLC stand for?', opts:['High-Pressure Liquid Chromatography','High-Performance Liquid Chromatography','High-Phase Liquid Chromatography','Hydrophilic Performance Liquid Chromatography'], ans:1, exp:'HPLC = High-Performance Liquid Chromatography. It is suitable for non-volatile compounds, with high resolution and quantitative capability.'},
+  {c:'205', q:'Leading zeros in a number like 0.0045 are:', opts:['Significant','Not significant','Optional','Ambiguous'], ans:1, exp:'Leading zeros (zeros before the first non-zero digit) are NOT significant. 0.0045 has only 2 significant figures (4 and 5).'},
+  {c:'205', q:'The dilution formula is:', opts:['C₁ + V₁ = C₂ + V₂','C₁V₁ = C₂V₂','C₁/V₁ = C₂/V₂','C₁² = C₂V₂'], ans:1, exp:'C₁V₁ = C₂V₂ is the dilution formula. Multiply initial concentration by initial volume = final concentration by final volume.'},
+  {c:'207', q:'Natural rubber is chemically known as:', opts:['trans-1,4-polyisoprene','cis-1,4-polyisoprene','styrene-butadiene copolymer','polyethylene'], ans:1, exp:'Natural rubber is cis-1,4-polyisoprene. The "cis" configuration is key to its elasticity. The formula is (C₅H₈)n.'},
+  {c:'207', q:'Vulcanization of rubber was discovered by:', opts:['Michael Faraday','Charles Goodyear','Louis Pasteur','Alfred Nobel'], ans:1, exp:'Charles Goodyear discovered vulcanization in 1839. He found that heating rubber with sulfur creates cross-links that dramatically improve rubber\'s properties.'},
+  {c:'207', q:'Which is the most common curing agent used in rubber compounding?', opts:['Carbon black','Zinc oxide','Sulfur','Stearic acid'], ans:2, exp:'Sulfur is the most common curing (vulcanization) agent. It forms cross-links between rubber polymer chains. Peroxide is an alternative but less common.'},
+  {c:'207', q:'What is the role of retarders in rubber compounding?', opts:['Speed up vulcanization','Improve color','Delay crosslinking until proper temperature','Act as fillers'], ans:2, exp:'Retarders delay the crosslinking reaction until the rubber is at the curing temperature. This prevents scorching (premature vulcanization) before the rubber is shaped.'},
+  {c:'207', q:'Which type of rubber moulding is used for hoses and pipes?', opts:['Compression moulding','Injection moulding','Extrusion moulding','Transfer moulding'], ans:2, exp:'Extrusion moulding forces rubber through a die to create products with a fixed cross-section like hoses and pipes. It works like squeezing toothpaste from a tube.'},
+  {c:'207', q:'Silk is described as the only natural:', opts:['Staple fibre','Mineral fibre','Filament fibre','Plant fibre'], ans:2, exp:'Silk is the only natural filament fibre, meaning it comes in continuous lengths. All other natural fibres (cotton, wool, jute) are staple fibres with short discrete lengths.'},
+  {c:'207', q:'In wet spinning, the spinneret is submerged in:', opts:['Air','Hot water only','A chemical bath','Molten polymer'], ans:2, exp:'In wet spinning, the polymer solution is pumped through the spinneret into a chemical bath that solidifies the solution into filaments. Used for Rayon, Acrylic, Spandex.'},
+  {c:'207', q:'Carbon Black is produced by:', opts:['Complete combustion','Incomplete combustion','Chemical reduction','Polymerization'], ans:1, exp:'Carbon Black is produced by the incomplete combustion of carbon-containing materials. It contains fine nanoparticles of mainly carbon and is the primary reinforcing filler for rubber.'},
+  {c:'207', q:'Wool fibres come from which type of animal?', opts:['Silkworms','Sheep, camels, goats, rabbits','Only sheep','Marine animals'], ans:1, exp:'Wool comes from sheep, camels, cashmere and mohair goats, rabbits, and yak. It has excellent elasticity and resilience among natural fibres.'},
+  {c:'207', q:'Which property describes a fibre\'s ability to resist wear from rubbing?', opts:['Resilience','Absorbency','Abrasion resistance','Elasticity'], ans:2, exp:'Abrasion resistance is the ability to resist wear and tear from rubbing. High abrasion resistance increases fabric durability and service life.'},
+];
+
+let quizQuestions = [];
+let quizScore = 0;
+let quizIdx = 0;
+
+function startQuiz() {
+  const course = document.getElementById('quiz-course').value;
+  const num = parseInt(document.getElementById('quiz-num').value);
+  let pool = course === 'all' ? quizBank : quizBank.filter(q => q.c === course);
+  pool = pool.sort(() => Math.random() - 0.5).slice(0, Math.min(num, pool.length));
+  quizQuestions = pool;
+  quizScore = 0; quizIdx = 0;
+  document.getElementById('quiz-setup-view').style.display = 'none';
+  document.getElementById('quiz-result-view').style.display = 'none';
+  document.getElementById('quiz-play-view').style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  if (quizIdx >= quizQuestions.length) { showResult(); return; }
+  const q = quizQuestions[quizIdx];
+  const pct = Math.round(quizIdx / quizQuestions.length * 100);
+  document.getElementById('quiz-play-view').innerHTML = `
+    <div style="font-size:0.75rem;color:#64748b;margin-bottom:8px">Question ${quizIdx+1} of ${quizQuestions.length} • CHM ${q.c}</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-question">
+      <p>${q.q}</p>
+      ${q.opts.map((o,i) => `<button class="option-btn" id="opt-${i}" onclick="selectAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+    </div>
+    <div class="explanation" id="exp"></div>
+    <div style="text-align:center;margin-top:12px"><button id="next-q-btn" onclick="nextQuestion()" style="display:none;background:#1e3a5f;border:1px solid #2563eb;color:#60a5fa;padding:8px 24px;border-radius:8px;cursor:pointer;font-size:0.85rem">Next →</button></div>
+  `;
+}
+
+function selectAnswer(i) {
+  const q = quizQuestions[quizIdx];
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  if (i === q.ans) {
+    document.getElementById(`opt-${i}`).classList.add('correct');
+    quizScore++;
+  } else {
+    document.getElementById(`opt-${i}`).classList.add('wrong');
+    document.getElementById(`opt-${q.ans}`).classList.add('correct');
+  }
+  const exp = document.getElementById('exp');
+  exp.textContent = '💡 ' + q.exp;
+  exp.classList.add('show');
+  document.getElementById('next-q-btn').style.display = 'inline-block';
+}
+
+function nextQuestion() { quizIdx++; showQuestion(); }
+
+function showResult() {
+  document.getElementById('quiz-play-view').style.display = 'none';
+  const pct = Math.round(quizScore / quizQuestions.length * 100);
+  const msg = pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good effort!' : '📚 Keep studying!';
+  document.getElementById('quiz-result-view').innerHTML = `
+    <h2>${msg}</h2>
+    <div class="score-circle">${pct}%</div>
+    <p style="color:#94a3b8;margin:8px 0">${quizScore} / ${quizQuestions.length} correct</p>
+    <button onclick="document.getElementById('quiz-setup-view').style.display='block';document.getElementById('quiz-result-view').style.display='none'" style="background:#1e3a5f;border:1px solid #2563eb;color:#60a5fa;padding:10px 24px;border-radius:8px;cursor:pointer;margin-top:16px;font-size:0.85rem">Try Again</button>
+  `;
+  document.getElementById('quiz-result-view').style.display = 'block';
+}
+
+// ===== PAST QUESTIONS =====
+const pastQs = [
+  {c:'205', section:'Section A', q:'A 48% (m/v) solution of HBr in water has a density of 1.5 g/mL. What is the molarity of the HBr?', ans:'Molarity = (% × density × 1000) / (100 × molar mass). Molar mass of HBr = 81 g/mol. M = (48 × 1.5 × 1000) / (100 × 81) = 72000/8100 ≈ 8.89 M'},
+  {c:'205', section:'Section A', q:'Explain the following terms: (i) uncertainty (ii) accuracy (iii) precision', ans:'(i) Uncertainty – range within which the true value lies. Expressed as ± value. (ii) Accuracy – closeness of measurement to true/accepted value. (iii) Precision – closeness of repeated measurements to each other. Note: High precision ≠ high accuracy.'},
+  {c:'205', section:'Section A', q:'Evaluate 1.76(±0.03) × 1.89(±0.02) + 0.59(±0.02) − 0.59(±0.02). Calculate the absolute and relative uncertainty.', ans:'Multiplication first: 1.76 × 1.89 = 3.3264. Relative uncertainty of product: √[(0.03/1.76)² + (0.02/1.89)²] = √[(0.01705)² + (0.01058)²] = √(0.000291 + 0.000112) = 0.0201. Absolute uncertainty = 3.3264 × 0.0201 ≈ ±0.067. Then for addition/subtraction, combine uncertainties in quadrature.'},
+  {c:'205', section:'Section B', q:'How much solution is needed to prepare 0.250 L of 0.160 M HBr from a 48% (m/v) HBr solution with density 1.5 g/mL?', ans:'First find molarity of stock: M = (48 × 1.5 × 1000)/(100 × 81) ≈ 8.89 M. Then use C₁V₁ = C₂V₂: V₁ = (0.160 × 0.250)/8.89 = 0.004498 L ≈ 4.5 mL. So pipette 4.5 mL of the stock into a 250 mL flask and dilute to mark.'},
+  {c:'205', section:'Section C', q:'Using equations, illustrate the acid-base properties of EDTA. Calculate the pH at each of the following points in the titration of 50.00 mL of 0.1000 M NaOH with 0.1000 M HCl: 3.0, 4.99, and 5.50 mL.', ans:'EDTA (H₄Y) is a hexaprotic weak acid that can donate up to 6 protons. For the NaOH-HCl titration: (i) At 3.0 mL HCl: moles NaOH = 0.005, moles HCl added = 0.0003; excess NaOH. pOH = −log(excess OH⁻ conc), pH = 14 − pOH. (ii) Near equivalence point at 4.99 mL, pH depends on remaining excess. (iii) At 5.50 mL, slight excess HCl, pH = −log[H⁺].'},
+  {c:'207', section:'Q1', q:'(a) Differentiate between natural and synthetic rubbers giving one example for each.', ans:'Natural rubber: obtained from the latex of Hevea brasiliensis (rubber tree). It is cis-1,4-polyisoprene. Example: latex rubber products. \nSynthetic rubber: artificially produced by polymerization of petroleum-derived monomers. Superior thermal stability and oil resistance. Example: SBR (styrene-butadiene rubber) used in car tyres.'},
+  {c:'207', section:'Q1', q:'(b) Explain the polymer nature of natural rubber stating its chemical composition.', ans:'Natural rubber is a naturally occurring polymer (elastomer). Monomer: isoprene (2-methyl-1,3-butadiene), C₅H₈. The monomers polymerize in a cis-1,4 addition to give the polymer formula (C₅H₈)n. This cis configuration around double bonds allows the long chains to coil and uncoil, giving rubber its elastic properties. The molecular weight is very high.'},
+  {c:'207', section:'Q2', q:'(a) What is rubber compounding? (b) Explain the importance of Fillers, Plasticizers, and Antioxidants with one example each.', ans:'Rubber compounding: mixing rubber with various additives before vulcanization to create a product with desirable characteristics.\n\nFillers: Reinforce and strengthen rubber. Example: Carbon Black – improves tensile strength, abrasion resistance, and provides UV protection.\n\nPlasticizers: Decrease viscosity of rubber, making it more flexible and easier to process. Example: Processing oils (extender oils) that reduce brittleness when carbon black is added.\n\nAntioxidants: Protect rubber from degradation by absorbing free radicals that break polymer bonds, extending service life. Example: aromatic amines or phenolic compounds used in tyre manufacture.'},
+  {c:'207', section:'Q4', q:'(a) Distinguish between natural and artificial fibres and classify natural fibres with examples.', ans:'Natural fibres: occur naturally from plant/animal/mineral sources. Require minimal processing. Generally biodegradable.\nArtificial fibres: manufactured by man using chemical processes on natural or synthetic polymers.\n\nClassification of natural fibres:\n• Plant fibres: cellulose-based. Examples: cotton (seed hair), jute (stem), flax (stem), bamboo.\n• Animal fibres: protein-based. Examples: wool (sheep), silk (silkworm), cashmere (goat), angora (rabbit).\n• Mineral fibres: inorganic. Example: asbestos – resistant to fire and acid.'},
+  {c:'207', section:'Q5', q:'(a) What is spinning in fibre processing? (ii) Distinguish between mechanical and chemical spinning.', ans:'Spinning: the process of converting fibres or filaments into a continuous yarn suitable for fabric production.\n\nMechanical spinning: fibres are twisted together by mechanical action. Used for natural staple fibres like cotton and wool. No chemical dissolution required.\n\nChemical spinning: the polymer is dissolved or melted and extruded through a spinneret. Three types: (1) Wet spinning – into a chemical bath (Rayon, Acrylic). (2) Dry spinning – into warm air (Acetate). (3) Melt spinning – melted polymer into cool air (Nylon, Polyester).'},
+];
+
+function renderPQ(filter) {
+  const list = filter === 'all' ? pastQs : pastQs.filter(q => q.c === filter);
+  document.getElementById('pq-list').innerHTML = list.map((q, i) => `
+    <div class="pq-card" data-course="${q.c}">
+      <h3>CHM ${q.c} – ${q.section}</h3>
+      <p>${q.q}</p>
+      <button class="show-ans-btn" onclick="togglePQAns(${i}, this)">Show Answer</button>
+      <div class="pq-answer" id="pqa-${i}">${q.ans.replace(/\n/g,'<br>')}</div>
+    </div>
+  `).join('');
+}
+
+function togglePQAns(i, btn) {
+  const el = document.getElementById(`pqa-${i}`);
+  el.classList.toggle('show');
+  btn.textContent = el.classList.contains('show') ? 'Hide Answer' : 'Show Answer';
+}
+
+function filterPQ(val, btn) {
+  document.querySelectorAll('.pq-filter button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPQ(val);
+}
+
+renderPQ('all');
+
+// ===== AI CHAT =====
+const SYSTEM_PROMPT = `You are a focused university chemistry tutor helping a student at Delta State University Abraka prepare for CHM 205 (Analytical Chemistry) and CHM 207 (Rubber Science and Fibre Technology) exams.
+
+KEY KNOWLEDGE BASE:
+CHM 205 topics: Analytical chemistry intro (qualitative/quantitative analysis), Theory of errors (systematic vs random, accuracy vs precision, significant figures, error propagation), Statistical treatment (mean, standard deviation formula: s=√[Σ(xi-x̄)²/(n-1)], ANOVA: F=MSB/MSW), Theory of sampling (random, systematic, stratified, grab; sample size: n=4σ²/E²), Volumetric analysis (standard solutions, primary standards, equivalence point vs end point, C1V1=C2V2, molarity calculations, acid-base titrations: MaVa/na=MbVb/nb, indicators: phenolphthalein pH 8.3-10, methyl orange pH 3.1-4.4), Beer-Lambert law (A=εbc), spectroscopy (UV-Vis, AAS, IR, fluorescence), separation methods (chromatography: Rf=dist substance/dist solvent, TLC, GC, HPLC, electrophoresis).
+
+CHM 207 topics: Natural rubber from Hevea brasiliensis – cis-1,4-polyisoprene (C5H8)n. Tapping/coagulation with formic acid. Synthetic rubber (SBR, neoprene, nitrile, polyisoprene). Rubber compounding: fillers (Carbon Black), plasticizers, antioxidants, antiozonants, curing agents (sulfur). Vulcanization discovered by Charles Goodyear 1839 – sulfur + heat + accelerators (ZnO, stearic acid) + retarders. Mixing: internal mixer, open mill, tandem mixer. Moulding: compression, injection, extrusion. Fibres: natural (plant: cotton/jute; animal: wool/silk; mineral: asbestos) and man-made (regenerated: rayon/acetate; synthetic: nylon/polyester). Properties: specific gravity, resilience, elasticity, absorbency. Spinning: mechanical vs chemical (wet/dry/melt). Yarn types: simple, novelty, textured.
+
+Be concise but thorough. Use bullet points and formulas where helpful. Always relate answers to exam context.`;
+
+async function sendMsg() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  addMsg(msg, 'user');
+  input.value = '';
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('typing-indicator').style.display = 'block';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: msg }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.map(b => b.text || '').join('') || 'Sorry, I could not generate a response.';
+    addMsg(reply, 'ai');
+  } catch(e) {
+    addMsg('Connection error. Please try again.', 'ai');
+  }
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('typing-indicator').style.display = 'none';
+}
+
+function addMsg(text, role) {
+  const area = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = `msg ${role} clearfix`;
+  div.innerHTML = `<div class="bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')}</div>`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function quickAsk(q) {
+  document.getElementById('chat-input').value = q;
+  sendMsg();
+  showTab('askai');
+  document.querySelectorAll('.tab-btn').forEach((b,i) => { if(i===4) b.classList.add('active'); else b.classList.remove('active'); });
+}
+</script>
+</body>
+</html>
