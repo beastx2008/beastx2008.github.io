@@ -3,840 +3,1548 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHM 205 & 207 Study Assistant</title>
+<title>CHEM 101 — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
-  
-  header {
-    background: linear-gradient(135deg, #1e3a5f, #0f2942);
-    padding: 20px 24px 16px;
-    border-bottom: 2px solid #2563eb;
-    text-align: center;
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #4a6080;
+    --glow: 0 0 20px rgba(0,212,255,0.15);
   }
-  header h1 { font-size: 1.4rem; color: #60a5fa; font-weight: 700; }
-  header p { font-size: 0.8rem; color: #94a3b8; margin-top: 4px; }
 
-  .tabs {
-    display: flex;
-    background: #1e293b;
-    border-bottom: 1px solid #334155;
-    overflow-x: auto;
-    gap: 2px;
-    padding: 8px 12px 0;
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
-  .tab-btn {
-    background: none; border: none; color: #94a3b8;
-    padding: 9px 14px; cursor: pointer; font-size: 0.8rem;
-    border-radius: 6px 6px 0 0; white-space: nowrap;
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,212,255,0.04) 0%, transparent 100%);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .logo-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #fff;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .score-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+
+  .score-chip span { color: var(--accent3); font-weight: 600; }
+
+  /* ─── NAV TABS ─── */
+  nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--surface);
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 1rem 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text3);
+    cursor: pointer;
+    border: none;
+    background: none;
     border-bottom: 2px solid transparent;
     transition: all 0.2s;
+    position: relative;
   }
-  .tab-btn:hover { background: #263451; color: #cbd5e1; }
-  .tab-btn.active { color: #60a5fa; border-bottom-color: #2563eb; background: #1e3a5f; }
 
-  .section { display: none; padding: 16px; }
-  .section.active { display: block; }
+  .tab:hover { color: var(--text2); background: rgba(255,255,255,0.03); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab .tab-icon { margin-right: 0.4rem; }
 
-  /* TOPICS */
-  .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  /* ─── MAIN LAYOUT ─── */
+  main {
+    position: relative;
+    z-index: 5;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── TOPIC CARDS ─── */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+
+  .section-desc {
+    color: var(--text2);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
   .topic-card {
-    background: #1e293b; border: 1px solid #334155;
-    border-radius: 10px; padding: 14px; cursor: pointer;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .topic-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--glow); }
+  .topic-card:hover::before { opacity: 1; }
+
+  .topic-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .topic-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+  }
+
+  .topic-body {
+    font-size: 0.85rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .topic-body ul { padding-left: 1.2rem; }
+  .topic-body li { margin-bottom: 0.25rem; }
+
+  /* Formulas */
+  .formula {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.15);
+    color: var(--accent);
+    padding: 0.1rem 0.5rem;
+    border-radius: 2px;
+    margin: 0.1rem;
+  }
+
+  .highlight-box {
+    background: rgba(0,212,255,0.05);
+    border-left: 3px solid var(--accent);
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+
+  .highlight-box.green { border-color: var(--accent3); background: rgba(16,185,129,0.05); }
+  .highlight-box.yellow { border-color: var(--warn); background: rgba(245,158,11,0.05); color: var(--warn); }
+
+  /* ─── FLASHCARDS ─── */
+  .flashcard-controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text2);
     transition: all 0.2s;
   }
-  .topic-card:hover { border-color: #2563eb; background: #1e3a5f; }
-  .topic-card h3 { font-size: 0.82rem; color: #60a5fa; margin-bottom: 4px; }
-  .topic-card p { font-size: 0.72rem; color: #94a3b8; }
-  .topic-detail { display: none; background: #1e293b; border: 1px solid #2563eb; border-radius: 10px; padding: 16px; }
-  .topic-detail.open { display: block; }
-  .topic-detail h2 { color: #60a5fa; font-size: 1rem; margin-bottom: 10px; }
-  .topic-detail p, .topic-detail li { font-size: 0.82rem; color: #cbd5e1; line-height: 1.6; }
-  .topic-detail ul { padding-left: 18px; margin: 8px 0; }
-  .topic-detail .formula { background: #0f2942; border-left: 3px solid #2563eb; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; color: #93c5fd; margin: 8px 0; }
-  .back-btn { background: none; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-bottom: 12px; }
-  .back-btn:hover { border-color: #60a5fa; color: #60a5fa; }
-  .course-badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; }
-  .badge-205 { background: #1d4ed8; color: #bfdbfe; }
-  .badge-207 { background: #065f46; color: #a7f3d0; }
-  .sub-heading { color: #f59e0b; font-size: 0.85rem; font-weight: 600; margin: 10px 0 4px; }
 
-  /* FLASHCARDS */
-  .fc-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .fc-controls select { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
-  .fc-counter { font-size: 0.78rem; color: #94a3b8; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  .btn.primary:hover { background: #00b8db; }
+
+  .btn.success {
+    background: var(--accent3);
+    border-color: var(--accent3);
+    color: #000;
+  }
+
+  .btn.danger {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+  }
+
+  .progress-bar-wrap {
+    flex: 1;
+    min-width: 120px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .card-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text3);
+    white-space: nowrap;
+  }
+
+  /* 3D flip card */
+  .flashcard-scene {
+    perspective: 1000px;
+    max-width: 680px;
+    margin: 0 auto 1.5rem;
+  }
+
   .flashcard {
-    background: #1e293b; border: 1px solid #334155; border-radius: 14px;
-    min-height: 200px; padding: 28px 20px; text-align: center;
-    cursor: pointer; position: relative; margin-bottom: 16px;
-    transition: transform 0.15s;
+    width: 100%; height: 240px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
   }
-  .flashcard:active { transform: scale(0.98); }
-  .fc-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 12px; }
-  .fc-q { font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; }
-  .fc-a { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid #334155; font-size: 0.82rem; color: #86efac; line-height: 1.6; }
-  .fc-a.show { display: block; }
-  .fc-hint { font-size: 0.7rem; color: #475569; margin-top: 10px; }
-  .fc-nav { display: flex; gap: 10px; justify-content: center; }
-  .fc-nav button {
-    background: #1e3a5f; border: 1px solid #2563eb; color: #60a5fa;
-    padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.82rem;
-  }
-  .fc-nav button:hover { background: #2563eb; color: white; }
-  .progress-bar { background: #1e293b; border-radius: 4px; height: 6px; margin-bottom: 10px; overflow: hidden; }
-  .progress-fill { background: linear-gradient(90deg, #2563eb, #7c3aed); height: 100%; border-radius: 4px; transition: width 0.3s; }
 
-  /* QUIZ */
-  .quiz-setup { text-align: center; padding: 20px 0; }
-  .quiz-setup h2 { color: #60a5fa; margin-bottom: 16px; font-size: 1rem; }
-  .quiz-setup select, .quiz-setup input[type=number] {
-    background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
-    padding: 8px 12px; border-radius: 8px; font-size: 0.85rem;
-    display: block; width: 100%; max-width: 300px; margin: 8px auto;
-  }
-  .start-btn {
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    color: white; border: none; padding: 12px 32px;
-    border-radius: 10px; font-size: 0.9rem; cursor: pointer; margin-top: 16px;
-  }
-  .quiz-question { background: #1e293b; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
-  .quiz-question p { font-size: 0.88rem; color: #e2e8f0; margin-bottom: 14px; line-height: 1.5; }
-  .option-btn {
-    display: block; width: 100%; text-align: left;
-    background: #0f172a; border: 1px solid #334155; color: #cbd5e1;
-    padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 0.82rem;
-    margin-bottom: 8px; transition: all 0.2s;
-  }
-  .option-btn:hover:not(:disabled) { border-color: #2563eb; color: #60a5fa; }
-  .option-btn.correct { background: #064e3b; border-color: #10b981; color: #6ee7b7; }
-  .option-btn.wrong { background: #450a0a; border-color: #ef4444; color: #fca5a5; }
-  .quiz-result { text-align: center; padding: 24px; }
-  .quiz-result h2 { font-size: 1.3rem; margin-bottom: 10px; }
-  .score-circle { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #2563eb; display: flex; align-items: center; justify-content: center; margin: 16px auto; font-size: 1.5rem; font-weight: 700; color: #60a5fa; }
-  .explanation { background: #0f2942; border-radius: 8px; padding: 10px 12px; font-size: 0.78rem; color: #93c5fd; margin-top: 10px; display: none; }
-  .explanation.show { display: block; }
+  .flashcard.flipped { transform: rotateY(180deg); }
 
-  /* ASK AI */
-  .chat-area { height: 340px; overflow-y: auto; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
-  .msg { margin-bottom: 12px; }
-  .msg.user .bubble { background: #1e3a5f; border-radius: 12px 12px 4px 12px; padding: 10px 14px; font-size: 0.82rem; color: #bfdbfe; display: inline-block; max-width: 85%; float: right; clear: both; }
-  .msg.ai .bubble { background: #1e293b; border-radius: 12px 12px 12px 4px; padding: 10px 14px; font-size: 0.82rem; color: #e2e8f0; display: inline-block; max-width: 90%; float: left; clear: both; line-height: 1.6; }
-  .msg.ai .bubble code { background: #0f2942; padding: 2px 6px; border-radius: 4px; font-size: 0.78rem; color: #93c5fd; }
-  .chat-input-row { display: flex; gap: 8px; }
-  .chat-input {
-    flex: 1; background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
-    padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; outline: none;
+  .card-face {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
-  .chat-input:focus { border-color: #2563eb; }
-  .send-btn {
-    background: #2563eb; border: none; color: white;
-    padding: 10px 18px; border-radius: 10px; cursor: pointer; font-size: 0.85rem;
+
+  .card-front { border-color: rgba(0,212,255,0.2); }
+  .card-back {
+    transform: rotateY(180deg);
+    border-color: rgba(124,58,237,0.3);
+    background: var(--surface2);
   }
-  .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .quick-asks { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-  .quick-ask { background: #1e293b; border: 1px solid #334155; color: #94a3b8; padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 0.72rem; }
-  .quick-ask:hover { border-color: #2563eb; color: #60a5fa; }
-  .typing { color: #475569; font-size: 0.78rem; padding: 4px 0; }
 
-  /* PAST Q */
-  .pq-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
-  .pq-card h3 { font-size: 0.82rem; color: #f59e0b; margin-bottom: 8px; }
-  .pq-card p { font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 8px; }
-  .show-ans-btn { background: none; border: 1px solid #334155; color: #94a3b8; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; }
-  .show-ans-btn:hover { border-color: #2563eb; color: #60a5fa; }
-  .pq-answer { background: #0f2942; border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 0.78rem; color: #93c5fd; line-height: 1.6; display: none; }
-  .pq-answer.show { display: block; }
-  .pq-filter { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-  .pq-filter button { background: #1e293b; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; }
-  .pq-filter button.active { background: #1e3a5f; border-color: #2563eb; color: #60a5fa; }
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
 
-  .clearfix::after { content: ''; display: table; clear: both; }
+  .card-front .card-label { color: var(--accent); }
+  .card-back .card-label { color: var(--accent2); }
+
+  .card-question {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #fff;
+  }
+
+  .card-answer {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text2);
+  }
+
+  .flip-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text3);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .flashcard-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .category-filter {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--text3);
+    background: transparent;
+    transition: all 0.2s;
+  }
+
+  .filter-chip.active, .filter-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.06);
+  }
+
+  /* ─── QUIZ ─── */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .quiz-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text3);
+  }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.75rem;
+    margin-bottom: 1rem;
+    max-width: 750px;
+  }
+
+  .q-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .q-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .option {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text2);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .option:hover { border-color: var(--accent); color: #fff; background: rgba(0,212,255,0.05); }
+
+  .option .opt-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--text3);
+  }
+
+  .option.correct { border-color: var(--accent3); background: rgba(16,185,129,0.1); color: var(--accent3); }
+  .option.correct .opt-key { border-color: var(--accent3); color: var(--accent3); }
+  .option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.08); color: var(--danger); }
+  .option.wrong .opt-key { border-color: var(--danger); color: var(--danger); }
+  .option.disabled { pointer-events: none; opacity: 0.5; }
+
+  .explanation {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(0,212,255,0.04);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    font-size: 0.85rem;
+    color: var(--text2);
+    line-height: 1.6;
+    display: none;
+  }
+
+  .explanation.show { display: block; animation: fadeIn 0.3s ease; }
+  .explanation strong { color: var(--accent); }
+
+  .quiz-footer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .quiz-result {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    display: none;
+  }
+
+  .result-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--accent3);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 1.5rem;
+  }
+
+  .result-grade {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ─── FORMULAS REFERENCE ─── */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .ref-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem;
+  }
+
+  .ref-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ref-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 0.5rem;
+  }
+
+  .ref-item:last-child { border-bottom: none; }
+  .ref-item .ref-label { font-size: 0.82rem; color: var(--text2); flex: 1; }
+  .ref-item .ref-val { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--accent3); text-align: right; }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th {
+    background: var(--surface2);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text2);
+  }
+
+  tr:hover td { background: rgba(0,212,255,0.02); }
+  td:first-child { color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.82rem; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  @media (max-width: 600px) {
+    header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .header-right { margin-left: 0; }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>⚗️ CHM 205 & 207 Study Assistant</h1>
-  <p>Delta State University, Abraka • 2024/2025</p>
+  <div>
+    <div class="logo-badge">2024/2025 Session</div>
+    <h1>CHEM <span>101</span></h1>
+    <div class="subtitle">General Chemistry — Exam Study Guide</div>
+  </div>
+  <div class="header-right">
+    <div class="score-chip">Quiz High Score: <span id="highScore">—</span></div>
+    <div class="score-chip">Cards Reviewed: <span id="cardCount">0</span></div>
+  </div>
 </header>
 
-<div class="tabs">
-  <button class="tab-btn active" onclick="showTab('topics')">📚 Topics</button>
-  <button class="tab-btn" onclick="showTab('flashcards')">🃏 Flashcards</button>
-  <button class="tab-btn" onclick="showTab('quiz')">🧠 Quiz</button>
-  <button class="tab-btn" onclick="showTab('pastq')">📝 Past Q</button>
-  <button class="tab-btn" onclick="showTab('askai')">🤖 Ask AI</button>
+<nav>
+  <button class="tab active" onclick="showSection('topics')" data-tab="topics"><span class="tab-icon">⚗</span>Topics</button>
+  <button class="tab" onclick="showSection('flashcards')" data-tab="flashcards"><span class="tab-icon">🗂</span>Flashcards</button>
+  <button class="tab" onclick="showSection('quiz')" data-tab="quiz"><span class="tab-icon">⚡</span>Quiz</button>
+  <button class="tab" onclick="showSection('reference')" data-tab="reference"><span class="tab-icon">📐</span>Reference</button>
+  <button class="tab" onclick="showSection('periodic')" data-tab="periodic"><span class="tab-icon">🔬</span>Periodic Table</button>
+</nav>
+
+<main>
+
+<!-- ══════════════════ TOPICS ══════════════════ -->
+<div id="topics" class="section active">
+  <div class="section-title">Core Topics</div>
+  <div class="section-desc">Click any topic to expand — covers all Chem 101 exam areas</div>
+  <div class="topics-grid" id="topicsGrid"></div>
 </div>
 
-<!-- TOPICS -->
-<div id="topics" class="section active">
-  <div id="topic-list">
-    <div class="topic-grid">
-      <div class="topic-card" onclick="showTopic('intro_chem')"><h3>Analytical Chemistry Intro</h3><p>CHM 205 • Scope, branches, applications</p></div>
-      <div class="topic-card" onclick="showTopic('errors')"><h3>Theory of Errors</h3><p>CHM 205 • Types, accuracy, precision, sig figs</p></div>
-      <div class="topic-card" onclick="showTopic('stats')"><h3>Statistical Treatment</h3><p>CHM 205 • Mean, SD, ANOVA, t-test</p></div>
-      <div class="topic-card" onclick="showTopic('sampling')"><h3>Theory of Sampling</h3><p>CHM 205 • Techniques, sample prep, errors</p></div>
-      <div class="topic-card" onclick="showTopic('volumetric')"><h3>Volumetric Analysis</h3><p>CHM 205 • Titrations, indicators, calculations</p></div>
-      <div class="topic-card" onclick="showTopic('spectro')"><h3>Optical & Spectroscopy</h3><p>CHM 205 • UV-Vis, AAS, IR, Beer-Lambert</p></div>
-      <div class="topic-card" onclick="showTopic('separation')"><h3>Separation Methods</h3><p>CHM 205 • Chromatography, extraction, electrophoresis</p></div>
-      <div class="topic-card" onclick="showTopic('rubber_intro')"><h3>Rubber Science Intro</h3><p>CHM 207 • Natural vs synthetic, latex, properties</p></div>
-      <div class="topic-card" onclick="showTopic('compounding')"><h3>Rubber Compounding</h3><p>CHM 207 • Additives, fillers, vulcanization</p></div>
-      <div class="topic-card" onclick="showTopic('mixing')"><h3>Rubber Mixing & Moulding</h3><p>CHM 207 • Internal, open mill, tandem, compression</p></div>
-      <div class="topic-card" onclick="showTopic('fibres')"><h3>Fibre Science</h3><p>CHM 207 • Natural, man-made, properties, classification</p></div>
-      <div class="topic-card" onclick="showTopic('spinning')"><h3>Spinning & Yarn</h3><p>CHM 207 • Wet, dry, melt spinning, yarn types</p></div>
+<!-- ══════════════════ FLASHCARDS ══════════════════ -->
+<div id="flashcards" class="section">
+  <div class="section-title">Flashcards</div>
+  <div class="section-desc">Click the card to reveal the answer. Use ← → to navigate.</div>
+
+  <div class="category-filter" id="catFilter"></div>
+
+  <div class="flashcard-controls">
+    <button class="btn" onclick="prevCard()">← Prev</button>
+    <button class="btn primary" onclick="nextCard()">Next →</button>
+    <button class="btn" onclick="shuffleCards()">⇄ Shuffle</button>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="flashProgress" style="width:0%"></div></div>
+    <div class="card-counter" id="cardCounter">1 / 60</div>
+  </div>
+
+  <div class="flip-hint">Click card to flip · Use arrow keys to navigate</div>
+
+  <div class="flashcard-scene">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="card-face card-front">
+        <div class="card-label">Question</div>
+        <div class="card-question" id="cardQ">—</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="card-label">Answer</div>
+        <div class="card-answer" id="cardA">—</div>
+      </div>
     </div>
   </div>
-  <div id="topic-detail" class="topic-detail"></div>
-</div>
 
-<!-- FLASHCARDS -->
-<div id="flashcards" class="section">
-  <div class="fc-controls">
-    <select id="fc-filter" onchange="loadCards()">
-      <option value="all">All Topics</option>
-      <option value="205">CHM 205 Only</option>
-      <option value="207">CHM 207 Only</option>
-    </select>
-    <span class="fc-counter" id="fc-counter">Card 1 of 40</span>
-  </div>
-  <div class="progress-bar"><div class="progress-fill" id="fc-progress" style="width:2.5%"></div></div>
-  <div class="flashcard" onclick="toggleAnswer()">
-    <div class="fc-label" id="fc-label">Question</div>
-    <div class="fc-q" id="fc-q">Loading...</div>
-    <div class="fc-a" id="fc-a"></div>
-    <div class="fc-hint">Tap to reveal answer</div>
-  </div>
-  <div class="fc-nav">
-    <button onclick="prevCard()">← Prev</button>
-    <button onclick="shuffleCards()">🔀 Shuffle</button>
-    <button onclick="nextCard()">Next →</button>
+  <div class="flashcard-nav">
+    <button class="btn danger" onclick="markCard(false)">✕ Needs Review</button>
+    <button class="btn success" onclick="markCard(true)">✓ Got It</button>
   </div>
 </div>
 
-<!-- QUIZ -->
+<!-- ══════════════════ QUIZ ══════════════════ -->
 <div id="quiz" class="section">
-  <div id="quiz-setup-view" class="quiz-setup">
-    <h2>🧠 Test Your Knowledge</h2>
-    <select id="quiz-course">
-      <option value="all">All Courses</option>
-      <option value="205">CHM 205 - Analytical Chemistry</option>
-      <option value="207">CHM 207 - Rubber & Fibre</option>
-    </select>
-    <select id="quiz-num">
-      <option value="5">5 Questions</option>
-      <option value="10" selected>10 Questions</option>
-      <option value="15">15 Questions</option>
-    </select>
-    <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+  <div class="section-title">Practice Quiz</div>
+  <div class="section-desc">Each quiz draws 15 random questions from 60+ in the bank — no repeats per session.</div>
+
+  <div id="quizSetup">
+    <div class="stats-row" id="quizStats">
+      <div class="stat-box"><span class="stat-val" id="statTotal">60+</span><span class="stat-lbl">Questions</span></div>
+      <div class="stat-box"><span class="stat-val" id="statTopics">8</span><span class="stat-lbl">Topics</span></div>
+      <div class="stat-box"><span class="stat-val" id="statBest">—</span><span class="stat-lbl">Best Score</span></div>
+    </div>
+    <button class="btn primary" onclick="startQuiz()" style="margin-bottom:1.5rem">▶ Start Quiz (15 Questions)</button>
   </div>
-  <div id="quiz-play-view" style="display:none"></div>
-  <div id="quiz-result-view" style="display:none" class="quiz-result"></div>
+
+  <div id="quizArea" style="display:none">
+    <div class="quiz-header">
+      <div class="quiz-meta" id="qMeta">Question 1 of 15</div>
+      <div class="progress-bar-wrap" style="flex:1;max-width:300px"><div class="progress-bar-fill" id="qProgress" style="width:0%"></div></div>
+      <div class="quiz-meta" id="qScoreLive">Score: 0</div>
+    </div>
+    <div class="quiz-card" id="quizCard"></div>
+    <div class="quiz-footer">
+      <button class="btn primary" id="nextQBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
+      <button class="btn" onclick="endQuiz()">End Quiz</button>
+    </div>
+  </div>
+
+  <div class="quiz-result" id="quizResult">
+    <div class="result-score" id="resultScore">0/15</div>
+    <div class="result-label">Final Score</div>
+    <div class="result-grade" id="resultGrade">—</div>
+    <div id="resultMsg" style="color:var(--text2);font-size:0.9rem;margin-bottom:1.5rem">—</div>
+    <button class="btn primary" onclick="startQuiz()">Try Again</button>
+  </div>
 </div>
 
-<!-- PAST QUESTIONS -->
-<div id="pastq" class="section">
-  <div class="pq-filter">
-    <button class="active" onclick="filterPQ('all', this)">All</button>
-    <button onclick="filterPQ('205', this)">CHM 205</button>
-    <button onclick="filterPQ('207', this)">CHM 207</button>
+<!-- ══════════════════ REFERENCE ══════════════════ -->
+<div id="reference" class="section">
+  <div class="section-title">Quick Reference</div>
+  <div class="section-desc">Key formulas, constants, and conversion factors</div>
+
+  <div class="ref-grid" id="refGrid"></div>
+
+  <div style="margin-top:1.5rem">
+    <div class="section-title" style="font-size:1.1rem;margin-bottom:1rem">Common Polyatomic Ions</div>
+    <div class="table-wrap">
+      <table id="polyTable"></table>
+    </div>
   </div>
-  <div id="pq-list"></div>
+
+  <div style="margin-top:1.5rem">
+    <div class="section-title" style="font-size:1.1rem;margin-bottom:1rem">Solubility Rules (Aqueous Solutions)</div>
+    <div class="table-wrap">
+      <table id="solTable"></table>
+    </div>
+  </div>
 </div>
 
-<!-- ASK AI -->
-<div id="askai" class="section">
-  <p style="font-size:0.78rem;color:#64748b;margin-bottom:10px;">Ask anything about CHM 205 or CHM 207 topics from your lecture notes.</p>
-  <div class="quick-asks">
-    <span class="quick-ask" onclick="quickAsk('What is vulcanization and who discovered it?')">Vulcanization</span>
-    <span class="quick-ask" onclick="quickAsk('Explain Beer-Lambert law with the formula')">Beer-Lambert</span>
-    <span class="quick-ask" onclick="quickAsk('Difference between systematic and random errors')">Error types</span>
-    <span class="quick-ask" onclick="quickAsk('What are the types of fibres and their properties?')">Fibre types</span>
-    <span class="quick-ask" onclick="quickAsk('How do you calculate molarity from a liquid stock solution?')">Molarity calc</span>
-    <span class="quick-ask" onclick="quickAsk('Explain ANOVA and how to compute the F-ratio')">ANOVA</span>
+<!-- ══════════════════ PERIODIC TABLE ══════════════════ -->
+<div id="periodic" class="section">
+  <div class="section-title">Periodic Table — Key Elements</div>
+  <div class="section-desc">First 36 elements with atomic number, symbol, mass, and group</div>
+  <div class="table-wrap">
+    <table id="ptTable"></table>
   </div>
-  <div class="chat-area" id="chat-area">
-    <div class="msg ai"><div class="bubble">👋 Hi! I'm your CHM 205 & 207 tutor. Ask me anything about your lecture notes — analytical chemistry, rubber science, fibre technology, or solving past questions!</div></div>
-  </div>
-  <div id="typing-indicator" class="typing" style="display:none">AI is thinking...</div>
-  <div class="chat-input-row">
-    <input class="chat-input" id="chat-input" placeholder="Ask about your notes..." onkeydown="if(event.key==='Enter') sendMsg()">
-    <button class="send-btn" id="send-btn" onclick="sendMsg()">Send</button>
+  <div style="margin-top:1.5rem">
+    <div class="section-title" style="font-size:1.1rem;margin-bottom:0.75rem">Periodic Trends</div>
+    <div class="topics-grid">
+      <div class="topic-card">
+        <div class="topic-tag">Trend</div>
+        <div class="topic-title">Atomic Radius</div>
+        <div class="topic-body">Increases ↓ down a group (more electron shells). Decreases → across a period (more protons pull electrons closer).</div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-tag">Trend</div>
+        <div class="topic-title">Ionization Energy</div>
+        <div class="topic-body">Increases → across a period. Decreases ↓ down a group. First IE always lowest; successive IEs get larger.</div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-tag">Trend</div>
+        <div class="topic-title">Electronegativity</div>
+        <div class="topic-body">Increases → across a period. Decreases ↓ down a group. F is most electronegative (3.98). Cs is least (0.79).</div>
+      </div>
+      <div class="topic-card">
+        <div class="topic-tag">Trend</div>
+        <div class="topic-title">Electron Affinity</div>
+        <div class="topic-body">Generally more negative across a period (want electrons more). Halogens have highest EA. Noble gases near zero.</div>
+      </div>
+    </div>
   </div>
 </div>
+
+</main>
 
 <script>
-// ===== TAB SWITCHING =====
-function showTab(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-}
+// ════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════
 
-// ===== TOPIC CONTENT =====
-const topics = {
-  intro_chem: {
-    course: '205', title: 'Introduction to Analytical Chemistry',
-    content: `
-      <p>Analytical chemistry is the science of obtaining, processing, and communicating information about the <strong>composition and structure of matter</strong>.</p>
-      <div class="sub-heading">Two Main Branches</div>
+const TOPICS = [
+  {
+    tag:"Unit 1",
+    title:"Matter & Measurement",
+    body:`
       <ul>
-        <li><strong>Qualitative Analysis</strong> – Identifies what is present (which elements/compounds)</li>
-        <li><strong>Quantitative Analysis</strong> – Determines how much is present (amounts/concentrations)</li>
+        <li>Matter: anything with mass and volume</li>
+        <li><b>States:</b> Solid (definite shape & volume), Liquid (definite volume), Gas (neither definite)</li>
+        <li><b>Changes:</b> Physical (no new substance), Chemical (new substance formed)</li>
+        <li><b>Pure substance:</b> element or compound. <b>Mixture:</b> homogeneous or heterogeneous</li>
+        <li>SI units: length (m), mass (kg), time (s), temperature (K), amount (mol)</li>
+        <li>Significant figures: reflect measurement precision</li>
       </ul>
-      <div class="sub-heading">Methods</div>
-      <ul>
-        <li><strong>Classical Methods</strong> – Based on chemical reactions (volumetric, gravimetric)</li>
-        <li><strong>Instrumental Methods</strong> – Based on physical properties (spectroscopy, chromatography)</li>
-      </ul>
-      <div class="sub-heading">Applications</div>
-      <ul><li>Environmental monitoring</li><li>Clinical diagnostics</li><li>Food & drug analysis</li><li>Industrial quality control</li><li>Forensic science</li></ul>
+      <div class="highlight-box">Key conversions: 1 L = 1000 mL, 1 kg = 1000 g, K = °C + 273.15</div>
     `
   },
-  errors: {
-    course: '205', title: 'Theory of Errors',
-    content: `
-      <p>Error = difference between the measured value and the true (actual) value.</p>
-      <div class="sub-heading">Types of Errors</div>
+  {
+    tag:"Unit 2",
+    title:"Atoms, Molecules & Ions",
+    body:`
       <ul>
-        <li><strong>Systematic (Determinate) Errors</strong> – Reproducible, can be corrected. Types: Instrumental, Method, Personal errors.</li>
-        <li><strong>Random (Indeterminate) Errors</strong> – Scatter randomly; cannot be eliminated. Caused by temperature, electrical noise, analyst fatigue.</li>
+        <li>Atom: smallest unit of an element. Protons + Neutrons (nucleus) + Electrons (shells)</li>
+        <li>Atomic number (Z) = # protons; Mass number (A) = protons + neutrons</li>
+        <li><b>Isotopes:</b> same Z, different A (e.g., C-12, C-13, C-14)</li>
+        <li>Ions: cation (+, loses e⁻), anion (–, gains e⁻)</li>
+        <li>Molecule: two or more atoms bonded. Molecular formula vs empirical formula</li>
       </ul>
-      <div class="sub-heading">Accuracy vs Precision</div>
-      <ul>
-        <li><strong>Accuracy</strong> – How close to true value. E = xᵢ − xₜ (absolute error)</li>
-        <li><strong>Precision</strong> – How close measurements are to each other (reproducibility)</li>
-        <li>⚠️ High precision does NOT guarantee high accuracy!</li>
-      </ul>
-      <div class="sub-heading">Significant Figures Rules</div>
-      <ul>
-        <li>All non-zero digits are significant</li>
-        <li>Zeros between non-zero digits are significant</li>
-        <li>Leading zeros are NOT significant (0.0045 → 2 sig figs)</li>
-        <li>Trailing zeros after decimal ARE significant (100.0 → 4 sig figs)</li>
-      </ul>
-      <div class="sub-heading">Error Propagation</div>
-      <div class="formula">Addition/Subtraction: Absolute uncertainty = √(σ₁² + σ₂²)</div>
-      <div class="formula">Multiplication/Division: Relative uncertainty = √[(σ₁/x₁)² + (σ₂/x₂)²]</div>
+      <div class="highlight-box">Dalton's atomic theory: atoms are indivisible; same element = same atoms; compounds = fixed ratios</div>
     `
   },
-  stats: {
-    course: '205', title: 'Statistical Treatment of Data',
-    content: `
-      <div class="sub-heading">Mean (x̄)</div>
-      <div class="formula">x̄ = (Σxᵢ) / n</div>
-      <div class="sub-heading">Standard Deviation (σ or s)</div>
-      <div class="formula">s = √[ Σ(xᵢ − x̄)² / (n − 1) ]</div>
-      <p>Small s = data close to mean (precise). Large s = data scattered.</p>
-      <div class="sub-heading">ANOVA (Analysis of Variance)</div>
-      <p>Used to compare means of <strong>3 or more groups</strong>. Computes an F-ratio:</p>
-      <div class="formula">F = MSB / MSW = (SSB/dfB) / (SSW/dfW)</div>
+  {
+    tag:"Unit 3",
+    title:"Stoichiometry & The Mole",
+    body:`
       <ul>
-        <li><strong>SSB</strong> = Sum of Squares Between groups = Σ nᵢ(x̄ᵢ − x̄)²</li>
-        <li><strong>SSW</strong> = Sum of Squares Within groups</li>
-        <li><strong>dfB</strong> = k − 1 (k = number of groups)</li>
-        <li><strong>dfW</strong> = N − k (N = total observations)</li>
-        <li>If F > F-critical → reject null hypothesis → means differ significantly</li>
+        <li>Mole: 6.022 × 10²³ particles (Avogadro's number)</li>
+        <li>Molar mass (g/mol) = mass of 1 mole of substance</li>
+        <li>Limiting reagent: reactant consumed first, determines max product</li>
+        <li>% yield = (actual / theoretical) × 100</li>
+        <li>Empirical formula: simplest whole-number ratio. Molecular = n × empirical</li>
       </ul>
-      <div class="sub-heading">One-way vs Two-way ANOVA</div>
-      <ul>
-        <li><strong>One-way</strong>: One independent variable</li>
-        <li><strong>Two-way</strong>: Two independent variables (e.g., programme type & gender)</li>
-      </ul>
+      <div class="highlight-box green">Mole map: mass ÷ M = moles; moles × Nₐ = particles; moles × 22.4 L = volume (STP)</div>
     `
   },
-  sampling: {
-    course: '205', title: 'Theory of Sampling',
-    content: `
-      <p>The analysis result is only as good as the sample. A <strong>representative sample</strong> must have the same composition as the bulk material.</p>
-      <div class="sub-heading">Sample Types</div>
+  {
+    tag:"Unit 4",
+    title:"Electronic Structure",
+    body:`
       <ul>
-        <li><strong>Gross Sample</strong> – Large initial sample from the lot</li>
-        <li><strong>Laboratory Sample</strong> – Smaller portion from gross sample</li>
-        <li><strong>Analytical Sample</strong> – Final small portion used in analysis</li>
+        <li>Bohr model: electrons in circular orbits with quantized energy levels</li>
+        <li>Quantum model: orbitals (s, p, d, f). 4 quantum numbers: n, l, mₗ, mₛ</li>
+        <li>Aufbau principle: fill lowest energy first. Pauli exclusion: no 2 electrons same 4 QNs</li>
+        <li>Hund's rule: maximize unpaired electrons in same subshell</li>
+        <li>Electron configuration: e.g., Na = 1s² 2s² 2p⁶ 3s¹</li>
       </ul>
-      <div class="sub-heading">Sampling Techniques</div>
-      <ul>
-        <li><strong>Random Sampling</strong> – Every part has equal chance</li>
-        <li><strong>Systematic Sampling</strong> – Regular intervals</li>
-        <li><strong>Stratified Sampling</strong> – Subgroups represented</li>
-        <li><strong>Grab Sampling</strong> – Quick single-point (least representative)</li>
-      </ul>
-      <div class="sub-heading">Sample Size Formula</div>
-      <div class="formula">n = 4σ² / E²  (n = min sample size, E = acceptable error)</div>
-      <div class="sub-heading">Sample Preparation Steps</div>
-      <ul><li>Drying → Grinding → Mixing → Quartering → Storage</li></ul>
+      <div class="highlight-box">Energy order: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, 4d, 5p …</div>
     `
   },
-  volumetric: {
-    course: '205', title: 'Volumetric Analysis',
-    content: `
-      <p>Measures the <strong>volume of a standard solution</strong> needed to completely react with the analyte.</p>
-      <div class="sub-heading">Key Terms</div>
+  {
+    tag:"Unit 5",
+    title:"Chemical Bonding",
+    body:`
       <ul>
-        <li><strong>Standard Solution</strong> – Known concentration</li>
-        <li><strong>Primary Standard</strong> – ≥99.9% purity, stable, high MW</li>
-        <li><strong>Equivalence Point</strong> – Moles titrant = moles analyte (stoichiometrically)</li>
-        <li><strong>End Point</strong> – Indicator colour change</li>
+        <li><b>Ionic:</b> metal + nonmetal; transfer of electrons; high mp/bp; conduct in solution</li>
+        <li><b>Covalent:</b> nonmetal + nonmetal; sharing electrons; single/double/triple bonds</li>
+        <li>Electronegativity difference: <0.4 = nonpolar covalent, 0.4–1.7 = polar covalent, >1.7 = ionic</li>
+        <li>Lewis structures: show all valence electrons; dots + lines (bonds)</li>
+        <li>VSEPR theory: electron pairs repel → determines shape (linear, bent, tetrahedral, etc.)</li>
+        <li>Formal charge = Valence e⁻ − Nonbonding e⁻ − ½(Bonding e⁻)</li>
       </ul>
-      <div class="sub-heading">Concentration Calculations</div>
-      <div class="formula">Molarity (M) = mass / (molar mass × Volume in L)</div>
-      <div class="formula">Dilution: C₁V₁ = C₂V₂</div>
-      <div class="sub-heading">Acid-Base Titration Formula</div>
-      <div class="formula">MₐVₐ/nₐ = M_bV_b/n_b</div>
-      <div class="sub-heading">Common Indicators</div>
-      <ul>
-        <li><strong>Phenolphthalein</strong> – pH 8.3–10.0: colourless → pink</li>
-        <li><strong>Methyl orange</strong> – pH 3.1–4.4: red → yellow</li>
-        <li><strong>Bromothymol blue</strong> – pH 6.0–7.6: yellow → blue</li>
-      </ul>
-      <div class="sub-heading">Stock Solution Molarity (liquid)</div>
-      <div class="formula">C = (% purity × density × 1000) / molar mass</div>
-      <p>Example: HCl (37%, density 1.18 g/mL, MW 36.46) → C ≈ 12 M</p>
+      <div class="highlight-box">Bond order: single=1, double=2, triple=3. Higher bond order = shorter & stronger bond.</div>
     `
   },
-  spectro: {
-    course: '205', title: 'Optical Methods & Spectroscopy',
-    content: `
-      <div class="sub-heading">Beer-Lambert Law (UV-Vis)</div>
-      <div class="formula">A = εbc</div>
-      <p>Where: A = absorbance, ε = molar absorptivity, b = path length (cm), c = concentration (mol/L)</p>
-      <div class="formula">A = log(I₀/I) = −log T</div>
-      <div class="sub-heading">UV-Vis Components</div>
+  {
+    tag:"Unit 6",
+    title:"Molecular Geometry & Polarity",
+    body:`
       <ul>
-        <li>Light source (tungsten for visible, deuterium for UV)</li>
-        <li>Monochromator → Sample cuvette → Detector → Readout</li>
-      </ul>
-      <div class="sub-heading">Other Methods</div>
-      <ul>
-        <li><strong>Flame Photometry</strong> – Emission intensity when sample atomized in flame. Used for Na⁺, K⁺, Ca²⁺</li>
-        <li><strong>AAS (Atomic Absorption Spectroscopy)</strong> – Absorption by free atoms. Very sensitive (ppb). Uses hollow cathode lamp. 70+ elements.</li>
-        <li><strong>IR Spectroscopy</strong> – Molecular vibrations. Identifies functional groups and fingerprint region.</li>
-        <li><strong>Fluorescence</strong> – 1000× more sensitive than UV-Vis. Measures emitted light after excitation.</li>
+        <li>VSEPR shapes: linear (180°), bent (104.5°), trigonal planar (120°), tetrahedral (109.5°), trigonal bipyramidal (90°/120°), octahedral (90°)</li>
+        <li>Lone pairs reduce bond angles slightly</li>
+        <li>Polar molecule: asymmetric charge distribution (e.g., H₂O, HCl)</li>
+        <li>Nonpolar: symmetric (CO₂, CCl₄, BF₃)</li>
+        <li>Dipole moment (μ) = charge × distance; in debye (D)</li>
       </ul>
     `
   },
-  separation: {
-    course: '205', title: 'Separation Methods',
-    content: `
-      <div class="sub-heading">Solvent Extraction</div>
-      <div class="formula">Distribution Coefficient: K_D = C_organic / C_aqueous</div>
-      <div class="formula">Extraction Efficiency: E = (K_D × V_org) / (K_D × V_org + V_aq) × 100%</div>
-      <div class="sub-heading">Chromatography Types</div>
+  {
+    tag:"Unit 7",
+    title:"Gases",
+    body:`
       <ul>
-        <li><strong>Paper</strong> – Simple, separates amino acids, sugars</li>
-        <li><strong>TLC</strong> – Faster, better resolution than paper. Silica gel stationary phase.</li>
-        <li><strong>Column</strong> – Adsorption, partition, ion-exchange, gel filtration</li>
-        <li><strong>GC (Gas Chromatography)</strong> – Volatile samples, uses carrier gas (He, N₂)</li>
-        <li><strong>HPLC</strong> – Non-volatile compounds; reversed phase most common</li>
-      </ul>
-      <div class="formula">Retention Factor: Rᶠ = distance substance / distance solvent</div>
-      <div class="sub-heading">Electrophoresis</div>
-      <p>Movement of charged particles in electric field. Used for protein/DNA separation. Types: paper, gel (PAGE, SDS-PAGE), capillary.</p>
-    `
-  },
-  rubber_intro: {
-    course: '207', title: 'Introduction to Rubber Science',
-    content: `
-      <p>Rubber is an elastic polymeric material (elastomer). Available as natural or synthetic.</p>
-      <div class="sub-heading">Natural Rubber</div>
-      <ul>
-        <li>Source: <em>Hevea brasiliensis</em> (rubber tree)</li>
-        <li>Chemical composition: cis-1,4-polyisoprene, formula (C₅H₈)n</li>
-        <li>Monomer: isoprene (2-methyl-1,3-butadiene)</li>
-        <li>Rubber content in latex ≈ 30%</li>
-        <li>Tapping: scoring bark at 30° angle, every ~2 days</li>
-        <li>Coagulation: with formic acid → rolled into sheets → dried</li>
-        <li>Preservation: ammonia prevents bacterial growth (pre-vulcanization)</li>
-      </ul>
-      <div class="sub-heading">Synthetic Rubber</div>
-      <ul>
-        <li>Made from petroleum byproducts</li>
-        <li>Most common: <strong>SBR</strong> (styrene-butadiene rubber)</li>
-        <li>Others: Polyisoprene, Neoprene (2-chlorobutadiene), Nitrile rubber, Butyl rubber</li>
-        <li>Superior: thermal stability, oil/oxidation resistance vs natural rubber</li>
-      </ul>
-      <div class="sub-heading">Natural vs Vulcanized Rubber</div>
-      <ul>
-        <li>Natural: sticky, low strength</li>
-        <li>Vulcanized: cross-linked with sulfur, stronger, non-sticky, elastic</li>
+        <li>Boyle's Law: P₁V₁ = P₂V₂ (constant T)</li>
+        <li>Charles's Law: V₁/T₁ = V₂/T₂ (constant P)</li>
+        <li>Gay-Lussac: P₁/T₁ = P₂/T₂ (constant V)</li>
+        <li>Combined Gas Law: P₁V₁/T₁ = P₂V₂/T₂</li>
+        <li>Ideal Gas: PV = nRT (R = 0.08206 L·atm/mol·K)</li>
+        <li>Dalton's Law of Partial Pressures: Pₜₒₜ = ΣPᵢ</li>
+        <li>Graham's Law: rate ∝ 1/√M (lighter gas diffuses faster)</li>
+        <li>STP: 0°C, 1 atm, 1 mol gas = 22.4 L</li>
       </ul>
     `
   },
-  compounding: {
-    course: '207', title: 'Rubber Compounding & Vulcanization',
-    content: `
-      <p>Rubber compounding is the science of mixing rubber with additives before vulcanization/curing.</p>
-      <div class="sub-heading">Compounding Steps</div>
-      <p>Compounding → Mixing → Shaping → Vulcanization/Curing</p>
-      <div class="sub-heading">Key Additives</div>
+  {
+    tag:"Unit 8",
+    title:"Thermochemistry",
+    body:`
       <ul>
-        <li><strong>Fillers</strong> – Carbon Black (most important reinforcing filler; also antiozonant). White clays, mineral fillers for coloured compounds.</li>
-        <li><strong>Plasticizers</strong> – Decrease viscosity, increase flexibility</li>
-        <li><strong>Processing Aids</strong> – Oils prevent sticking, reduce viscosity</li>
-        <li><strong>Antioxidants</strong> – Absorb free radicals, protect at high temps</li>
-        <li><strong>Antiozonants</strong> – Create impenetrable barrier against ozone</li>
-        <li><strong>Curing Agents</strong> – Form cross-links. Sulfur is most common. Peroxide is alternative.</li>
-      </ul>
-      <div class="sub-heading">Vulcanization</div>
-      <ul>
-        <li>Reaction of rubber with sulfur + heat → cross-links formed</li>
-        <li>Discovered by <strong>Charles Goodyear in 1839</strong></li>
-        <li><strong>Accelerators</strong> (ZnO, stearic acid) – Speed up vulcanization from hours to minutes</li>
-        <li><strong>Retarders</strong> – Delay crosslinking until rubber reaches curing temperature (prevent scorching)</li>
+        <li>Enthalpy (H): heat at constant pressure. ΔH = H_products − H_reactants</li>
+        <li>Exothermic: ΔH < 0 (releases heat). Endothermic: ΔH > 0 (absorbs heat)</li>
+        <li>Hess's Law: ΔH is path independent; add equations algebraically</li>
+        <li>Standard enthalpy of formation (ΔH°f): formation of 1 mol from elements</li>
+        <li>ΔH°rxn = Σ ΔH°f(products) − Σ ΔH°f(reactants)</li>
+        <li>Calorimetry: q = mcΔT (c of water = 4.184 J/g·°C)</li>
+        <li>Bond enthalpies: ΔH ≈ Σ(bonds broken) − Σ(bonds formed)</li>
       </ul>
     `
   },
-  mixing: {
-    course: '207', title: 'Rubber Mixing & Moulding',
-    content: `
-      <div class="sub-heading">Types of Mixers</div>
+  {
+    tag:"Unit 9",
+    title:"Solutions & Colligative Properties",
+    body:`
       <ul>
-        <li><strong>Internal Mixer</strong> – Closed chamber with two rotors; generates shear forces. Best for dispersion and distribution.</li>
-        <li><strong>Open Mill</strong> – Two horizontal rolls rotating in opposite directions. Rubber bonds to front roll; back roll slower → shear forces.</li>
-        <li><strong>Tandem Mixer</strong> – Two mixers in series. First disperses; second distributes. Optimises both tasks.</li>
-      </ul>
-      <div class="sub-heading">Types of Moulding</div>
-      <ul>
-        <li><strong>Compression Moulding</strong> – Oldest method. Inexpensive, little waste. Pre-formed rubber placed into mold; pressure + heat cures it.</li>
-        <li><strong>Injection Moulding</strong> – Heated rubber forced into pressurized cavity via screw/barrel. Cost-effective, precise.</li>
-        <li><strong>Extrusion Moulding</strong> – For fixed cross-section products (hoses, pipes). Rubber forced through a die. Cold feed or hot feed.</li>
-      </ul>
-    `
-  },
-  fibres: {
-    course: '207', title: 'Fibre Science & Classification',
-    content: `
-      <p>Fibres are thin, long, flexible thread-like structures. A fibre's length must be ≥100× its diameter.</p>
-      <div class="sub-heading">Classification</div>
-      <ul>
-        <li><strong>Natural Fibres</strong>
-          <ul>
-            <li>Plant fibres: cotton, jute, bamboo, flax</li>
-            <li>Animal fibres: wool (sheep, camel, goat), silk (silkworm)</li>
-            <li>Mineral fibres: Asbestos (fire/acid resistant)</li>
-          </ul>
-        </li>
-        <li><strong>Man-Made Fibres</strong>
-          <ul>
-            <li>Regenerated (semi-synthetic): viscose rayon, acetate, triacetate</li>
-            <li>Synthetic: polyester, nylon, acrylic</li>
-          </ul>
-        </li>
-      </ul>
-      <div class="sub-heading">Key Fibre Properties</div>
-      <ul>
-        <li><strong>Specific Gravity</strong> – Mass relative to equal volume of water at 4°C. Nylon/acrylics: low density. Cotton/rayon: high density.</li>
-        <li><strong>Strength</strong> – Withstands stress without tearing</li>
-        <li><strong>Elasticity</strong> – Returns to original length after tension. Wool has excellent elasticity.</li>
-        <li><strong>Resilience</strong> – Returns to shape after deformation. Wool has good resilience.</li>
-        <li><strong>Absorbency</strong> – Hydrophilic (natural fibres + rayon) vs Hydrophobic (most synthetics)</li>
-        <li><strong>Luster</strong> – Silk has highest natural sheen; cotton has minimum</li>
-        <li><strong>Heat Conductivity</strong> – Cotton: high (good for summer). Wool: low (warm in winter)</li>
-      </ul>
-      <div class="sub-heading">Filament vs Staple</div>
-      <ul>
-        <li><strong>Filaments</strong> – Continuous length (length:width ≥1000). Silk is only natural filament.</li>
-        <li><strong>Staples</strong> – Short (¾ to 18 inches). Cotton, wool, jute.</li>
+        <li>Molarity (M) = moles solute / liters solution</li>
+        <li>Molality (m) = moles solute / kg solvent</li>
+        <li>Mole fraction (χ) = moles component / total moles</li>
+        <li><b>Colligative properties</b> (depend on number of particles, not identity):</li>
+        <li>Vapor pressure lowering: ΔP = χ_solute × P°_solvent (Raoult's Law)</li>
+        <li>Boiling point elevation: ΔT_b = K_b × m</li>
+        <li>Freezing point depression: ΔT_f = K_f × m</li>
+        <li>Osmotic pressure: π = MRT</li>
+        <li>"Like dissolves like" — polar in polar, nonpolar in nonpolar</li>
       </ul>
     `
   },
-  spinning: {
-    course: '207', title: 'Spinning & Yarn Types',
-    content: `
-      <p>Spinning is the process of converting fibres/filaments into yarn.</p>
-      <div class="sub-heading">Types of Spinning</div>
+  {
+    tag:"Unit 10",
+    title:"Acids, Bases & Equilibrium",
+    body:`
       <ul>
-        <li><strong>Mechanical Spinning</strong> – Used for natural fibres (cotton). Produces staple yarn.</li>
-        <li><strong>Chemical Spinning</strong> – Three types:
-          <ul>
-            <li><strong>Wet Spinning</strong> – Polymer pumped through spinneret into chemical bath. Example: Viscose Rayon, Acrylic, Spandex.</li>
-            <li><strong>Dry Spinning</strong> – Polymer pumped into air chamber. Example: Acetate, Triacetate, Acrylic, Spandex.</li>
-            <li><strong>Melt Spinning</strong> – Polymer chips melted, pumped through spinneret into air. Example: Polyester, Nylon.</li>
-          </ul>
-        </li>
+        <li>Arrhenius: acid = H⁺ donor; base = OH⁻ donor</li>
+        <li>Brønsted-Lowry: acid = proton donor; base = proton acceptor</li>
+        <li>Lewis: acid = e⁻ pair acceptor; base = e⁻ pair donor</li>
+        <li>pH = −log[H⁺]; pOH = −log[OH⁻]; pH + pOH = 14 at 25°C</li>
+        <li>Strong acids: HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄</li>
+        <li>Equilibrium: Kc = [products]^n / [reactants]^m (no solids/liquids)</li>
+        <li>Le Chatelier's principle: system shifts to oppose changes in concentration, T, or P</li>
+        <li>Buffer: weak acid + conjugate base (or weak base + conjugate acid)</li>
       </ul>
-      <div class="sub-heading">Yarn Types</div>
+    `
+  },
+  {
+    tag:"Unit 11",
+    title:"Oxidation-Reduction (Redox)",
+    body:`
       <ul>
-        <li><strong>Simple Yarns</strong> – Twisted together; uniform appearance; great strength. Types: Single, Ply, Cable/Cord.</li>
-        <li><strong>Novelty/Fancy Yarns</strong> – Irregular size or colour for special appearance. Has core yarn + effect yarn + binder yarn. Examples: Slub, Boucle, Chenille, Corkscrew.</li>
-        <li><strong>Textured Yarns</strong> – Greater apparent volume than conventional yarn. Types: Stretch yarns & Bulk yarns.</li>
+        <li>Oxidation: loss of electrons (OIL — Oxidation Is Loss)</li>
+        <li>Reduction: gain of electrons (RIG — Reduction Is Gain)</li>
+        <li>Oxidizing agent: oxidizes others; gets reduced itself</li>
+        <li>Reducing agent: reduces others; gets oxidized itself</li>
+        <li>Oxidation number rules: O = −2 (usually), H = +1, monoatomic ion = charge, neutral compound = 0</li>
+        <li>Balancing redox: half-reaction method (acidic/basic media)</li>
+      </ul>
+      <div class="highlight-box yellow">OILRIG: Oxidation Is Loss, Reduction Is Gain</div>
+    `
+  },
+  {
+    tag:"Unit 12",
+    title:"Organic Chemistry Basics",
+    body:`
+      <ul>
+        <li>Carbon: 4 valence electrons, forms 4 bonds</li>
+        <li>Hydrocarbons: alkanes (C–C only), alkenes (C=C), alkynes (C≡C), aromatics (benzene ring)</li>
+        <li>Functional groups: OH (alcohol), COOH (carboxylic acid), NH₂ (amine), C=O (ketone/aldehyde)</li>
+        <li>IUPAC naming: find longest chain, number from end closest to branch</li>
+        <li>Isomers: same formula, different structure (structural) or arrangement (stereoisomers)</li>
+        <li>Organic reactions: addition, substitution, elimination, condensation, hydrolysis</li>
       </ul>
     `
   }
-};
-
-function showTopic(id) {
-  const t = topics[id];
-  document.getElementById('topic-list').style.display = 'none';
-  const det = document.getElementById('topic-detail');
-  det.innerHTML = `
-    <button class="back-btn" onclick="backToTopics()">← Back</button>
-    <span class="course-badge badge-${t.course}">CHM ${t.course}</span>
-    <h2>${t.title}</h2>
-    ${t.content}
-  `;
-  det.classList.add('open');
-}
-
-function backToTopics() {
-  document.getElementById('topic-list').style.display = '';
-  document.getElementById('topic-detail').classList.remove('open');
-}
-
-// ===== FLASHCARDS =====
-const allCards = [
-  {c:'205', q:'What is the difference between accuracy and precision?', a:'Accuracy is how close a measurement is to the true value. Precision is how close measurements are to each other. High precision does NOT guarantee high accuracy.'},
-  {c:'205', q:'Give the formula for standard deviation of a sample.', a:'s = √[ Σ(xᵢ − x̄)² / (n − 1) ] where x̄ is the mean and n is the number of measurements.'},
-  {c:'205', q:'What are the 3 types of systematic errors?', a:'(1) Instrumental errors – faulty equipment. (2) Method errors – non-ideal chemical behaviour. (3) Personal errors – bias in reading or technique.'},
-  {c:'205', q:'State Beer-Lambert Law.', a:'A = εbc, where A = absorbance, ε = molar absorptivity (L/mol·cm), b = path length (cm), c = concentration (mol/L). Also: A = log(I₀/I).'},
-  {c:'205', q:'What is the difference between equivalence point and end point?', a:'Equivalence point: moles of titrant stoichiometrically equal moles of analyte. End point: when indicator changes colour. Ideally they should be the same.'},
-  {c:'205', q:'What colour change does phenolphthalein show and at what pH range?', a:'Colourless to pink at pH 8.3–10.0. Used in alkaline titrations.'},
-  {c:'205', q:'Give the dilution formula for preparing solutions from a stock.', a:'C₁V₁ = C₂V₂. C₁ = initial concentration, V₁ = volume to take, C₂ = desired concentration, V₂ = final volume.'},
-  {c:'205', q:'What is ANOVA used for and how is the F-ratio computed?', a:'ANOVA compares means of 3+ groups. F = MSB/MSW = (SSB/dfB)/(SSW/dfW). If F > F-critical, reject null hypothesis (means differ significantly).'},
-  {c:'205', q:'What is a primary standard?', a:'A highly pure substance (≥99.9%) used to prepare standard solutions. Must be stable, have high molecular weight, and be readily available.'},
-  {c:'205', q:'What is the Rₑ formula in chromatography?', a:'Rᶠ = distance traveled by substance / distance traveled by solvent front. Used in paper and TLC chromatography.'},
-  {c:'205', q:'Distinguish between hydrophilic and hydrophobic fibres.', a:'Hydrophilic fibres absorb water (natural fibres, rayon, acetate). Hydrophobic fibres do not absorb water (most synthetics like polyester, nylon).'},
-  {c:'205', q:'What is the principle of AAS?', a:'Atomic Absorption Spectroscopy measures absorption of light by free atoms in the gaseous state. Uses element-specific hollow cathode lamp. Very sensitive (ppb levels), applicable to 70+ elements.'},
-  {c:'205', q:'What are the 4 steps in sample preparation?', a:'(1) Drying – remove moisture. (2) Grinding – reduce particle size. (3) Mixing – ensure homogeneity. (4) Quartering – reduce size while maintaining representativeness.'},
-  {c:'205', q:'What is the sample size formula?', a:'n = 4σ²/E² where n = minimum sample size, σ = standard deviation, E = acceptable error.'},
-  {c:'205', q:'How is molarity of a stock liquid acid calculated?', a:'C = (% purity × density × 1000) / molar mass. Example: HCl (37%, 1.18 g/mL, MW 36.46) → C ≈ 12 M.'},
-  {c:'205', q:'What is the principle of fluorescence spectroscopy and its advantage?', a:'Measures emitted light after molecular excitation. It is ~1000× more sensitive than UV-Vis spectroscopy.'},
-  {c:'205', q:'Name three types of column chromatography.', a:'(1) Adsorption chromatography – polar stationary phase. (2) Ion-exchange – charged stationary phase. (3) Gel filtration – size exclusion. Also: partition chromatography.'},
-  {c:'205', q:'What does HPLC stand for and when is it preferred over GC?', a:'High-Performance Liquid Chromatography. Preferred for non-volatile and thermally unstable compounds. Most common type is reversed-phase HPLC.'},
-  {c:'207', q:'What is the chemical composition of natural rubber?', a:'Natural rubber is cis-1,4-polyisoprene with formula (C₅H₈)n. It is made by polymerization of isoprene (2-methyl-1,3-butadiene). Also called an elastomer.'},
-  {c:'207', q:'Who discovered vulcanization and in what year?', a:'Charles Goodyear discovered vulcanization in 1839. It involves reacting natural rubber with sulfur in the presence of heat.'},
-  {c:'207', q:'What is rubber compounding?', a:'The science of mixing a specific rubber formulation (rubber + additives) before vulcanization. Additives include fillers, plasticizers, antioxidants, curing agents.'},
-  {c:'207', q:'What is the role of Carbon Black in rubber compounding?', a:'Primary reinforcing filler in rubber. Improves strength, has antiozonant properties, absorbs UV, and provides conductivity. Made by incomplete combustion.'},
-  {c:'207', q:'Distinguish between accelerators and retarders in vulcanization.', a:'Accelerators (e.g. ZnO, stearic acid) speed up vulcanization from hours to minutes. Retarders delay crosslinking until the rubber reaches the curing temperature, preventing scorching.'},
-  {c:'207', q:'What is the difference between an internal mixer and an open mill?', a:'Internal mixer: closed chamber with two rotors that generate shear forces. Open mill: two exposed horizontal rolls rotating in opposite directions; rubber bonds to front roll.'},
-  {c:'207', q:'Name and describe the three types of rubber moulding.', a:'(1) Compression – pre-formed rubber in metal mold, pressure + heat cures it. (2) Injection – heated rubber forced into mold via pressurized screw barrel. (3) Extrusion – rubber forced through a die for continuous cross-section (hoses, pipes).'},
-  {c:'207', q:'Classify natural fibres.', a:'Natural fibres are classified as: (1) Plant fibres – cotton, jute, flax, bamboo. (2) Animal fibres – wool (sheep, goat, camel) and silk (silkworm). (3) Mineral fibres – Asbestos.'},
-  {c:'207', q:'What is the difference between filament and staple fibres?', a:'Filaments are continuous fibres (length:width ratio ≥1000). Silk is the only natural filament. Staples are short fibres (¾ to 18 inches) like cotton, wool, and jute.'},
-  {c:'207', q:'Describe the three types of chemical spinning.', a:'(1) Wet spinning – spinneret into chemical bath (Rayon, Acrylic, Spandex). (2) Dry spinning – spinneret into air chamber (Acetate, Acrylic). (3) Melt spinning – melted polymer into air (Polyester, Nylon).'},
-  {c:'207', q:'What are the three types of yarn?', a:'(1) Simple yarns – twisted, uniform, strong. Types: single, ply, cable. (2) Novelty/Fancy yarns – irregular for special effects (Slub, Boucle, Chenille). (3) Textured yarns – greater volume; types: stretch and bulk.'},
-  {c:'207', q:'What is resilience in fibres?', a:'The ability of a fibre to return to its original shape after compression, bending, or creasing. Closely related to wrinkle recovery. Wool has excellent resilience.'},
-  {c:'207', q:'What is the source of natural rubber and how is it tapped?', a:'From Hevea brasiliensis tree. Bark is scored at 30° angle for half the trunk circumference. Milky latex flows out; tapped every ~2 days. Trees produce from age 5-6 years.'},
-  {c:'207', q:'Name three synthetic rubbers and their monomers.', a:'(1) SBR – styrene + butadiene copolymer. (2) Neoprene – polymerization of 2-chlorobutadiene. (3) Nitrile rubber – cyanobutadiene + butadiene. (4) Polyisoprene – polymerization of isoprene.'},
-  {c:'207', q:'What are regenerated fibres? Give examples.', a:'Also called semi-synthetic fibres. Cellulose from plants is purified and processed into fibres. Examples: viscose rayon, acetate, triacetate.'},
-  {c:'207', q:'What is specific gravity of a fibre?', a:'Ratio of mass of the fibre to an equal volume of water at 4°C. Indicates density relative to water. Nylon/acrylics have low specific gravity; cotton/rayon have higher density.'},
-  {c:'207', q:'How does coagulation work in rubber processing?', a:'After tapping, formic acid is added to the latex, causing the rubber particles to coagulate (clump like curds). The coagulated mass is then rolled through rollers to remove excess water, creating thin sheets.'},
 ];
 
-let filteredCards = [...allCards];
-let currentCard = 0;
+// ════════════ FLASHCARDS (60 cards) ════════════
+const FLASHCARDS = [
+  // Matter & Measurement
+  {cat:"Matter",q:"What is the difference between a physical change and a chemical change?",a:"A physical change alters form or appearance but not chemical composition (e.g., melting ice). A chemical change produces a new substance with different properties (e.g., burning wood)."},
+  {cat:"Matter",q:"What are the three states of matter and their key differences?",a:"Solid: definite shape & volume, particles tightly packed. Liquid: definite volume, no definite shape. Gas: no definite shape or volume, particles far apart."},
+  {cat:"Matter",q:"What is the difference between a homogeneous and heterogeneous mixture?",a:"Homogeneous (solution): uniform composition throughout (e.g., saltwater). Heterogeneous: non-uniform, components visibly distinct (e.g., salad)."},
+  {cat:"Matter",q:"Define density and give its SI unit.",a:"Density = mass / volume. SI unit is kg/m³, but g/cm³ or g/mL is commonly used in chemistry."},
+  {cat:"Matter",q:"What is the difference between an element and a compound?",a:"An element is a pure substance made of one type of atom (e.g., Fe). A compound is a pure substance made of two or more elements chemically combined in fixed ratios (e.g., H₂O)."},
 
-function loadCards() {
-  const f = document.getElementById('fc-filter').value;
-  filteredCards = f === 'all' ? [...allCards] : allCards.filter(c => c.c === f);
-  currentCard = 0;
-  updateCard();
-}
+  // Atoms
+  {cat:"Atoms",q:"What are the three subatomic particles and their charges?",a:"Proton: +1 charge, in nucleus. Neutron: 0 charge, in nucleus. Electron: −1 charge, in electron cloud."},
+  {cat:"Atoms",q:"What are isotopes? Give an example.",a:"Isotopes are atoms of the same element with the same atomic number (Z) but different mass numbers (A). Example: Carbon-12 (6 protons, 6 neutrons) and Carbon-14 (6 protons, 8 neutrons)."},
+  {cat:"Atoms",q:"How do you calculate the number of neutrons in an atom?",a:"Neutrons = Mass number (A) − Atomic number (Z). Example: Cl-35 has 35 − 17 = 18 neutrons."},
+  {cat:"Atoms",q:"What is atomic mass and how is it calculated?",a:"Atomic mass is the weighted average of all naturally occurring isotopes of an element. Atomic mass = Σ (fractional abundance × isotope mass)."},
+  {cat:"Atoms",q:"What is the difference between a cation and an anion?",a:"A cation is a positively charged ion formed by losing electrons (e.g., Na⁺). An anion is a negatively charged ion formed by gaining electrons (e.g., Cl⁻)."},
 
-function updateCard() {
-  const card = filteredCards[currentCard];
-  document.getElementById('fc-q').textContent = card.q;
-  document.getElementById('fc-a').textContent = card.a;
-  document.getElementById('fc-a').classList.remove('show');
-  document.getElementById('fc-label').textContent = `CHM ${card.c} — Question`;
-  document.getElementById('fc-counter').textContent = `Card ${currentCard + 1} of ${filteredCards.length}`;
-  document.getElementById('fc-progress').style.width = ((currentCard + 1) / filteredCards.length * 100) + '%';
-}
+  // Stoichiometry
+  {cat:"Stoichiometry",q:"What is the mole and what is Avogadro's number?",a:"A mole is the SI unit for amount of substance. 1 mole = 6.022 × 10²³ particles (Avogadro's number)."},
+  {cat:"Stoichiometry",q:"How do you find molar mass?",a:"Add up the atomic masses of all atoms in the formula. Example: H₂O = 2(1.008) + 16.00 = 18.02 g/mol."},
+  {cat:"Stoichiometry",q:"What is a limiting reagent?",a:"The limiting reagent is the reactant that is completely consumed first, limiting the amount of product that can be formed."},
+  {cat:"Stoichiometry",q:"How do you calculate percent yield?",a:"% yield = (actual yield / theoretical yield) × 100%. Theoretical yield is calculated from stoichiometry."},
+  {cat:"Stoichiometry",q:"How do you determine an empirical formula from percent composition?",a:"1. Assume 100 g sample → % = grams. 2. Divide each mass by atomic mass → moles. 3. Divide all by smallest moles → whole-number ratio."},
 
-function toggleAnswer() {
-  document.getElementById('fc-a').classList.toggle('show');
-  const label = document.getElementById('fc-label');
-  label.textContent = label.textContent.includes('Question') ? `CHM ${filteredCards[currentCard].c} — Answer` : `CHM ${filteredCards[currentCard].c} — Question`;
-}
+  // Electronic Structure
+  {cat:"Electrons",q:"State the Pauli exclusion principle.",a:"No two electrons in the same atom can have the same set of four quantum numbers. This means each orbital holds maximum 2 electrons with opposite spins."},
+  {cat:"Electrons",q:"State Hund's rule.",a:"When filling orbitals of equal energy (degenerate), electrons fill each orbital singly first before pairing up. All single electrons have the same spin."},
+  {cat:"Electrons",q:"What are the four quantum numbers and what does each describe?",a:"n = principal (energy level, size). l = azimuthal (subshell shape: 0=s,1=p,2=d,3=f). mₗ = magnetic (orbital orientation). mₛ = spin (+½ or −½)."},
+  {cat:"Electrons",q:"Write the electron configuration for Iron (Z=26).",a:"Fe: 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶. Abbreviated: [Ar] 4s² 3d⁶"},
+  {cat:"Electrons",q:"What is the difference between ground state and excited state?",a:"Ground state: electrons occupy lowest available energy levels. Excited state: one or more electrons have absorbed energy and moved to higher energy levels."},
 
-function nextCard() { currentCard = (currentCard + 1) % filteredCards.length; updateCard(); }
-function prevCard() { currentCard = (currentCard - 1 + filteredCards.length) % filteredCards.length; updateCard(); }
-function shuffleCards() { filteredCards.sort(() => Math.random() - 0.5); currentCard = 0; updateCard(); }
+  // Chemical Bonding
+  {cat:"Bonding",q:"What is an ionic bond?",a:"An ionic bond forms between a metal and nonmetal through complete transfer of electrons. The metal becomes a cation (+) and the nonmetal becomes an anion (−). Held by electrostatic attraction."},
+  {cat:"Bonding",q:"What is a covalent bond?",a:"A covalent bond forms between two nonmetals through sharing of electron pairs. Can be single (1 pair), double (2 pairs), or triple (3 pairs)."},
+  {cat:"Bonding",q:"What determines if a bond is polar covalent vs nonpolar covalent?",a:"Electronegativity difference (ΔEN): < 0.4 = nonpolar covalent; 0.4–1.7 = polar covalent; > 1.7 = ionic. Polar bonds have unequal electron sharing."},
+  {cat:"Bonding",q:"What is VSEPR theory?",a:"Valence Shell Electron Pair Repulsion: electron pairs (bonding and lone pairs) around a central atom repel each other and arrange to minimize repulsion, determining molecular geometry."},
+  {cat:"Bonding",q:"What is a coordinate covalent (dative) bond?",a:"A bond where both electrons in the shared pair come from the same atom. Example: NH₃ + H⁺ → NH₄⁺, where nitrogen donates both electrons."},
 
-updateCard();
+  // Molecular Geometry
+  {cat:"Geometry",q:"What is the bond angle and shape for a tetrahedral molecule?",a:"Tetrahedral geometry has 4 bonding pairs, 0 lone pairs around the central atom. Bond angle = 109.5°. Example: CH₄."},
+  {cat:"Geometry",q:"Why is the bond angle in water 104.5° and not 109.5°?",a:"Water (H₂O) has 2 bonding pairs and 2 lone pairs. Lone pairs exert greater repulsion than bonding pairs, compressing the H-O-H angle from 109.5° to 104.5°."},
+  {cat:"Geometry",q:"What shape does CO₂ have and is it polar?",a:"CO₂ is linear (180°) with 2 double bonds and no lone pairs on carbon. Although C=O bonds are polar, they are equal and opposite → net dipole = 0 → nonpolar molecule."},
+  {cat:"Geometry",q:"What is the geometry of BF₃?",a:"BF₃ has 3 bonding pairs, 0 lone pairs → trigonal planar, bond angle = 120°. It is nonpolar due to symmetry. Note: B is electron deficient."},
+  {cat:"Geometry",q:"What are the 5 electron-domain geometries and their bond angles?",a:"Linear (180°), Trigonal planar (120°), Tetrahedral (109.5°), Trigonal bipyramidal (90°/120°), Octahedral (90°)."},
 
-// ===== QUIZ =====
-const quizBank = [
-  {c:'205', q:'Beer-Lambert Law states A = εbc. What does ε represent?', opts:['Path length','Molar absorptivity','Concentration','Absorbance'], ans:1, exp:'ε (epsilon) is the molar absorptivity constant, measured in L/mol·cm. It is characteristic of the substance at a given wavelength.'},
-  {c:'205', q:'Which type of error can be discovered and corrected?', opts:['Random error','Indeterminate error','Systematic error','Sampling error'], ans:2, exp:'Systematic (determinate) errors are reproducible and can be identified and corrected, e.g. a balance reading consistently high.'},
-  {c:'205', q:'What is the Rf value in chromatography?', opts:['Rate of flow of mobile phase','Ratio of distances (substance vs solvent)','Retention factor of column','Relative frequency'], ans:1, exp:'Rf = distance traveled by substance / distance traveled by solvent front. It ranges from 0 to 1.'},
-  {c:'205', q:'In ANOVA, the degrees of freedom between groups (dfB) equals:', opts:['N − k','k − 1','n − 1','k + 1'], ans:1, exp:'dfB = k − 1 where k is the number of groups. dfW = N − k where N is total observations.'},
-  {c:'205', q:'Which indicator is used for strong acid / strong base titrations?', opts:['Starch solution','Phenolphthalein','Methyl orange','Any of the above'], ans:3, exp:'For strong acid/strong base titrations, the large pH jump near equivalence point means any of these indicators can work. Phenolphthalein (pH 8.3-10) and methyl orange (pH 3.1-4.4) are both commonly used.'},
-  {c:'205', q:'What is the formula for minimum sample size?', opts:['n = 2σ²/E','n = σ/E²','n = 4σ²/E²','n = σ²/4E'], ans:2, exp:'n = 4σ²/E² where σ = standard deviation and E = acceptable error. Larger allowed error means fewer samples needed.'},
-  {c:'205', q:'AAS uses what type of lamp?', opts:['Tungsten lamp','Deuterium lamp','Hollow cathode lamp','Mercury lamp'], ans:2, exp:'AAS uses a hollow cathode lamp that is element-specific. It emits light at wavelengths absorbed by the target element\'s free atoms.'},
-  {c:'205', q:'What does HPLC stand for?', opts:['High-Pressure Liquid Chromatography','High-Performance Liquid Chromatography','High-Phase Liquid Chromatography','Hydrophilic Performance Liquid Chromatography'], ans:1, exp:'HPLC = High-Performance Liquid Chromatography. It is suitable for non-volatile compounds, with high resolution and quantitative capability.'},
-  {c:'205', q:'Leading zeros in a number like 0.0045 are:', opts:['Significant','Not significant','Optional','Ambiguous'], ans:1, exp:'Leading zeros (zeros before the first non-zero digit) are NOT significant. 0.0045 has only 2 significant figures (4 and 5).'},
-  {c:'205', q:'The dilution formula is:', opts:['C₁ + V₁ = C₂ + V₂','C₁V₁ = C₂V₂','C₁/V₁ = C₂/V₂','C₁² = C₂V₂'], ans:1, exp:'C₁V₁ = C₂V₂ is the dilution formula. Multiply initial concentration by initial volume = final concentration by final volume.'},
-  {c:'207', q:'Natural rubber is chemically known as:', opts:['trans-1,4-polyisoprene','cis-1,4-polyisoprene','styrene-butadiene copolymer','polyethylene'], ans:1, exp:'Natural rubber is cis-1,4-polyisoprene. The "cis" configuration is key to its elasticity. The formula is (C₅H₈)n.'},
-  {c:'207', q:'Vulcanization of rubber was discovered by:', opts:['Michael Faraday','Charles Goodyear','Louis Pasteur','Alfred Nobel'], ans:1, exp:'Charles Goodyear discovered vulcanization in 1839. He found that heating rubber with sulfur creates cross-links that dramatically improve rubber\'s properties.'},
-  {c:'207', q:'Which is the most common curing agent used in rubber compounding?', opts:['Carbon black','Zinc oxide','Sulfur','Stearic acid'], ans:2, exp:'Sulfur is the most common curing (vulcanization) agent. It forms cross-links between rubber polymer chains. Peroxide is an alternative but less common.'},
-  {c:'207', q:'What is the role of retarders in rubber compounding?', opts:['Speed up vulcanization','Improve color','Delay crosslinking until proper temperature','Act as fillers'], ans:2, exp:'Retarders delay the crosslinking reaction until the rubber is at the curing temperature. This prevents scorching (premature vulcanization) before the rubber is shaped.'},
-  {c:'207', q:'Which type of rubber moulding is used for hoses and pipes?', opts:['Compression moulding','Injection moulding','Extrusion moulding','Transfer moulding'], ans:2, exp:'Extrusion moulding forces rubber through a die to create products with a fixed cross-section like hoses and pipes. It works like squeezing toothpaste from a tube.'},
-  {c:'207', q:'Silk is described as the only natural:', opts:['Staple fibre','Mineral fibre','Filament fibre','Plant fibre'], ans:2, exp:'Silk is the only natural filament fibre, meaning it comes in continuous lengths. All other natural fibres (cotton, wool, jute) are staple fibres with short discrete lengths.'},
-  {c:'207', q:'In wet spinning, the spinneret is submerged in:', opts:['Air','Hot water only','A chemical bath','Molten polymer'], ans:2, exp:'In wet spinning, the polymer solution is pumped through the spinneret into a chemical bath that solidifies the solution into filaments. Used for Rayon, Acrylic, Spandex.'},
-  {c:'207', q:'Carbon Black is produced by:', opts:['Complete combustion','Incomplete combustion','Chemical reduction','Polymerization'], ans:1, exp:'Carbon Black is produced by the incomplete combustion of carbon-containing materials. It contains fine nanoparticles of mainly carbon and is the primary reinforcing filler for rubber.'},
-  {c:'207', q:'Wool fibres come from which type of animal?', opts:['Silkworms','Sheep, camels, goats, rabbits','Only sheep','Marine animals'], ans:1, exp:'Wool comes from sheep, camels, cashmere and mohair goats, rabbits, and yak. It has excellent elasticity and resilience among natural fibres.'},
-  {c:'207', q:'Which property describes a fibre\'s ability to resist wear from rubbing?', opts:['Resilience','Absorbency','Abrasion resistance','Elasticity'], ans:2, exp:'Abrasion resistance is the ability to resist wear and tear from rubbing. High abrasion resistance increases fabric durability and service life.'},
+  // Gases
+  {cat:"Gases",q:"State Boyle's Law.",a:"At constant temperature, the pressure and volume of a gas are inversely proportional: P₁V₁ = P₂V₂."},
+  {cat:"Gases",q:"State Charles's Law.",a:"At constant pressure, the volume of a gas is directly proportional to its absolute temperature: V₁/T₁ = V₂/T₂. Temperature must be in Kelvin."},
+  {cat:"Gases",q:"What is the ideal gas law equation?",a:"PV = nRT. Where P = pressure (atm), V = volume (L), n = moles, R = 0.08206 L·atm/mol·K, T = temperature (K)."},
+  {cat:"Gases",q:"What is STP and the molar volume of a gas at STP?",a:"STP (Standard Temperature and Pressure) = 0°C (273.15 K) and 1 atm. At STP, 1 mole of any ideal gas occupies 22.4 L."},
+  {cat:"Gases",q:"State Graham's Law of Effusion.",a:"The rate of effusion of a gas is inversely proportional to the square root of its molar mass: rate₁/rate₂ = √(M₂/M₁). Lighter gases move faster."},
+
+  // Thermochemistry
+  {cat:"Thermo",q:"What is the difference between exothermic and endothermic reactions?",a:"Exothermic: releases heat to surroundings, ΔH < 0 (products have less energy). Endothermic: absorbs heat from surroundings, ΔH > 0 (products have more energy)."},
+  {cat:"Thermo",q:"State Hess's Law.",a:"The total enthalpy change of a reaction is the same regardless of the pathway — it depends only on initial and final states. Equations can be added algebraically."},
+  {cat:"Thermo",q:"What is the formula for calorimetry (heat transfer)?",a:"q = mcΔT. Where q = heat (J), m = mass (g), c = specific heat capacity (J/g·°C), ΔT = change in temperature."},
+  {cat:"Thermo",q:"What is standard enthalpy of formation (ΔH°f)?",a:"The enthalpy change when 1 mole of a compound is formed from its constituent elements in their standard states at 25°C and 1 atm. ΔH°f of elements = 0."},
+  {cat:"Thermo",q:"How do you calculate ΔH°rxn using standard enthalpies of formation?",a:"ΔH°rxn = Σ[ΔH°f(products)] − Σ[ΔH°f(reactants)]. Multiply each ΔH°f by the stoichiometric coefficient."},
+
+  // Solutions
+  {cat:"Solutions",q:"What is molarity and how is it calculated?",a:"Molarity (M) = moles of solute / liters of solution. Units: mol/L or M. Most common concentration unit in general chemistry."},
+  {cat:"Solutions",q:"What are colligative properties? Name four.",a:"Properties that depend on the number of solute particles, not their identity: (1) Vapor pressure lowering, (2) Boiling point elevation, (3) Freezing point depression, (4) Osmotic pressure."},
+  {cat:"Solutions",q:"What is Raoult's Law?",a:"P_solution = χ_solvent × P°_solvent. The vapor pressure of a solution equals the mole fraction of the solvent times the vapor pressure of the pure solvent."},
+  {cat:"Solutions",q:"What is Henry's Law?",a:"The solubility of a gas in a liquid is directly proportional to the partial pressure of that gas above the liquid: C = kH × P."},
+  {cat:"Solutions",q:"Explain 'like dissolves like' with an example.",a:"Polar solvents dissolve polar/ionic solutes; nonpolar solvents dissolve nonpolar solutes. Example: NaCl (polar/ionic) dissolves in water (polar) but not in hexane (nonpolar)."},
+
+  // Acids & Bases
+  {cat:"Acids/Bases",q:"What are the strong acids you must memorize?",a:"HCl (hydrochloric), HBr (hydrobromic), HI (hydroiodic), HNO₃ (nitric), H₂SO₄ (sulfuric), HClO₄ (perchloric). These fully dissociate in water."},
+  {cat:"Acids/Bases",q:"What is the relationship between pH and pOH at 25°C?",a:"pH + pOH = 14 at 25°C. pH = −log[H⁺], pOH = −log[OH⁻]. Neutral solution: pH = pOH = 7."},
+  {cat:"Acids/Bases",q:"What is a buffer solution?",a:"A buffer resists changes in pH when small amounts of acid or base are added. It contains a weak acid and its conjugate base (or weak base + conjugate acid) in comparable amounts."},
+  {cat:"Acids/Bases",q:"State Le Chatelier's Principle.",a:"When a system at equilibrium is disturbed (by changing concentration, temperature, or pressure), it shifts to partially counteract the disturbance and re-establish equilibrium."},
+  {cat:"Acids/Bases",q:"What is Kw and what is its value at 25°C?",a:"Kw is the water dissociation constant: H₂O ⇌ H⁺ + OH⁻. Kw = [H⁺][OH⁻] = 1.0 × 10⁻¹⁴ at 25°C."},
+
+  // Redox
+  {cat:"Redox",q:"What does OILRIG stand for?",a:"OIL RIG = Oxidation Is Loss (of electrons), Reduction Is Gain (of electrons). Memory device for redox reactions."},
+  {cat:"Redox",q:"What is the oxidation state of oxygen in most compounds?",a:"Oxygen is usually −2, except in peroxides (H₂O₂) where it is −1, and in OF₂ where it is +2."},
+  {cat:"Redox",q:"What is the oxidation number of hydrogen in compounds?",a:"Hydrogen is +1 when bonded to nonmetals (e.g., HCl), and −1 when bonded to metals (hydrides, e.g., NaH)."},
+  {cat:"Redox",q:"What is an oxidizing agent? A reducing agent?",a:"Oxidizing agent: causes oxidation of another substance; it gets reduced (gains e⁻). Reducing agent: causes reduction of another substance; it gets oxidized (loses e⁻)."},
+  {cat:"Redox",q:"In electrochemistry, what happens at the anode vs cathode?",a:"Anode: oxidation occurs (loses electrons). Cathode: reduction occurs (gains electrons). Memory: AN OX, RED CAT."},
+
+  // Organic
+  {cat:"Organic",q:"What is the general formula for alkanes, alkenes, and alkynes?",a:"Alkanes: CₙH₂ₙ₊₂ (single bonds). Alkenes: CₙH₂ₙ (one double bond). Alkynes: CₙH₂ₙ₋₂ (one triple bond)."},
+  {cat:"Organic",q:"What are the main functional groups in organic chemistry?",a:"Hydroxyl (–OH, alcohol), Carbonyl (C=O, ketone/aldehyde), Carboxyl (–COOH, acid), Amino (–NH₂, amine), Ester (–COO–), Ether (–O–), Halide (–X)."},
+  {cat:"Organic",q:"What is the difference between structural isomers and stereoisomers?",a:"Structural (constitutional) isomers: same molecular formula, different connectivity. Stereoisomers: same connectivity, different spatial arrangement (includes enantiomers and diastereomers)."},
+  {cat:"Organic",q:"What are enantiomers?",a:"Non-superimposable mirror image molecules. Occur when a carbon has 4 different substituents (chiral center). They rotate plane-polarized light in opposite directions."},
+  {cat:"Organic",q:"Name the four basic types of organic reactions.",a:"(1) Addition: atoms added across multiple bond. (2) Substitution: one atom/group replaced by another. (3) Elimination: atoms removed to form a double bond. (4) Condensation/Hydrolysis: joining/breaking with loss/gain of water."},
 ];
 
-let quizQuestions = [];
+// ════════════════════════════════════════════
+// QUIZ QUESTIONS (60+ unique questions)
+// ════════════════════════════════════════════
+const QUESTIONS = [
+  // Matter
+  {topic:"Matter",q:"Which of the following is a chemical change?",opts:["Melting ice","Dissolving sugar in water","Burning wood","Breaking glass"],ans:2,exp:"Burning wood produces new substances (CO₂, H₂O, ash) through a chemical reaction — it cannot be easily reversed."},
+  {topic:"Matter",q:"A substance with definite volume but no definite shape is a:",opts:["Solid","Liquid","Gas","Plasma"],ans:1,exp:"Liquids have definite volume (fixed amount of particles) but take the shape of their container, so no definite shape."},
+  {topic:"Matter",q:"What is the SI unit of temperature?",opts:["Celsius","Fahrenheit","Kelvin","Rankine"],ans:2,exp:"Kelvin (K) is the SI base unit of temperature. K = °C + 273.15."},
+  {topic:"Matter",q:"Saltwater is an example of a:",opts:["Pure substance","Compound","Homogeneous mixture","Heterogeneous mixture"],ans:2,exp:"Saltwater has uniform composition throughout (salt dissolved in water), making it a homogeneous mixture (solution)."},
+  {topic:"Matter",q:"The number of significant figures in 0.00340 is:",opts:["2","3","5","6"],ans:1,exp:"Leading zeros are not significant. The significant figures are 3, 4, and 0 (trailing zero after decimal) = 3 significant figures."},
+
+  // Atoms
+  {topic:"Atoms",q:"An atom has 17 protons and 18 neutrons. Its mass number is:",opts:["17","18","35","1"],ans:2,exp:"Mass number = protons + neutrons = 17 + 18 = 35. This is Chlorine-35."},
+  {topic:"Atoms",q:"Which particles are found in the nucleus?",opts:["Electrons and protons","Protons and neutrons","Electrons and neutrons","Only protons"],ans:1,exp:"The nucleus contains protons and neutrons (collectively called nucleons). Electrons orbit outside the nucleus."},
+  {topic:"Atoms",q:"Carbon-12 and Carbon-14 are:",opts:["Allotropes","Isotopes","Isobars","Ions"],ans:1,exp:"Both have 6 protons (same element, Z=6) but different neutrons/mass numbers — they are isotopes."},
+  {topic:"Atoms",q:"An element with Z=11 has lost one electron. What is its charge?",opts:["-1","+1","-2","+2"],ans:1,exp:"Losing 1 electron means the atom now has one more proton than electrons → charge = +1. This is Na⁺."},
+  {topic:"Atoms",q:"The atomic number of an element equals its number of:",opts:["Neutrons","Electrons (neutral atom)","Protons","Mass number"],ans:2,exp:"Atomic number (Z) = number of protons. For a neutral atom, protons = electrons. But the question says 'protons' is also correct — in a neutral atom, protons = electrons, but Z specifically equals protons."},
+
+  // Stoichiometry
+  {topic:"Stoichiometry",q:"How many moles are in 44 g of CO₂? (Molar mass CO₂ = 44 g/mol)",opts:["0.5 mol","1 mol","2 mol","88 mol"],ans:1,exp:"n = mass / molar mass = 44 g / 44 g/mol = 1 mol."},
+  {topic:"Stoichiometry",q:"Avogadro's number is approximately:",opts:["6.022 × 10²³","3.14 × 10¹⁰","6.022 × 10⁻²³","1.38 × 10⁻²³"],ans:0,exp:"Avogadro's number Nₐ = 6.022 × 10²³. It represents the number of particles in 1 mole."},
+  {topic:"Stoichiometry",q:"In a reaction, the actual yield is 18 g and theoretical yield is 24 g. Percent yield is:",opts:["133%","75%","18%","42%"],ans:1,exp:"% yield = (actual / theoretical) × 100 = (18/24) × 100 = 75%."},
+  {topic:"Stoichiometry",q:"What is the empirical formula of C₆H₁₂O₆?",opts:["C₂H₄O₂","CH₂O","C₃H₆O₃","C₆H₁₂O₆"],ans:1,exp:"Divide all subscripts by their GCF (6): 6/6=1, 12/6=2, 6/6=1 → CH₂O."},
+  {topic:"Stoichiometry",q:"The limiting reagent in a reaction is:",opts:["The cheapest reactant","The reactant in excess","The reactant completely consumed first","The reactant with highest molar mass"],ans:2,exp:"The limiting reagent is the first reactant to be completely consumed, which limits the amount of product formed."},
+
+  // Electronic Structure
+  {topic:"Electrons",q:"The maximum number of electrons in the 3rd energy level (n=3) is:",opts:["8","18","32","2"],ans:1,exp:"Max electrons = 2n² = 2(3)² = 18. The 3rd shell contains 3s, 3p, and 3d subshells."},
+  {topic:"Electrons",q:"Which subshell fills first: 4s or 3d?",opts:["4s","3d","They fill simultaneously","Depends on the element"],ans:0,exp:"According to the Aufbau principle, 4s (n+l=4) has lower energy than 3d (n+l=5), so 4s fills first."},
+  {topic:"Electrons",q:"Hund's rule states that electrons:",opts:["Fill the lowest energy orbital first","Cannot have same spin","Fill each degenerate orbital singly before pairing","Always pair up first"],ans:2,exp:"Hund's rule: electrons occupy each degenerate orbital singly before any pairing occurs, with parallel spins."},
+  {topic:"Electrons",q:"What is the electron configuration of Na (Z=11)?",opts:["1s² 2s² 2p⁶ 3s¹","1s² 2s² 2p⁵ 3s²","1s² 2s² 2p⁶ 3p¹","[Ne] 3p¹"],ans:0,exp:"Na: 1s² 2s² 2p⁶ 3s¹. The 11th electron enters the 3s subshell. Also written [Ne] 3s¹."},
+  {topic:"Electrons",q:"Which quantum number describes the orientation of an orbital?",opts:["Principal (n)","Azimuthal (l)","Magnetic (mₗ)","Spin (mₛ)"],ans:2,exp:"The magnetic quantum number (mₗ) describes the orientation of the orbital in space. Its values range from −l to +l."},
+
+  // Bonding
+  {topic:"Bonding",q:"NaCl is an example of:",opts:["Covalent bonding","Ionic bonding","Metallic bonding","Hydrogen bonding"],ans:1,exp:"NaCl forms between sodium (metal) and chlorine (nonmetal) through complete electron transfer: Na donates 1 electron to Cl."},
+  {topic:"Bonding",q:"Which molecule has a triple bond?",opts:["H₂O","N₂","O₂","CO₂"],ans:1,exp:"N₂ has a triple bond (N≡N), making it very stable. O₂ has a double bond. H₂O and CO₂ have double bonds."},
+  {topic:"Bonding",q:"A bond between two atoms with electronegativity difference of 0.3 is:",opts:["Ionic","Polar covalent","Nonpolar covalent","Metallic"],ans:2,exp:"ΔEN < 0.4 = nonpolar covalent. The electrons are shared almost equally, giving no significant dipole."},
+  {topic:"Bonding",q:"What does VSEPR stand for?",opts:["Very Strong Electron Pair Repulsion","Valence Shell Electron Pair Repulsion","Valence Shell Energy Pair Rotation","Variable Shell Electron Pair Rule"],ans:1,exp:"VSEPR = Valence Shell Electron Pair Repulsion. Electron pairs arrange to minimize repulsion, determining shape."},
+  {topic:"Bonding",q:"How many valence electrons does carbon have?",opts:["2","4","6","8"],ans:1,exp:"Carbon is in Group 14 (IVA), so it has 4 valence electrons. This is why it forms 4 bonds."},
+
+  // Geometry
+  {topic:"Geometry",q:"What is the molecular geometry of NH₃?",opts:["Trigonal planar","Tetrahedral","Trigonal pyramidal","Linear"],ans:2,exp:"NH₃ has 3 bonding pairs + 1 lone pair. Electron geometry = tetrahedral, but molecular geometry = trigonal pyramidal. Bond angle ≈ 107°."},
+  {topic:"Geometry",q:"Which molecule is nonpolar despite having polar bonds?",opts:["HCl","H₂O","CO₂","NH₃"],ans:2,exp:"CO₂ is linear — the two polar C=O bonds point in opposite directions and cancel out, giving zero net dipole moment."},
+  {topic:"Geometry",q:"The bond angle in methane (CH₄) is:",opts:["90°","104.5°","109.5°","120°"],ans:2,exp:"CH₄ is tetrahedral with 4 equivalent bonding pairs and no lone pairs → 109.5°."},
+  {topic:"Geometry",q:"How many lone pairs does the central atom in H₂O have?",opts:["0","1","2","3"],ans:2,exp:"Oxygen has 6 valence electrons. 2 are used in bonds with H, leaving 4 = 2 lone pairs on the central oxygen."},
+  {topic:"Geometry",q:"What shape does BeCl₂ have?",opts:["Bent","Linear","Trigonal planar","Tetrahedral"],ans:1,exp:"BeCl₂: Be has 2 bonding pairs, no lone pairs → linear, bond angle = 180°. Be is electron deficient."},
+
+  // Gases
+  {topic:"Gases",q:"A gas occupies 4 L at 2 atm. What volume at 1 atm (constant T)?",opts:["1 L","2 L","4 L","8 L"],ans:3,exp:"Boyle's Law: P₁V₁ = P₂V₂ → (2)(4) = (1)(V₂) → V₂ = 8 L. Pressure drops, volume increases."},
+  {topic:"Gases",q:"At STP, 1 mole of an ideal gas occupies:",opts:["11.2 L","22.4 L","44.8 L","2.24 L"],ans:1,exp:"Standard molar volume at STP (0°C, 1 atm) = 22.4 L/mol. This is a key value to memorize."},
+  {topic:"Gases",q:"In PV = nRT, the value of R in L·atm/mol·K is:",opts:["8.314","0.08206","1.987","6.022"],ans:1,exp:"R = 0.08206 L·atm/mol·K (used when pressure is in atm and volume in liters)."},
+  {topic:"Gases",q:"Dalton's Law states that total pressure of a gas mixture equals:",opts:["The pressure of the heaviest gas","The average of all partial pressures","The sum of all partial pressures","The product of partial pressures"],ans:2,exp:"Dalton's Law of Partial Pressures: Pₜₒₜ = P₁ + P₂ + P₃ + … Each gas behaves independently."},
+  {topic:"Gases",q:"At constant pressure, doubling the absolute temperature of a gas:",opts:["Doubles the volume","Halves the volume","Quadruples the volume","Has no effect"],ans:0,exp:"Charles's Law: V/T = constant. If T doubles, V doubles (they are directly proportional at constant P)."},
+
+  // Thermochemistry
+  {topic:"Thermo",q:"Which of the following is an exothermic reaction?",opts:["Melting ice","Dissolving NH₄NO₃ in water","Burning methane","Photosynthesis"],ans:2,exp:"Burning methane (CH₄ + 2O₂ → CO₂ + 2H₂O) releases energy (heat and light), so ΔH < 0 = exothermic."},
+  {topic:"Thermo",q:"The specific heat of water is 4.184 J/g·°C. How much heat to raise 50 g by 10°C?",opts:["2092 J","418 J","209 J","4184 J"],ans:0,exp:"q = mcΔT = (50 g)(4.184 J/g·°C)(10°C) = 2092 J = 2.092 kJ."},
+  {topic:"Thermo",q:"According to Hess's Law, enthalpy is:",opts:["Path dependent","State function (path independent)","Always negative","Equal to temperature"],ans:1,exp:"Enthalpy is a state function — ΔH depends only on the initial and final states, not the pathway taken."},
+  {topic:"Thermo",q:"What is the standard enthalpy of formation of any element in its standard state?",opts:["1 kJ/mol","-1 kJ/mol","0 kJ/mol","Depends on the element"],ans:2,exp:"By definition, ΔH°f = 0 for any element in its most stable standard state (e.g., O₂(g), C(graphite), Fe(s))."},
+  {topic:"Thermo",q:"Breaking chemical bonds requires:",opts:["Releasing energy","Absorbing energy","No energy change","Only catalysts"],ans:1,exp:"Bond breaking is endothermic (requires energy input). Bond formation is exothermic (releases energy). Net ΔH = bonds broken − bonds formed."},
+
+  // Solutions
+  {topic:"Solutions",q:"What is the molarity of 2 moles of NaCl dissolved in 500 mL solution?",opts:["1 M","2 M","4 M","0.5 M"],ans:2,exp:"M = moles / liters = 2 mol / 0.500 L = 4 M."},
+  {topic:"Solutions",q:"Adding a nonvolatile solute to a solvent will:",opts:["Raise vapor pressure","Lower vapor pressure","Have no effect on vapor pressure","Increase evaporation rate"],ans:1,exp:"Raoult's Law: adding solute lowers the mole fraction of solvent, thus lowering vapor pressure of the solution."},
+  {topic:"Solutions",q:"Which colligative property is used to determine molar mass of a polymer?",opts:["Vapor pressure lowering","Boiling point elevation","Osmotic pressure","Freezing point depression"],ans:2,exp:"Osmotic pressure (π = MRT) is most sensitive and useful for high-MW solutes like polymers and biomolecules."},
+  {topic:"Solutions",q:"Antifreeze works by which colligative property?",opts:["Vapor pressure lowering","Boiling point elevation","Freezing point depression","Osmotic pressure"],ans:2,exp:"Ethylene glycol (antifreeze) lowers the freezing point of water (ΔTf = Kf × m), preventing it from freezing in winter."},
+  {topic:"Solutions",q:"Which substance would you expect to dissolve best in water?",opts:["CCl₄","Hexane (C₆H₁₄)","Ethanol (C₂H₅OH)","I₂"],ans:2,exp:"Ethanol has an –OH group, making it polar and capable of hydrogen bonding with water. Water is polar — 'like dissolves like.'"},
+
+  // Acids/Bases
+  {topic:"Acids/Bases",q:"What is the pH of a solution with [H⁺] = 10⁻³ M?",opts:["3","11","7","-3"],ans:0,exp:"pH = −log[H⁺] = −log(10⁻³) = 3. Since pH < 7, this is an acidic solution."},
+  {topic:"Acids/Bases",q:"Which of these is a strong acid?",opts:["HF","CH₃COOH","HCl","H₂CO₃"],ans:2,exp:"HCl (hydrochloric acid) is a strong acid — it fully dissociates: HCl → H⁺ + Cl⁻. HF and acetic acid are weak acids."},
+  {topic:"Acids/Bases",q:"A Brønsted-Lowry acid is defined as:",opts:["An electron pair donor","An electron pair acceptor","A proton donor","A proton acceptor"],ans:2,exp:"Brønsted-Lowry definition: acid = proton (H⁺) donor; base = proton acceptor. This is broader than Arrhenius definition."},
+  {topic:"Acids/Bases",q:"At 25°C, the product [H⁺][OH⁻] equals:",opts:["14","7","1.0 × 10⁻⁷","1.0 × 10⁻¹⁴"],ans:3,exp:"Kw = [H⁺][OH⁻] = 1.0 × 10⁻¹⁴ at 25°C. This is the water autoionization constant."},
+  {topic:"Acids/Bases",q:"Le Chatelier's Principle says a system at equilibrium will:",opts:["Always shift right when disturbed","Always shift left when disturbed","Shift to counteract a disturbance","Remain unchanged after a disturbance"],ans:2,exp:"Le Chatelier's Principle: the system shifts in the direction that partially offsets the imposed change, to restore equilibrium."},
+
+  // Redox
+  {topic:"Redox",q:"In the reaction 2Na + Cl₂ → 2NaCl, sodium is:",opts:["Reduced","Oxidized","Neither","Both"],ans:1,exp:"Na goes from 0 to +1 — it loses an electron, which is oxidation. Na is the reducing agent."},
+  {topic:"Redox",q:"What is the oxidation number of Mn in KMnO₄?",opts:["+3","+5","+7","+4"],ans:2,exp:"K = +1, O = −2 (×4 = −8). So: +1 + Mn − 8 = 0 → Mn = +7."},
+  {topic:"Redox",q:"Which statement about a galvanic cell is correct?",opts:["Anode is positive","Cathode undergoes oxidation","Reduction occurs at the cathode","Oxidation occurs at the cathode"],ans:2,exp:"In a galvanic (voltaic) cell: cathode = reduction (RED CAT), anode = oxidation. Cathode is the positive electrode."},
+  {topic:"Redox",q:"The species that causes another to be oxidized is called:",opts:["Reducing agent","Oxidizing agent","Acid","Catalyst"],ans:1,exp:"The oxidizing agent accepts electrons from the other species, causing it to be oxidized. The oxidizing agent itself gets reduced."},
+  {topic:"Redox",q:"What is the oxidation number of sulfur in H₂SO₄?",opts:["+2","+4","+6","-2"],ans:2,exp:"H = +1 (×2=+2), O = −2 (×4=−8). Total = 0: +2 + S − 8 = 0 → S = +6."},
+
+  // Organic
+  {topic:"Organic",q:"What is the molecular formula of butane?",opts:["C₃H₈","C₄H₁₀","C₄H₈","C₅H₁₂"],ans:1,exp:"Alkanes: CₙH₂ₙ₊₂. For butane (n=4): C₄H₂(4)+2 = C₄H₁₀."},
+  {topic:"Organic",q:"Which functional group characterizes alcohols?",opts:["–COOH","–NH₂","–OH","C=O"],ans:2,exp:"Alcohols contain the hydroxyl group (–OH) attached to a carbon chain. Example: ethanol (CH₃CH₂OH)."},
+  {topic:"Organic",q:"What type of isomers are non-superimposable mirror images?",opts:["Constitutional isomers","Conformational isomers","Enantiomers","Diastereomers"],ans:2,exp:"Enantiomers are non-superimposable mirror images, typically due to a chiral carbon (carbon with 4 different substituents)."},
+  {topic:"Organic",q:"Which reaction adds atoms across a C=C double bond?",opts:["Substitution","Elimination","Addition","Condensation"],ans:2,exp:"Addition reactions add atoms or groups across the double bond of alkenes, converting C=C to C–C. Example: H₂ + CH₂=CH₂ → CH₃CH₃."},
+  {topic:"Organic",q:"What is the name of CH₃COOH?",opts:["Methanol","Acetaldehyde","Acetic acid","Acetone"],ans:2,exp:"CH₃COOH contains a carboxyl group (–COOH) → carboxylic acid. Its common name is acetic acid (found in vinegar)."},
+];
+
+// ════════════════════════════════════════════
+// REFERENCE DATA
+// ════════════════════════════════════════════
+const REF_CARDS = [
+  {title:"Gas Laws", items:[
+    {l:"Boyle's Law", v:"P₁V₁ = P₂V₂"},
+    {l:"Charles's Law", v:"V₁/T₁ = V₂/T₂"},
+    {l:"Gay-Lussac", v:"P₁/T₁ = P₂/T₂"},
+    {l:"Ideal Gas", v:"PV = nRT"},
+    {l:"R (L·atm)", v:"0.08206 L·atm/mol·K"},
+    {l:"STP Molar Vol", v:"22.4 L/mol"},
+  ]},
+  {title:"Thermochemistry", items:[
+    {l:"Calorimetry", v:"q = mcΔT"},
+    {l:"c(water)", v:"4.184 J/g·°C"},
+    {l:"Hess's Law", v:"ΔH = path independent"},
+    {l:"ΔH°rxn", v:"Σ ΔH°f(prod) − Σ ΔH°f(react)"},
+    {l:"Exothermic", v:"ΔH < 0"},
+    {l:"Endothermic", v:"ΔH > 0"},
+  ]},
+  {title:"Solutions", items:[
+    {l:"Molarity", v:"M = mol / L"},
+    {l:"Molality", v:"m = mol / kg"},
+    {l:"Raoult's Law", v:"P = χ·P°"},
+    {l:"ΔTb", v:"Kb × m"},
+    {l:"ΔTf", v:"Kf × m"},
+    {l:"Osmotic π", v:"MRT"},
+  ]},
+  {title:"Acids & Bases", items:[
+    {l:"pH", v:"−log[H⁺]"},
+    {l:"pOH", v:"−log[OH⁻]"},
+    {l:"pH + pOH", v:"= 14 at 25°C"},
+    {l:"Kw", v:"1.0 × 10⁻¹⁴"},
+    {l:"Henderson-H.", v:"pH = pKa + log([A⁻]/[HA])"},
+  ]},
+  {title:"Stoichiometry", items:[
+    {l:"Moles", v:"n = m / M"},
+    {l:"Avogadro Nₐ", v:"6.022 × 10²³"},
+    {l:"% Yield", v:"(actual/theoretical)×100"},
+    {l:"% Composition", v:"(mass element/molar mass)×100"},
+  ]},
+  {title:"Key Constants", items:[
+    {l:"Speed of light c", v:"3.00 × 10⁸ m/s"},
+    {l:"Planck h", v:"6.626 × 10⁻³⁴ J·s"},
+    {l:"Boltzmann k", v:"1.38 × 10⁻²³ J/K"},
+    {l:"1 atm", v:"101.325 kPa = 760 mmHg"},
+    {l:"0°C", v:"= 273.15 K"},
+    {l:"1 cal", v:"= 4.184 J"},
+  ]},
+];
+
+const POLY_IONS = [
+  ["NH₄⁺","Ammonium"],["OH⁻","Hydroxide"],["NO₂⁻","Nitrite"],["NO₃⁻","Nitrate"],
+  ["SO₃²⁻","Sulfite"],["SO₄²⁻","Sulfate"],["HSO₄⁻","Hydrogen sulfate"],
+  ["CO₃²⁻","Carbonate"],["HCO₃⁻","Bicarbonate"],["PO₄³⁻","Phosphate"],
+  ["HPO₄²⁻","Hydrogen phosphate"],["H₂PO₄⁻","Dihydrogen phosphate"],
+  ["ClO⁻","Hypochlorite"],["ClO₂⁻","Chlorite"],["ClO₃⁻","Chlorate"],["ClO₄⁻","Perchlorate"],
+  ["MnO₄⁻","Permanganate"],["Cr₂O₇²⁻","Dichromate"],["CrO₄²⁻","Chromate"],["CN⁻","Cyanide"],
+];
+
+const SOLUBILITY = [
+  ["Li⁺, Na⁺, K⁺, NH₄⁺ salts","Soluble","No exceptions"],
+  ["Nitrate NO₃⁻ salts","Soluble","No exceptions"],
+  ["Acetate CH₃COO⁻","Soluble","Except Ag⁺"],
+  ["Cl⁻, Br⁻, I⁻ halides","Soluble","Except Ag⁺, Pb²⁺, Hg₂²⁺"],
+  ["Sulfates SO₄²⁻","Soluble","Except Ba²⁺, Pb²⁺, Sr²⁺, Ca²⁺"],
+  ["Hydroxides OH⁻","Insoluble","Except alkali metals, Ba²⁺, Sr²⁺"],
+  ["Carbonates CO₃²⁻","Insoluble","Except alkali metals, NH₄⁺"],
+  ["Phosphates PO₄³⁻","Insoluble","Except alkali metals, NH₄⁺"],
+  ["Sulfides S²⁻","Insoluble","Except alkali metals, Ca²⁺, Ba²⁺, Sr²⁺"],
+];
+
+const ELEMENTS = [
+  [1,"H","Hydrogen",1.008,"1"],[2,"He","Helium",4.003,"18"],
+  [3,"Li","Lithium",6.941,"1"],[4,"Be","Beryllium",9.012,"2"],
+  [5,"B","Boron",10.81,"13"],[6,"C","Carbon",12.01,"14"],
+  [7,"N","Nitrogen",14.01,"15"],[8,"O","Oxygen",16.00,"16"],
+  [9,"F","Fluorine",19.00,"17"],[10,"Ne","Neon",20.18,"18"],
+  [11,"Na","Sodium",22.99,"1"],[12,"Mg","Magnesium",24.31,"2"],
+  [13,"Al","Aluminum",26.98,"13"],[14,"Si","Silicon",28.09,"14"],
+  [15,"P","Phosphorus",30.97,"15"],[16,"S","Sulfur",32.07,"16"],
+  [17,"Cl","Chlorine",35.45,"17"],[18,"Ar","Argon",39.95,"18"],
+  [19,"K","Potassium",39.10,"1"],[20,"Ca","Calcium",40.08,"2"],
+  [21,"Sc","Scandium",44.96,"3"],[22,"Ti","Titanium",47.87,"4"],
+  [23,"V","Vanadium",50.94,"5"],[24,"Cr","Chromium",52.00,"6"],
+  [25,"Mn","Manganese",54.94,"7"],[26,"Fe","Iron",55.85,"8"],
+  [27,"Co","Cobalt",58.93,"9"],[28,"Ni","Nickel",58.69,"10"],
+  [29,"Cu","Copper",63.55,"11"],[30,"Zn","Zinc",65.38,"12"],
+  [31,"Ga","Gallium",69.72,"13"],[32,"Ge","Germanium",72.63,"14"],
+  [33,"As","Arsenic",74.92,"15"],[34,"Se","Selenium",78.97,"16"],
+  [35,"Br","Bromine",79.90,"17"],[36,"Kr","Krypton",83.80,"18"],
+];
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let currentCardIndex = 0;
+let filteredCards = [...FLASHCARDS];
+let currentCat = "All";
+let cardsReviewed = 0;
+let highScore = 0;
+
+let quizPool = [];
+let quizCurrent = 0;
 let quizScore = 0;
-let quizIdx = 0;
+let currentQuizQuestions = [];
+const QUIZ_SIZE = 15;
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  buildTopics();
+  buildCatFilter();
+  updateFlashcard();
+  buildRefGrid();
+  buildPolyTable();
+  buildSolTable();
+  buildPTTable();
+
+  document.addEventListener('keydown', e => {
+    const fc = document.getElementById('flashcards');
+    if (!fc.classList.contains('active')) return;
+    if (e.key === 'ArrowRight') nextCard();
+    if (e.key === 'ArrowLeft') prevCard();
+    if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  });
+});
+
+// ── Section switching ──
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`[data-tab="${id}"]`).classList.add('active');
+}
+
+// ── Topics ──
+function buildTopics() {
+  const g = document.getElementById('topicsGrid');
+  TOPICS.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'topic-card';
+    card.innerHTML = `<div class="topic-tag">${t.tag}</div><div class="topic-title">${t.title}</div><div class="topic-body">${t.body}</div>`;
+    g.appendChild(card);
+  });
+}
+
+// ── Flashcards ──
+function buildCatFilter() {
+  const cats = ['All', ...new Set(FLASHCARDS.map(c => c.cat))];
+  const f = document.getElementById('catFilter');
+  cats.forEach(c => {
+    const ch = document.createElement('button');
+    ch.className = 'filter-chip' + (c === 'All' ? ' active' : '');
+    ch.textContent = c;
+    ch.onclick = () => {
+      document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
+      ch.classList.add('active');
+      currentCat = c;
+      filteredCards = c === 'All' ? [...FLASHCARDS] : FLASHCARDS.filter(x => x.cat === c);
+      currentCardIndex = 0;
+      document.getElementById('flashcard').classList.remove('flipped');
+      updateFlashcard();
+    };
+    f.appendChild(ch);
+  });
+}
+
+function updateFlashcard() {
+  const card = filteredCards[currentCardIndex];
+  document.getElementById('cardQ').textContent = card.q;
+  document.getElementById('cardA').textContent = card.a;
+  document.getElementById('flashcard').classList.remove('flipped');
+  const total = filteredCards.length;
+  document.getElementById('cardCounter').textContent = `${currentCardIndex+1} / ${total}`;
+  const pct = ((currentCardIndex+1)/total)*100;
+  document.getElementById('flashProgress').style.width = pct + '%';
+}
+
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextCard() {
+  currentCardIndex = (currentCardIndex + 1) % filteredCards.length;
+  updateFlashcard();
+}
+
+function prevCard() {
+  currentCardIndex = (currentCardIndex - 1 + filteredCards.length) % filteredCards.length;
+  updateFlashcard();
+}
+
+function shuffleCards() {
+  for (let i = filteredCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+  }
+  currentCardIndex = 0;
+  updateFlashcard();
+}
+
+function markCard(good) {
+  cardsReviewed++;
+  document.getElementById('cardCount').textContent = cardsReviewed;
+  nextCard();
+}
+
+// ── Quiz ──
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
 
 function startQuiz() {
-  const course = document.getElementById('quiz-course').value;
-  const num = parseInt(document.getElementById('quiz-num').value);
-  let pool = course === 'all' ? quizBank : quizBank.filter(q => q.c === course);
-  pool = pool.sort(() => Math.random() - 0.5).slice(0, Math.min(num, pool.length));
-  quizQuestions = pool;
-  quizScore = 0; quizIdx = 0;
-  document.getElementById('quiz-setup-view').style.display = 'none';
-  document.getElementById('quiz-result-view').style.display = 'none';
-  document.getElementById('quiz-play-view').style.display = 'block';
-  showQuestion();
+  currentQuizQuestions = shuffle(QUESTIONS).slice(0, QUIZ_SIZE);
+  quizCurrent = 0;
+  quizScore = 0;
+  document.getElementById('quizSetup').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('nextQBtn').style.display = 'none';
+  renderQuestion();
 }
 
-function showQuestion() {
-  if (quizIdx >= quizQuestions.length) { showResult(); return; }
-  const q = quizQuestions[quizIdx];
-  const pct = Math.round(quizIdx / quizQuestions.length * 100);
-  document.getElementById('quiz-play-view').innerHTML = `
-    <div style="font-size:0.75rem;color:#64748b;margin-bottom:8px">Question ${quizIdx+1} of ${quizQuestions.length} • CHM ${q.c}</div>
-    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="quiz-question">
-      <p>${q.q}</p>
-      ${q.opts.map((o,i) => `<button class="option-btn" id="opt-${i}" onclick="selectAnswer(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
-    </div>
-    <div class="explanation" id="exp"></div>
-    <div style="text-align:center;margin-top:12px"><button id="next-q-btn" onclick="nextQuestion()" style="display:none;background:#1e3a5f;border:1px solid #2563eb;color:#60a5fa;padding:8px 24px;border-radius:8px;cursor:pointer;font-size:0.85rem">Next →</button></div>
+function renderQuestion() {
+  const q = currentQuizQuestions[quizCurrent];
+  document.getElementById('qMeta').textContent = `Question ${quizCurrent+1} of ${QUIZ_SIZE}`;
+  document.getElementById('qScoreLive').textContent = `Score: ${quizScore}`;
+  document.getElementById('qProgress').style.width = ((quizCurrent)/QUIZ_SIZE*100)+'%';
+  document.getElementById('nextQBtn').style.display = 'none';
+
+  const optsHTML = q.opts.map((o,i) => {
+    const key = ['A','B','C','D'][i];
+    return `<div class="option" id="opt${i}" onclick="selectAnswer(${i})"><span class="opt-key">${key}</span>${o}</div>`;
+  }).join('');
+
+  document.getElementById('quizCard').innerHTML = `
+    <div class="q-number">Question ${quizCurrent+1} · ${q.topic}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="options">${optsHTML}</div>
+    <div class="explanation" id="qExp"><strong>Explanation:</strong> ${q.exp}</div>
   `;
 }
 
-function selectAnswer(i) {
-  const q = quizQuestions[quizIdx];
-  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-  if (i === q.ans) {
-    document.getElementById(`opt-${i}`).classList.add('correct');
-    quizScore++;
+function selectAnswer(chosen) {
+  const q = currentQuizQuestions[quizCurrent];
+  const opts = document.querySelectorAll('.option');
+  opts.forEach((el, i) => {
+    el.classList.add('disabled');
+    if (i === q.ans) el.classList.add('correct');
+    else if (i === chosen && chosen !== q.ans) el.classList.add('wrong');
+  });
+  if (chosen === q.ans) quizScore++;
+  document.getElementById('qExp').classList.add('show');
+  document.getElementById('qScoreLive').textContent = `Score: ${quizScore}`;
+  document.getElementById('nextQBtn').style.display = 'inline-block';
+  if (quizCurrent === QUIZ_SIZE - 1) {
+    document.getElementById('nextQBtn').textContent = 'See Results →';
+  }
+}
+
+function nextQuestion() {
+  quizCurrent++;
+  if (quizCurrent >= QUIZ_SIZE) {
+    showResults();
   } else {
-    document.getElementById(`opt-${i}`).classList.add('wrong');
-    document.getElementById(`opt-${q.ans}`).classList.add('correct');
+    renderQuestion();
   }
-  const exp = document.getElementById('exp');
-  exp.textContent = '💡 ' + q.exp;
-  exp.classList.add('show');
-  document.getElementById('next-q-btn').style.display = 'inline-block';
 }
 
-function nextQuestion() { quizIdx++; showQuestion(); }
-
-function showResult() {
-  document.getElementById('quiz-play-view').style.display = 'none';
-  const pct = Math.round(quizScore / quizQuestions.length * 100);
-  const msg = pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good effort!' : '📚 Keep studying!';
-  document.getElementById('quiz-result-view').innerHTML = `
-    <h2>${msg}</h2>
-    <div class="score-circle">${pct}%</div>
-    <p style="color:#94a3b8;margin:8px 0">${quizScore} / ${quizQuestions.length} correct</p>
-    <button onclick="document.getElementById('quiz-setup-view').style.display='block';document.getElementById('quiz-result-view').style.display='none'" style="background:#1e3a5f;border:1px solid #2563eb;color:#60a5fa;padding:10px 24px;border-radius:8px;cursor:pointer;margin-top:16px;font-size:0.85rem">Try Again</button>
-  `;
-  document.getElementById('quiz-result-view').style.display = 'block';
-}
-
-// ===== PAST QUESTIONS =====
-const pastQs = [
-  {c:'205', section:'Section A', q:'A 48% (m/v) solution of HBr in water has a density of 1.5 g/mL. What is the molarity of the HBr?', ans:'Molarity = (% × density × 1000) / (100 × molar mass). Molar mass of HBr = 81 g/mol. M = (48 × 1.5 × 1000) / (100 × 81) = 72000/8100 ≈ 8.89 M'},
-  {c:'205', section:'Section A', q:'Explain the following terms: (i) uncertainty (ii) accuracy (iii) precision', ans:'(i) Uncertainty – range within which the true value lies. Expressed as ± value. (ii) Accuracy – closeness of measurement to true/accepted value. (iii) Precision – closeness of repeated measurements to each other. Note: High precision ≠ high accuracy.'},
-  {c:'205', section:'Section A', q:'Evaluate 1.76(±0.03) × 1.89(±0.02) + 0.59(±0.02) − 0.59(±0.02). Calculate the absolute and relative uncertainty.', ans:'Multiplication first: 1.76 × 1.89 = 3.3264. Relative uncertainty of product: √[(0.03/1.76)² + (0.02/1.89)²] = √[(0.01705)² + (0.01058)²] = √(0.000291 + 0.000112) = 0.0201. Absolute uncertainty = 3.3264 × 0.0201 ≈ ±0.067. Then for addition/subtraction, combine uncertainties in quadrature.'},
-  {c:'205', section:'Section B', q:'How much solution is needed to prepare 0.250 L of 0.160 M HBr from a 48% (m/v) HBr solution with density 1.5 g/mL?', ans:'First find molarity of stock: M = (48 × 1.5 × 1000)/(100 × 81) ≈ 8.89 M. Then use C₁V₁ = C₂V₂: V₁ = (0.160 × 0.250)/8.89 = 0.004498 L ≈ 4.5 mL. So pipette 4.5 mL of the stock into a 250 mL flask and dilute to mark.'},
-  {c:'205', section:'Section C', q:'Using equations, illustrate the acid-base properties of EDTA. Calculate the pH at each of the following points in the titration of 50.00 mL of 0.1000 M NaOH with 0.1000 M HCl: 3.0, 4.99, and 5.50 mL.', ans:'EDTA (H₄Y) is a hexaprotic weak acid that can donate up to 6 protons. For the NaOH-HCl titration: (i) At 3.0 mL HCl: moles NaOH = 0.005, moles HCl added = 0.0003; excess NaOH. pOH = −log(excess OH⁻ conc), pH = 14 − pOH. (ii) Near equivalence point at 4.99 mL, pH depends on remaining excess. (iii) At 5.50 mL, slight excess HCl, pH = −log[H⁺].'},
-  {c:'207', section:'Q1', q:'(a) Differentiate between natural and synthetic rubbers giving one example for each.', ans:'Natural rubber: obtained from the latex of Hevea brasiliensis (rubber tree). It is cis-1,4-polyisoprene. Example: latex rubber products. \nSynthetic rubber: artificially produced by polymerization of petroleum-derived monomers. Superior thermal stability and oil resistance. Example: SBR (styrene-butadiene rubber) used in car tyres.'},
-  {c:'207', section:'Q1', q:'(b) Explain the polymer nature of natural rubber stating its chemical composition.', ans:'Natural rubber is a naturally occurring polymer (elastomer). Monomer: isoprene (2-methyl-1,3-butadiene), C₅H₈. The monomers polymerize in a cis-1,4 addition to give the polymer formula (C₅H₈)n. This cis configuration around double bonds allows the long chains to coil and uncoil, giving rubber its elastic properties. The molecular weight is very high.'},
-  {c:'207', section:'Q2', q:'(a) What is rubber compounding? (b) Explain the importance of Fillers, Plasticizers, and Antioxidants with one example each.', ans:'Rubber compounding: mixing rubber with various additives before vulcanization to create a product with desirable characteristics.\n\nFillers: Reinforce and strengthen rubber. Example: Carbon Black – improves tensile strength, abrasion resistance, and provides UV protection.\n\nPlasticizers: Decrease viscosity of rubber, making it more flexible and easier to process. Example: Processing oils (extender oils) that reduce brittleness when carbon black is added.\n\nAntioxidants: Protect rubber from degradation by absorbing free radicals that break polymer bonds, extending service life. Example: aromatic amines or phenolic compounds used in tyre manufacture.'},
-  {c:'207', section:'Q4', q:'(a) Distinguish between natural and artificial fibres and classify natural fibres with examples.', ans:'Natural fibres: occur naturally from plant/animal/mineral sources. Require minimal processing. Generally biodegradable.\nArtificial fibres: manufactured by man using chemical processes on natural or synthetic polymers.\n\nClassification of natural fibres:\n• Plant fibres: cellulose-based. Examples: cotton (seed hair), jute (stem), flax (stem), bamboo.\n• Animal fibres: protein-based. Examples: wool (sheep), silk (silkworm), cashmere (goat), angora (rabbit).\n• Mineral fibres: inorganic. Example: asbestos – resistant to fire and acid.'},
-  {c:'207', section:'Q5', q:'(a) What is spinning in fibre processing? (ii) Distinguish between mechanical and chemical spinning.', ans:'Spinning: the process of converting fibres or filaments into a continuous yarn suitable for fabric production.\n\nMechanical spinning: fibres are twisted together by mechanical action. Used for natural staple fibres like cotton and wool. No chemical dissolution required.\n\nChemical spinning: the polymer is dissolved or melted and extruded through a spinneret. Three types: (1) Wet spinning – into a chemical bath (Rayon, Acrylic). (2) Dry spinning – into warm air (Acetate). (3) Melt spinning – melted polymer into cool air (Nylon, Polyester).'},
-];
-
-function renderPQ(filter) {
-  const list = filter === 'all' ? pastQs : pastQs.filter(q => q.c === filter);
-  document.getElementById('pq-list').innerHTML = list.map((q, i) => `
-    <div class="pq-card" data-course="${q.c}">
-      <h3>CHM ${q.c} – ${q.section}</h3>
-      <p>${q.q}</p>
-      <button class="show-ans-btn" onclick="togglePQAns(${i}, this)">Show Answer</button>
-      <div class="pq-answer" id="pqa-${i}">${q.ans.replace(/\n/g,'<br>')}</div>
-    </div>
-  `).join('');
-}
-
-function togglePQAns(i, btn) {
-  const el = document.getElementById(`pqa-${i}`);
-  el.classList.toggle('show');
-  btn.textContent = el.classList.contains('show') ? 'Hide Answer' : 'Show Answer';
-}
-
-function filterPQ(val, btn) {
-  document.querySelectorAll('.pq-filter button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderPQ(val);
-}
-
-renderPQ('all');
-
-// ===== AI CHAT =====
-const SYSTEM_PROMPT = `You are a focused university chemistry tutor helping a student at Delta State University Abraka prepare for CHM 205 (Analytical Chemistry) and CHM 207 (Rubber Science and Fibre Technology) exams.
-
-KEY KNOWLEDGE BASE:
-CHM 205 topics: Analytical chemistry intro (qualitative/quantitative analysis), Theory of errors (systematic vs random, accuracy vs precision, significant figures, error propagation), Statistical treatment (mean, standard deviation formula: s=√[Σ(xi-x̄)²/(n-1)], ANOVA: F=MSB/MSW), Theory of sampling (random, systematic, stratified, grab; sample size: n=4σ²/E²), Volumetric analysis (standard solutions, primary standards, equivalence point vs end point, C1V1=C2V2, molarity calculations, acid-base titrations: MaVa/na=MbVb/nb, indicators: phenolphthalein pH 8.3-10, methyl orange pH 3.1-4.4), Beer-Lambert law (A=εbc), spectroscopy (UV-Vis, AAS, IR, fluorescence), separation methods (chromatography: Rf=dist substance/dist solvent, TLC, GC, HPLC, electrophoresis).
-
-CHM 207 topics: Natural rubber from Hevea brasiliensis – cis-1,4-polyisoprene (C5H8)n. Tapping/coagulation with formic acid. Synthetic rubber (SBR, neoprene, nitrile, polyisoprene). Rubber compounding: fillers (Carbon Black), plasticizers, antioxidants, antiozonants, curing agents (sulfur). Vulcanization discovered by Charles Goodyear 1839 – sulfur + heat + accelerators (ZnO, stearic acid) + retarders. Mixing: internal mixer, open mill, tandem mixer. Moulding: compression, injection, extrusion. Fibres: natural (plant: cotton/jute; animal: wool/silk; mineral: asbestos) and man-made (regenerated: rayon/acetate; synthetic: nylon/polyester). Properties: specific gravity, resilience, elasticity, absorbency. Spinning: mechanical vs chemical (wet/dry/melt). Yarn types: simple, novelty, textured.
-
-Be concise but thorough. Use bullet points and formulas where helpful. Always relate answers to exam context.`;
-
-async function sendMsg() {
-  const input = document.getElementById('chat-input');
-  const msg = input.value.trim();
-  if (!msg) return;
-  addMsg(msg, 'user');
-  input.value = '';
-  document.getElementById('send-btn').disabled = true;
-  document.getElementById('typing-indicator').style.display = 'block';
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: msg }]
-      })
-    });
-    const data = await res.json();
-    const reply = data.content?.map(b => b.text || '').join('') || 'Sorry, I could not generate a response.';
-    addMsg(reply, 'ai');
-  } catch(e) {
-    addMsg('Connection error. Please try again.', 'ai');
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  const res = document.getElementById('quizResult');
+  res.style.display = 'block';
+  const pct = Math.round((quizScore/QUIZ_SIZE)*100);
+  document.getElementById('resultScore').textContent = `${quizScore}/${QUIZ_SIZE}`;
+  if (quizScore > highScore) {
+    highScore = quizScore;
+    document.getElementById('highScore').textContent = `${highScore}/${QUIZ_SIZE}`;
+    document.getElementById('statBest').textContent = `${Math.round(highScore/QUIZ_SIZE*100)}%`;
   }
-  document.getElementById('send-btn').disabled = false;
-  document.getElementById('typing-indicator').style.display = 'none';
+  let grade, msg;
+  if (pct >= 90) { grade = 'A — Excellent!'; msg = "Outstanding performance. You're well prepared!"; }
+  else if (pct >= 80) { grade = 'B — Very Good'; msg = "Great work! Review any missed topics."; }
+  else if (pct >= 70) { grade = 'C — Good'; msg = "Decent understanding — revisit weaker areas."; }
+  else if (pct >= 60) { grade = 'D — Needs Work'; msg = "Keep studying! Use the flashcards more."; }
+  else { grade = 'F — Study More!'; msg = "Don't give up — go through all the topics again."; }
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('quizSetup').style.display = 'block';
 }
 
-function addMsg(text, role) {
-  const area = document.getElementById('chat-area');
-  const div = document.createElement('div');
-  div.className = `msg ${role} clearfix`;
-  div.innerHTML = `<div class="bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')}</div>`;
-  area.appendChild(div);
-  area.scrollTop = area.scrollHeight;
+function endQuiz() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizSetup').style.display = 'block';
 }
 
-function quickAsk(q) {
-  document.getElementById('chat-input').value = q;
-  sendMsg();
-  showTab('askai');
-  document.querySelectorAll('.tab-btn').forEach((b,i) => { if(i===4) b.classList.add('active'); else b.classList.remove('active'); });
+// ── Reference ──
+function buildRefGrid() {
+  const g = document.getElementById('refGrid');
+  REF_CARDS.forEach(rc => {
+    const card = document.createElement('div');
+    card.className = 'ref-card';
+    const items = rc.items.map(i => `<div class="ref-item"><span class="ref-label">${i.l}</span><span class="ref-val">${i.v}</span></div>`).join('');
+    card.innerHTML = `<h3>${rc.title}</h3>${items}`;
+    g.appendChild(card);
+  });
+}
+
+function buildPolyTable() {
+  const t = document.getElementById('polyTable');
+  t.innerHTML = `<thead><tr><th>Formula</th><th>Name</th><th>Formula</th><th>Name</th></tr></thead><tbody></tbody>`;
+  const tb = t.querySelector('tbody');
+  for (let i = 0; i < POLY_IONS.length; i += 2) {
+    const b = POLY_IONS[i], c = POLY_IONS[i+1] || ['',''];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${b[0]}</td><td style="color:var(--text2)">${b[1]}</td><td>${c[0]}</td><td style="color:var(--text2)">${c[1]}</td>`;
+    tb.appendChild(tr);
+  }
+}
+
+function buildSolTable() {
+  const t = document.getElementById('solTable');
+  t.innerHTML = `<thead><tr><th>Ion / Salt</th><th>Solubility</th><th>Exceptions</th></tr></thead><tbody></tbody>`;
+  const tb = t.querySelector('tbody');
+  SOLUBILITY.forEach(row => {
+    const tr = document.createElement('tr');
+    const solColor = row[1] === 'Soluble' ? 'var(--accent3)' : 'var(--danger)';
+    tr.innerHTML = `<td style="color:var(--text2);font-family:'DM Sans'">${row[0]}</td><td style="color:${solColor}">${row[1]}</td><td style="color:var(--text3)">${row[2]}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function buildPTTable() {
+  const t = document.getElementById('ptTable');
+  t.innerHTML = `<thead><tr><th>Z</th><th>Symbol</th><th>Name</th><th>Molar Mass</th><th>Group</th></tr></thead><tbody></tbody>`;
+  const tb = t.querySelector('tbody');
+  ELEMENTS.forEach(el => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${el[0]}</td><td style="color:var(--accent);font-weight:700;font-family:'Syne'">${el[1]}</td><td style="color:var(--text)">${el[2]}</td><td style="color:var(--accent3)">${el[3]}</td><td style="color:var(--text3)">${el[4]}</td>`;
+    tb.appendChild(tr);
+  });
 }
 </script>
 </body>
