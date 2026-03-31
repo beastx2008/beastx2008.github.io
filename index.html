@@ -3,1549 +3,1535 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHEM 101 — Study Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<title>ELITE — Command Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --surface2: #1a2235;
-    --border: #1e2d45;
-    --accent: #00d4ff;
-    --accent2: #7c3aed;
-    --accent3: #10b981;
-    --warn: #f59e0b;
-    --danger: #ef4444;
-    --text: #e2e8f0;
-    --text2: #94a3b8;
-    --text3: #4a6080;
-    --glow: 0 0 20px rgba(0,212,255,0.15);
-  }
-
-  * { margin:0; padding:0; box-sizing:border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Animated background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* ─── HEADER ─── */
-  header {
-    position: relative;
-    z-index: 10;
-    padding: 2rem 2rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(0,212,255,0.04) 0%, transparent 100%);
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .logo-badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(0,212,255,0.08);
-    border: 1px solid rgba(0,212,255,0.2);
-    padding: 0.3rem 0.8rem;
-    border-radius: 2px;
-  }
-
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    color: #fff;
-  }
-
-  h1 span { color: var(--accent); }
-
-  .subtitle {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text3);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .header-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .score-chip {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--text2);
-  }
-
-  .score-chip span { color: var(--accent3); font-weight: 600; }
-
-  /* ─── NAV TABS ─── */
-  nav {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    gap: 0;
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-    scrollbar-width: none;
-    background: var(--surface);
-  }
-
-  nav::-webkit-scrollbar { display: none; }
-
-  .tab {
-    flex-shrink: 0;
-    padding: 1rem 1.5rem;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text3);
-    cursor: pointer;
-    border: none;
-    background: none;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-    position: relative;
-  }
-
-  .tab:hover { color: var(--text2); background: rgba(255,255,255,0.03); }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab .tab-icon { margin-right: 0.4rem; }
-
-  /* ─── MAIN LAYOUT ─── */
-  main {
-    position: relative;
-    z-index: 5;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-  }
-
-  .section { display: none; }
-  .section.active { display: block; animation: fadeIn 0.3s ease; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ─── TOPIC CARDS ─── */
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.4rem;
-  }
-
-  .section-desc {
-    color: var(--text2);
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .topics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-  }
-
-  .topic-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.25rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .topic-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: var(--accent);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .topic-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--glow); }
-  .topic-card:hover::before { opacity: 1; }
-
-  .topic-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-  }
-
-  .topic-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #fff;
-  }
-
-  .topic-body {
-    font-size: 0.85rem;
-    color: var(--text2);
-    line-height: 1.6;
-  }
-
-  .topic-body ul { padding-left: 1.2rem; }
-  .topic-body li { margin-bottom: 0.25rem; }
-
-  /* Formulas */
-  .formula {
-    display: inline-block;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    background: rgba(0,212,255,0.08);
-    border: 1px solid rgba(0,212,255,0.15);
-    color: var(--accent);
-    padding: 0.1rem 0.5rem;
-    border-radius: 2px;
-    margin: 0.1rem;
-  }
-
-  .highlight-box {
-    background: rgba(0,212,255,0.05);
-    border-left: 3px solid var(--accent);
-    padding: 0.75rem 1rem;
-    margin: 0.75rem 0;
-    border-radius: 0 4px 4px 0;
-    font-size: 0.85rem;
-    color: var(--text2);
-  }
-
-  .highlight-box.green { border-color: var(--accent3); background: rgba(16,185,129,0.05); }
-  .highlight-box.yellow { border-color: var(--warn); background: rgba(245,158,11,0.05); color: var(--warn); }
-
-  /* ─── FLASHCARDS ─── */
-  .flashcard-controls {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.6rem 1.25rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    cursor: pointer;
-    background: var(--surface);
-    color: var(--text2);
-    transition: all 0.2s;
-  }
-
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  .btn.primary {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #000;
-    font-weight: 700;
-  }
-
-  .btn.primary:hover { background: #00b8db; }
-
-  .btn.success {
-    background: var(--accent3);
-    border-color: var(--accent3);
-    color: #000;
-  }
-
-  .btn.danger {
-    background: var(--danger);
-    border-color: var(--danger);
-    color: #fff;
-  }
-
-  .progress-bar-wrap {
-    flex: 1;
-    min-width: 120px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    height: 6px;
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 3px;
-    transition: width 0.4s ease;
-  }
-
-  .card-counter {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text3);
-    white-space: nowrap;
-  }
-
-  /* 3D flip card */
-  .flashcard-scene {
-    perspective: 1000px;
-    max-width: 680px;
-    margin: 0 auto 1.5rem;
-  }
-
-  .flashcard {
-    width: 100%; height: 240px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
-    cursor: pointer;
-  }
-
-  .flashcard.flipped { transform: rotateY(180deg); }
-
-  .card-face {
-    position: absolute; inset: 0;
-    backface-visibility: hidden;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .card-front { border-color: rgba(0,212,255,0.2); }
-  .card-back {
-    transform: rotateY(180deg);
-    border-color: rgba(124,58,237,0.3);
-    background: var(--surface2);
-  }
-
-  .card-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-  }
-
-  .card-front .card-label { color: var(--accent); }
-  .card-back .card-label { color: var(--accent2); }
-
-  .card-question {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.5;
-    color: #fff;
-  }
-
-  .card-answer {
-    font-size: 0.9rem;
-    line-height: 1.65;
-    color: var(--text2);
-  }
-
-  .flip-hint {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text3);
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-
-  .flashcard-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .category-filter {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.25rem;
-  }
-
-  .filter-chip {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.8rem;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    cursor: pointer;
-    color: var(--text3);
-    background: transparent;
-    transition: all 0.2s;
-  }
-
-  .filter-chip.active, .filter-chip:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(0,212,255,0.06);
-  }
-
-  /* ─── QUIZ ─── */
-  .quiz-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .quiz-meta {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text3);
-  }
-
-  .quiz-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.75rem;
-    margin-bottom: 1rem;
-    max-width: 750px;
-  }
-
-  .q-number {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text3);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
-  }
-
-  .q-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.55;
-    color: #fff;
-    margin-bottom: 1.25rem;
-  }
-
-  .options { display: flex; flex-direction: column; gap: 0.6rem; }
-
-  .option {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: var(--text2);
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .option:hover { border-color: var(--accent); color: #fff; background: rgba(0,212,255,0.05); }
-
-  .option .opt-key {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    width: 24px;
-    height: 24px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--text3);
-  }
-
-  .option.correct { border-color: var(--accent3); background: rgba(16,185,129,0.1); color: var(--accent3); }
-  .option.correct .opt-key { border-color: var(--accent3); color: var(--accent3); }
-  .option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.08); color: var(--danger); }
-  .option.wrong .opt-key { border-color: var(--danger); color: var(--danger); }
-  .option.disabled { pointer-events: none; opacity: 0.5; }
-
-  .explanation {
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    background: rgba(0,212,255,0.04);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 4px 4px 0;
-    font-size: 0.85rem;
-    color: var(--text2);
-    line-height: 1.6;
-    display: none;
-  }
-
-  .explanation.show { display: block; animation: fadeIn 0.3s ease; }
-  .explanation strong { color: var(--accent); }
-
-  .quiz-footer {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .quiz-result {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2rem;
-    text-align: center;
-    max-width: 500px;
-    margin: 0 auto;
-    display: none;
-  }
-
-  .result-score {
-    font-family: 'Syne', sans-serif;
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: var(--accent3);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .result-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 1.5rem;
-  }
-
-  .result-grade {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-  }
-
-  /* ─── FORMULAS REFERENCE ─── */
-  .ref-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
-  }
-
-  .ref-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.25rem;
-  }
-
-  .ref-card h3 {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .ref-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 0.4rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    gap: 0.5rem;
-  }
-
-  .ref-item:last-child { border-bottom: none; }
-  .ref-item .ref-label { font-size: 0.82rem; color: var(--text2); flex: 1; }
-  .ref-item .ref-val { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--accent3); text-align: right; }
-
-  .table-wrap { overflow-x: auto; margin: 1rem 0; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th {
-    background: var(--surface2);
-    padding: 0.6rem 0.8rem;
-    text-align: left;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text3);
-    border-bottom: 1px solid var(--border);
-  }
-
-  td {
-    padding: 0.55rem 0.8rem;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    color: var(--text2);
-  }
-
-  tr:hover td { background: rgba(0,212,255,0.02); }
-  td:first-child { color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.82rem; }
-
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: var(--surface); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .stat-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    padding: 1rem;
-    text-align: center;
-  }
-
-  .stat-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.75rem;
-    font-weight: 800;
-    color: var(--accent);
-    display: block;
-  }
-
-  .stat-lbl {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text3);
-  }
-
-  @media (max-width: 600px) {
-    header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-    .header-right { margin-left: 0; }
-  }
+:root {
+  --bg:       #020408;
+  --surface:  #060d14;
+  --panel:    #0a1520;
+  --border:   #0f2a3f;
+  --accent:   #00c8ff;
+  --accent2:  #00ff9d;
+  --danger:   #ff3c3c;
+  --warn:     #ffb800;
+  --muted:    #2a4a60;
+  --text:     #c8e8f8;
+  --dim:      #4a7a9a;
+  --glow:     0 0 20px rgba(0,200,255,0.3);
+  --glow2:    0 0 20px rgba(0,255,157,0.3);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── GRID BG ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── SCANLINE ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.15) 2px,
+    rgba(0,0,0,0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── LAYOUT ── */
+#app { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── HEADER ── */
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(6,13,20,0.95);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 8px;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-flag { font-size: 18px; }
+.logo-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 3px;
+  display: block;
+  margin-top: -4px;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--dim);
+}
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  display: inline-block;
+  margin-right: 6px;
+  animation: pulse 2s infinite;
+}
+.status-dot.online { background: var(--accent2); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.user-badge {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  color: var(--dim);
+  font-size: 11px;
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 1px;
+}
+.user-badge.logged { border-color: var(--accent2); color: var(--accent2); }
+
+/* ── MAIN LAYOUT ── */
+.container { display: flex; flex: 1; }
+
+/* ── SIDEBAR ── */
+aside {
+  width: 220px;
+  min-width: 220px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-section {
+  padding: 8px 16px 4px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  cursor: pointer;
+  color: var(--dim);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  user-select: none;
+}
+.nav-item:hover { background: var(--panel); color: var(--text); border-left-color: var(--muted); }
+.nav-item.active { background: var(--panel); color: var(--accent); border-left-color: var(--accent); }
+.nav-item .nav-icon { font-size: 14px; width: 18px; text-align: center; }
+.nav-item .nav-cmd {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+}
+.nav-item.active .nav-cmd { color: var(--accent); opacity: 0.6; }
+
+/* ── MAIN PANEL ── */
+main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── TERMINAL ── */
+.terminal {
+  flex: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* scrollbar */
+.terminal::-webkit-scrollbar { width: 4px; }
+.terminal::-webkit-scrollbar-track { background: transparent; }
+.terminal::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ── PANELS / SECTIONS ── */
+.panel {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+.panel.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+.panel-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.panel-title::before {
+  content: '//';
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* ── FORM ELEMENTS ── */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+input, select, textarea {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), inset 0 0 20px rgba(0,200,255,0.03);
+}
+select option { background: var(--panel); }
+textarea { resize: vertical; min-height: 80px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 10px 24px;
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  border: 1px solid;
+  background: transparent;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn-primary:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: var(--glow);
+}
+.btn-success {
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+.btn-success:hover {
+  background: var(--accent2);
+  color: var(--bg);
+  box-shadow: var(--glow2);
+}
+.btn-danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-warn {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+.btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-sm { padding: 6px 14px; font-size: 9px; letter-spacing: 2px; }
+
+/* ── OUTPUT BOX ── */
+.output-box {
+  background: #000;
+  border: 1px solid var(--border);
+  padding: 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--accent2);
+  min-height: 120px;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-top: 16px;
+  position: relative;
+}
+.output-box::before {
+  content: 'OUTPUT';
+  position: absolute;
+  top: -9px; left: 12px;
+  background: #000;
+  padding: 0 6px;
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+.output-box::-webkit-scrollbar { width: 3px; }
+.output-box::-webkit-scrollbar-thumb { background: var(--border); }
+.output-empty { color: var(--muted); font-style: italic; }
+.output-error { color: var(--danger); }
+.output-success { color: var(--accent2); }
+.output-info { color: var(--accent); }
+.output-warn { color: var(--warn); }
+
+/* ── CARD GRID ── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 8px; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.card:hover { border-color: var(--muted); }
+.card-accent { border-top: 2px solid var(--accent); }
+.card-accent2 { border-top: 2px solid var(--accent2); }
+.card-danger  { border-top: 2px solid var(--danger); }
+.card-warn    { border-top: 2px solid var(--warn); }
+
+.card-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+.card-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+}
+.card-sub { font-size: 11px; color: var(--dim); margin-top: 4px; }
+
+/* ── TABLE ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
+.data-table th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+.data-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(15,42,63,0.5);
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--text);
+}
+.data-table tr:hover td { background: var(--panel); }
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 1px;
+}
+.badge-open   { background: rgba(0,255,157,0.1); color: var(--accent2); border: 1px solid var(--accent2); }
+.badge-locked { background: rgba(255,60,60,0.1);  color: var(--danger);  border: 1px solid var(--danger); }
+.badge-slow   { background: rgba(255,184,0,0.1);  color: var(--warn);   border: 1px solid var(--warn); }
+.badge-good   { background: rgba(0,200,255,0.1);  color: var(--accent); border: 1px solid var(--accent); }
+
+/* ── LOGIN SCREEN ── */
+.login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 0;
+}
+.login-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 40px 48px;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+}
+.login-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.login-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 10px;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.login-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 4px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+.login-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* ── ALERT ── */
+.alert {
+  padding: 10px 14px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  margin-bottom: 12px;
+  border-left: 3px solid;
+  display: none;
+}
+.alert.show { display: block; }
+.alert-error   { border-color: var(--danger); background: rgba(255,60,60,0.05);  color: var(--danger); }
+.alert-success { border-color: var(--accent2); background: rgba(0,255,157,0.05); color: var(--accent2); }
+.alert-info    { border-color: var(--accent);  background: rgba(0,200,255,0.05); color: var(--accent); }
+
+/* ── SPINNER ── */
+.spinner {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+  gap: 0;
+}
+.tab {
+  padding: 10px 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  user-select: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── PROFILE CARD ── */
+.profile-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.profile-avatar {
+  width: 60px; height: 60px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.profile-name {
+  font-family: 'Orbitron', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 3px;
+}
+.profile-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--accent2);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+.profile-id {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  margin-top: 6px;
+}
+
+/* ── SERVER STATUS ── */
+.server-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.server-indicator .label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 2px;
+  flex: 1;
+}
+.server-indicator .value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ── CONTRIBUTOR ROW ── */
+.contrib-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(15,42,63,0.4);
+}
+.contrib-rank {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--dim);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.contrib-name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text);
+  flex: 1;
+}
+.contrib-score {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+.contrib-speed {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--accent2);
+  width: 80px;
+  text-align: right;
+}
+
+/* ── CHAT ── */
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #000;
+  border: 1px solid var(--border);
+  min-height: 300px;
+  max-height: 400px;
+}
+.chat-messages::-webkit-scrollbar { width: 3px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--border); }
+
+.msg {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.msg-user { flex-direction: row-reverse; }
+.msg-bubble {
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 70%;
+  font-family: 'Rajdhani', sans-serif;
+}
+.msg-bot .msg-bubble  { background: var(--panel); border: 1px solid var(--border); color: var(--text); }
+.msg-user .msg-bubble { background: rgba(0,200,255,0.1); border: 1px solid var(--accent); color: var(--accent); }
+.msg-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.msg-user .msg-label { text-align: right; }
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.chat-input-row input { flex: 1; }
+
+/* ── ROAST ── */
+.roast-output {
+  background: rgba(255,60,60,0.05);
+  border: 1px solid var(--danger);
+  padding: 20px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text);
+  margin-top: 16px;
+  display: none;
+  font-family: 'Rajdhani', sans-serif;
+  font-style: italic;
+}
+.roast-output.show { display: block; }
+
+/* ── MISC ── */
+.sep { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.mono { font-family: 'Share Tech Mono', monospace; }
+.text-accent  { color: var(--accent); }
+.text-accent2 { color: var(--accent2); }
+.text-danger  { color: var(--danger); }
+.text-warn    { color: var(--warn); }
+.text-dim     { color: var(--dim); }
+.mt-8  { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.flex  { display: flex; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.flex-wrap { flex-wrap: wrap; }
+.loading-row { display: flex; align-items: center; gap: 10px; color: var(--dim); font-family:'Share Tech Mono',monospace; font-size:12px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  aside { display: none; }
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .login-box { padding: 24px; }
+}
 </style>
 </head>
 <body>
+<div id="app">
 
+<!-- ══ HEADER ══════════════════════════════════ -->
 <header>
-  <div>
-    <div class="logo-badge">2024/2025 Session</div>
-    <h1>CHEM <span>101</span></h1>
-    <div class="subtitle">General Chemistry — Exam Study Guide</div>
+  <div class="logo">
+    <span class="logo-flag">🇪🇺</span>
+    <div>
+      ELITE
+      <span class="logo-sub">COMMAND TERMINAL v2.0</span>
+    </div>
   </div>
-  <div class="header-right">
-    <div class="score-chip">Quiz High Score: <span id="highScore">—</span></div>
-    <div class="score-chip">Cards Reviewed: <span id="cardCount">0</span></div>
+  <div class="header-status">
+    <span><span class="status-dot" id="serverDot"></span><span id="serverLabel">CHECKING...</span></span>
+    <span class="user-badge" id="userBadge">NOT AUTHENTICATED</span>
   </div>
 </header>
 
-<nav>
-  <button class="tab active" onclick="showSection('topics')" data-tab="topics"><span class="tab-icon">⚗</span>Topics</button>
-  <button class="tab" onclick="showSection('flashcards')" data-tab="flashcards"><span class="tab-icon">🗂</span>Flashcards</button>
-  <button class="tab" onclick="showSection('quiz')" data-tab="quiz"><span class="tab-icon">⚡</span>Quiz</button>
-  <button class="tab" onclick="showSection('reference')" data-tab="reference"><span class="tab-icon">📐</span>Reference</button>
-  <button class="tab" onclick="showSection('periodic')" data-tab="periodic"><span class="tab-icon">🔬</span>Periodic Table</button>
-</nav>
+<div class="container">
 
+<!-- ══ SIDEBAR ══════════════════════════════════ -->
+<aside id="sidebar" style="display:none">
+  <div class="nav-section">ACCESS</div>
+  <div class="nav-item active" data-panel="dashboard" onclick="nav(this)">
+    <span class="nav-icon">⚡</span> Dashboard
+    <span class="nav-cmd">/me</span>
+  </div>
+
+  <div class="nav-section">INTELLIGENCE</div>
+  <div class="nav-item" data-panel="war" onclick="nav(this)">
+    <span class="nav-icon">⚔️</span> War Scanner
+    <span class="nav-cmd">/war</span>
+  </div>
+  <div class="nav-item" data-panel="res" onclick="nav(this)">
+    <span class="nav-icon">🗳️</span> Resolutions
+    <span class="nav-cmd">/res</span>
+  </div>
+  <div class="nav-item" data-panel="cw" onclick="nav(this)">
+    <span class="nav-icon">🏹</span> Contributors
+    <span class="nav-cmd">/cw</span>
+  </div>
+  <div class="nav-item" data-panel="st" onclick="nav(this)">
+    <span class="nav-icon">⚡</span> Speed Tracker
+    <span class="nav-cmd">/st</span>
+  </div>
+  <div class="nav-item" data-panel="cm" onclick="nav(this)">
+    <span class="nav-icon">💬</span> Country Chat
+    <span class="nav-cmd">/cm</span>
+  </div>
+
+  <div class="nav-section">SERVER</div>
+  <div class="nav-item" data-panel="cs" onclick="nav(this)">
+    <span class="nav-icon">🖥️</span> BT5 Status
+    <span class="nav-cmd">/cs</span>
+  </div>
+  <div class="nav-item" data-panel="bt6" onclick="nav(this)">
+    <span class="nav-icon">📦</span> Script Runner
+    <span class="nav-cmd">/bt6</span>
+  </div>
+
+  <div class="nav-section">AI</div>
+  <div class="nav-item" data-panel="chat" onclick="nav(this)">
+    <span class="nav-icon">🤖</span> Claude Chat
+    <span class="nav-cmd">/chat</span>
+  </div>
+  <div class="nav-item" data-panel="roast" onclick="nav(this)">
+    <span class="nav-icon">🔥</span> Roast
+    <span class="nav-cmd">/roast</span>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══════════════════════════════════════ -->
 <main>
+<div class="terminal" id="terminal">
 
-<!-- ══════════════════ TOPICS ══════════════════ -->
-<div id="topics" class="section active">
-  <div class="section-title">Core Topics</div>
-  <div class="section-desc">Click any topic to expand — covers all Chem 101 exam areas</div>
-  <div class="topics-grid" id="topicsGrid"></div>
-</div>
-
-<!-- ══════════════════ FLASHCARDS ══════════════════ -->
-<div id="flashcards" class="section">
-  <div class="section-title">Flashcards</div>
-  <div class="section-desc">Click the card to reveal the answer. Use ← → to navigate.</div>
-
-  <div class="category-filter" id="catFilter"></div>
-
-  <div class="flashcard-controls">
-    <button class="btn" onclick="prevCard()">← Prev</button>
-    <button class="btn primary" onclick="nextCard()">Next →</button>
-    <button class="btn" onclick="shuffleCards()">⇄ Shuffle</button>
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="flashProgress" style="width:0%"></div></div>
-    <div class="card-counter" id="cardCounter">1 / 60</div>
-  </div>
-
-  <div class="flip-hint">Click card to flip · Use arrow keys to navigate</div>
-
-  <div class="flashcard-scene">
-    <div class="flashcard" id="flashcard" onclick="flipCard()">
-      <div class="card-face card-front">
-        <div class="card-label">Question</div>
-        <div class="card-question" id="cardQ">—</div>
+<!-- ── LOGIN ──────────────────────────────────── -->
+<div class="panel active" id="panel-login">
+  <div class="login-screen">
+    <div class="login-box">
+      <div class="login-logo">ELITE</div>
+      <div class="login-sub">🇪🇺 ACCESS TERMINAL 🇪🇺</div>
+      <div class="alert" id="loginAlert"></div>
+      <div class="form-group">
+        <label class="form-label">ACCESS ID</label>
+        <input type="text" id="loginId" placeholder="Enter your ID..." autocomplete="off">
       </div>
-      <div class="card-face card-back">
-        <div class="card-label">Answer</div>
-        <div class="card-answer" id="cardA">—</div>
+      <div class="form-group">
+        <label class="form-label">ACCESS KEY</label>
+        <input type="password" id="loginKey" placeholder="Enter your key..." autocomplete="off">
       </div>
-    </div>
-  </div>
-
-  <div class="flashcard-nav">
-    <button class="btn danger" onclick="markCard(false)">✕ Needs Review</button>
-    <button class="btn success" onclick="markCard(true)">✓ Got It</button>
-  </div>
-</div>
-
-<!-- ══════════════════ QUIZ ══════════════════ -->
-<div id="quiz" class="section">
-  <div class="section-title">Practice Quiz</div>
-  <div class="section-desc">Each quiz draws 15 random questions from 60+ in the bank — no repeats per session.</div>
-
-  <div id="quizSetup">
-    <div class="stats-row" id="quizStats">
-      <div class="stat-box"><span class="stat-val" id="statTotal">60+</span><span class="stat-lbl">Questions</span></div>
-      <div class="stat-box"><span class="stat-val" id="statTopics">8</span><span class="stat-lbl">Topics</span></div>
-      <div class="stat-box"><span class="stat-val" id="statBest">—</span><span class="stat-lbl">Best Score</span></div>
-    </div>
-    <button class="btn primary" onclick="startQuiz()" style="margin-bottom:1.5rem">▶ Start Quiz (15 Questions)</button>
-  </div>
-
-  <div id="quizArea" style="display:none">
-    <div class="quiz-header">
-      <div class="quiz-meta" id="qMeta">Question 1 of 15</div>
-      <div class="progress-bar-wrap" style="flex:1;max-width:300px"><div class="progress-bar-fill" id="qProgress" style="width:0%"></div></div>
-      <div class="quiz-meta" id="qScoreLive">Score: 0</div>
-    </div>
-    <div class="quiz-card" id="quizCard"></div>
-    <div class="quiz-footer">
-      <button class="btn primary" id="nextQBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
-      <button class="btn" onclick="endQuiz()">End Quiz</button>
-    </div>
-  </div>
-
-  <div class="quiz-result" id="quizResult">
-    <div class="result-score" id="resultScore">0/15</div>
-    <div class="result-label">Final Score</div>
-    <div class="result-grade" id="resultGrade">—</div>
-    <div id="resultMsg" style="color:var(--text2);font-size:0.9rem;margin-bottom:1.5rem">—</div>
-    <button class="btn primary" onclick="startQuiz()">Try Again</button>
-  </div>
-</div>
-
-<!-- ══════════════════ REFERENCE ══════════════════ -->
-<div id="reference" class="section">
-  <div class="section-title">Quick Reference</div>
-  <div class="section-desc">Key formulas, constants, and conversion factors</div>
-
-  <div class="ref-grid" id="refGrid"></div>
-
-  <div style="margin-top:1.5rem">
-    <div class="section-title" style="font-size:1.1rem;margin-bottom:1rem">Common Polyatomic Ions</div>
-    <div class="table-wrap">
-      <table id="polyTable"></table>
-    </div>
-  </div>
-
-  <div style="margin-top:1.5rem">
-    <div class="section-title" style="font-size:1.1rem;margin-bottom:1rem">Solubility Rules (Aqueous Solutions)</div>
-    <div class="table-wrap">
-      <table id="solTable"></table>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">
+        <span id="loginBtnText">AUTHENTICATE</span>
+      </button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════ PERIODIC TABLE ══════════════════ -->
-<div id="periodic" class="section">
-  <div class="section-title">Periodic Table — Key Elements</div>
-  <div class="section-desc">First 36 elements with atomic number, symbol, mass, and group</div>
-  <div class="table-wrap">
-    <table id="ptTable"></table>
+<!-- ── DASHBOARD ───────────────────────────────── -->
+<div class="panel" id="panel-dashboard">
+  <div class="panel-title">Dashboard</div>
+  <div class="profile-card" id="profileCard">
+    <div class="profile-avatar">👑</div>
+    <div>
+      <div class="profile-name" id="profileName">—</div>
+      <div class="profile-role" id="profileRole">—</div>
+      <div class="profile-id" id="profileId">ID: —</div>
+    </div>
+    <button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="doLogout()">LOGOUT</button>
   </div>
-  <div style="margin-top:1.5rem">
-    <div class="section-title" style="font-size:1.1rem;margin-bottom:0.75rem">Periodic Trends</div>
-    <div class="topics-grid">
-      <div class="topic-card">
-        <div class="topic-tag">Trend</div>
-        <div class="topic-title">Atomic Radius</div>
-        <div class="topic-body">Increases ↓ down a group (more electron shells). Decreases → across a period (more protons pull electrons closer).</div>
-      </div>
-      <div class="topic-card">
-        <div class="topic-tag">Trend</div>
-        <div class="topic-title">Ionization Energy</div>
-        <div class="topic-body">Increases → across a period. Decreases ↓ down a group. First IE always lowest; successive IEs get larger.</div>
-      </div>
-      <div class="topic-card">
-        <div class="topic-tag">Trend</div>
-        <div class="topic-title">Electronegativity</div>
-        <div class="topic-body">Increases → across a period. Decreases ↓ down a group. F is most electronegative (3.98). Cs is least (0.79).</div>
-      </div>
-      <div class="topic-card">
-        <div class="topic-tag">Trend</div>
-        <div class="topic-title">Electron Affinity</div>
-        <div class="topic-body">Generally more negative across a period (want electrons more). Halogens have highest EA. Noble gases near zero.</div>
-      </div>
+  <div class="card-grid">
+    <div class="card card-accent">
+      <div class="card-title">SESSION</div>
+      <div class="card-value text-accent2">ACTIVE</div>
+      <div class="card-sub">Authenticated via Supabase</div>
+    </div>
+    <div class="card card-accent2">
+      <div class="card-title">BT5 SERVER</div>
+      <div class="card-value" id="dashServerVal">—</div>
+      <div class="card-sub" id="dashServerSub">Run /cs to check</div>
+    </div>
+    <div class="card card-warn">
+      <div class="card-title">ELITE COUNTRIES</div>
+      <div class="card-value">9</div>
+      <div class="card-sub">Russia, Germany, France…</div>
+    </div>
+    <div class="card card-danger">
+      <div class="card-title">ALL COUNTRIES</div>
+      <div class="card-value">22</div>
+      <div class="card-sub">Full resolution radar coverage</div>
     </div>
   </div>
 </div>
 
+<!-- ── WAR SCANNER ─────────────────────────────── -->
+<div class="panel" id="panel-war">
+  <div class="panel-title">War Scanner</div>
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label">Country</label>
+      <input type="text" id="warCountry" placeholder="e.g. Russia, Germany…">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mode</label>
+      <select id="warMode">
+        <option value="single">Single Country</option>
+        <option value="ELITE">ELITE (9 countries)</option>
+      </select>
+    </div>
+  </div>
+  <div class="flex gap-8">
+    <button class="btn btn-primary" onclick="doWar()">⚔️ SCAN WARS</button>
+  </div>
+  <div class="output-box" id="warOutput"><span class="output-empty">No scan results yet.</span></div>
+</div>
+
+<!-- ── RESOLUTIONS ─────────────────────────────── -->
+<div class="panel" id="panel-res">
+  <div class="panel-title">Resolution Radar</div>
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label">Country</label>
+      <input type="text" id="resCountry" placeholder="e.g. Iran, France…">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mode</label>
+      <select id="resMode">
+        <option value="single">Single Country</option>
+        <option value="ELITE">ELITE (9 countries)</option>
+        <option value="ALL">ALL (22 countries)</option>
+      </select>
+    </div>
+  </div>
+  <div class="flex gap-8">
+    <button class="btn btn-primary" onclick="doRes()">🗳️ SCAN RESOLUTIONS</button>
+  </div>
+  <div class="output-box" id="resOutput"><span class="output-empty">No scan results yet.</span></div>
+</div>
+
+<!-- ── CONTRIBUTORS ────────────────────────────── -->
+<div class="panel" id="panel-cw">
+  <div class="panel-title">Contributor Viewer</div>
+  <div class="form-row-3">
+    <div class="form-group">
+      <label class="form-label">War ID</label>
+      <input type="text" id="cwWarId" placeholder="e.g. 57927">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Country 1</label>
+      <input type="text" id="cwCountry1" placeholder="e.g. Norway">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Country 2</label>
+      <input type="text" id="cwCountry2" placeholder="e.g. Germany">
+    </div>
+  </div>
+  <div class="form-group" style="max-width:160px">
+    <label class="form-label">Size</label>
+    <input type="number" id="cwSize" value="1000" min="1" max="2000">
+  </div>
+  <button class="btn btn-primary" onclick="doCW()">🏹 FETCH CONTRIBUTORS</button>
+  <div class="output-box" id="cwOutput"><span class="output-empty">No data yet.</span></div>
+</div>
+
+<!-- ── SPEED TRACKER ───────────────────────────── -->
+<div class="panel" id="panel-st">
+  <div class="panel-title">Speed Tracker</div>
+  <div class="alert alert-info show" style="margin-bottom:16px">
+    ⚡ Takes two snapshots 60 seconds apart. Page must stay open during tracking.
+  </div>
+  <div class="form-row-3">
+    <div class="form-group">
+      <label class="form-label">War ID</label>
+      <input type="text" id="stWarId" placeholder="e.g. 57855">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Country 1</label>
+      <input type="text" id="stCountry1" placeholder="e.g. Germany">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Country 2</label>
+      <input type="text" id="stCountry2" placeholder="e.g. Laos">
+    </div>
+  </div>
+  <button class="btn btn-primary" id="stBtn" onclick="doST()">⚡ START TRACKING</button>
+  <div id="stCountdown" style="display:none;margin-top:12px" class="loading-row">
+    <div class="spinner"></div>
+    <span id="stCountdownText">Taking snapshot 1...</span>
+  </div>
+  <div class="output-box" id="stOutput"><span class="output-empty">No tracking data yet.</span></div>
+</div>
+
+<!-- ── COUNTRY CHAT ────────────────────────────── -->
+<div class="panel" id="panel-cm">
+  <div class="panel-title">Country Chat Feed</div>
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label">Country</label>
+      <input type="text" id="cmCountry" placeholder="e.g. Russia, Iran…">
+    </div>
+    <div class="form-group" style="display:flex;align-items:flex-end">
+      <button class="btn btn-primary" onclick="doCM()" style="width:100%">💬 FETCH CHAT</button>
+    </div>
+  </div>
+  <div class="output-box" id="cmOutput"><span class="output-empty">No messages yet.</span></div>
+</div>
+
+<!-- ── BT5 SERVER STATUS ───────────────────────── -->
+<div class="panel" id="panel-cs">
+  <div class="panel-title">BT5 Server Status</div>
+  <div class="server-indicator" id="csIndicator">
+    <span class="status-dot" id="csDot"></span>
+    <span class="label">BT5 GAME SERVER</span>
+    <span class="value" id="csValue">UNKNOWN</span>
+  </div>
+  <div class="card-grid" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">RESPONSE TIME</div>
+      <div class="card-value mono" id="csTime">—</div>
+      <div class="card-sub">seconds</div>
+    </div>
+    <div class="card">
+      <div class="card-title">LAST CHECKED</div>
+      <div class="card-value mono" id="csChecked" style="font-size:14px">—</div>
+      <div class="card-sub">local time</div>
+    </div>
+  </div>
+  <div class="flex gap-8">
+    <button class="btn btn-primary" onclick="doCS()">🖥️ CHECK NOW</button>
+  </div>
+  <div class="output-box" id="csOutput"><span class="output-empty">Press CHECK NOW to ping the server.</span></div>
+</div>
+
+<!-- ── SCRIPT RUNNER ───────────────────────────── -->
+<div class="panel" id="panel-bt6">
+  <div class="panel-title">BT6 Script Runner</div>
+  <div class="alert alert-info show">
+    📦 Scripts are fetched from Elite Supabase storage and executed server-side via the Telegram bot.
+    Use the Telegram bot for interactive scripts. This panel shows output only.
+  </div>
+  <div class="form-row" style="margin-top:16px">
+    <div class="form-group">
+      <label class="form-label">Script Filename</label>
+      <input type="text" id="bt6File" placeholder="e.g. st.py, ad.py, war.py">
+    </div>
+    <div class="form-group" style="display:flex;align-items:flex-end">
+      <button class="btn btn-primary" onclick="doBT6()" style="width:100%">📦 FETCH &amp; VIEW SCRIPT</button>
+    </div>
+  </div>
+  <div class="output-box" id="bt6Output"><span class="output-empty">Enter a filename to fetch its source code.</span></div>
+</div>
+
+<!-- ── CLAUDE CHAT ─────────────────────────────── -->
+<div class="panel" id="panel-chat">
+  <div class="panel-title">Claude AI Chat</div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg msg-bot">
+      <div>
+        <div class="msg-label">CLAUDE AI</div>
+        <div class="msg-bubble">Online and ready. What do you need, operator?</div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Type your message…" onkeydown="if(event.key==='Enter')doChat()">
+    <button class="btn btn-primary" onclick="doChat()">SEND</button>
+  </div>
+</div>
+
+<!-- ── ROAST ───────────────────────────────────── -->
+<div class="panel" id="panel-roast">
+  <div class="panel-title">Roast Engine 🔥</div>
+  <div class="form-group">
+    <label class="form-label">Target (person, thing, or concept)</label>
+    <input type="text" id="roastTarget" placeholder="Who or what should be destroyed?">
+  </div>
+  <button class="btn btn-danger" onclick="doRoast()">🔥 EXECUTE ROAST</button>
+  <div class="roast-output" id="roastOutput"></div>
+</div>
+
+</div><!-- /terminal -->
 </main>
+</div><!-- /container -->
+</div><!-- /app -->
 
 <script>
-// ════════════════════════════════════════════
-// DATA
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════
+const SUPABASE_URL  = "https://lwrwxkxoqnvcljlwfhbs.supabase.co";
+const SUPABASE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3cnd4a3hvcW52Y2xqbHdmaGJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5MTE1NTcsImV4cCI6MjA3NDQ4NzU1N30.1zxAaCFZDpje5ylUms6z2RR8yc7divuOJvulkfia2yc";
+const CLAUDE_KEY    = "YOUR_CLAUDE_API_KEY"; // ← replace with your key
+const WAR_API       = "http://52.24.104.170:8086";
+const SCRIPT_BASE   = `${SUPABASE_URL}/storage/v1/object/public/BXM1/`;
 
-const TOPICS = [
-  {
-    tag:"Unit 1",
-    title:"Matter & Measurement",
-    body:`
-      <ul>
-        <li>Matter: anything with mass and volume</li>
-        <li><b>States:</b> Solid (definite shape & volume), Liquid (definite volume), Gas (neither definite)</li>
-        <li><b>Changes:</b> Physical (no new substance), Chemical (new substance formed)</li>
-        <li><b>Pure substance:</b> element or compound. <b>Mixture:</b> homogeneous or heterogeneous</li>
-        <li>SI units: length (m), mass (kg), time (s), temperature (K), amount (mol)</li>
-        <li>Significant figures: reflect measurement precision</li>
-      </ul>
-      <div class="highlight-box">Key conversions: 1 L = 1000 mL, 1 kg = 1000 g, K = °C + 273.15</div>
-    `
-  },
-  {
-    tag:"Unit 2",
-    title:"Atoms, Molecules & Ions",
-    body:`
-      <ul>
-        <li>Atom: smallest unit of an element. Protons + Neutrons (nucleus) + Electrons (shells)</li>
-        <li>Atomic number (Z) = # protons; Mass number (A) = protons + neutrons</li>
-        <li><b>Isotopes:</b> same Z, different A (e.g., C-12, C-13, C-14)</li>
-        <li>Ions: cation (+, loses e⁻), anion (–, gains e⁻)</li>
-        <li>Molecule: two or more atoms bonded. Molecular formula vs empirical formula</li>
-      </ul>
-      <div class="highlight-box">Dalton's atomic theory: atoms are indivisible; same element = same atoms; compounds = fixed ratios</div>
-    `
-  },
-  {
-    tag:"Unit 3",
-    title:"Stoichiometry & The Mole",
-    body:`
-      <ul>
-        <li>Mole: 6.022 × 10²³ particles (Avogadro's number)</li>
-        <li>Molar mass (g/mol) = mass of 1 mole of substance</li>
-        <li>Limiting reagent: reactant consumed first, determines max product</li>
-        <li>% yield = (actual / theoretical) × 100</li>
-        <li>Empirical formula: simplest whole-number ratio. Molecular = n × empirical</li>
-      </ul>
-      <div class="highlight-box green">Mole map: mass ÷ M = moles; moles × Nₐ = particles; moles × 22.4 L = volume (STP)</div>
-    `
-  },
-  {
-    tag:"Unit 4",
-    title:"Electronic Structure",
-    body:`
-      <ul>
-        <li>Bohr model: electrons in circular orbits with quantized energy levels</li>
-        <li>Quantum model: orbitals (s, p, d, f). 4 quantum numbers: n, l, mₗ, mₛ</li>
-        <li>Aufbau principle: fill lowest energy first. Pauli exclusion: no 2 electrons same 4 QNs</li>
-        <li>Hund's rule: maximize unpaired electrons in same subshell</li>
-        <li>Electron configuration: e.g., Na = 1s² 2s² 2p⁶ 3s¹</li>
-      </ul>
-      <div class="highlight-box">Energy order: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, 4d, 5p …</div>
-    `
-  },
-  {
-    tag:"Unit 5",
-    title:"Chemical Bonding",
-    body:`
-      <ul>
-        <li><b>Ionic:</b> metal + nonmetal; transfer of electrons; high mp/bp; conduct in solution</li>
-        <li><b>Covalent:</b> nonmetal + nonmetal; sharing electrons; single/double/triple bonds</li>
-        <li>Electronegativity difference: <0.4 = nonpolar covalent, 0.4–1.7 = polar covalent, >1.7 = ionic</li>
-        <li>Lewis structures: show all valence electrons; dots + lines (bonds)</li>
-        <li>VSEPR theory: electron pairs repel → determines shape (linear, bent, tetrahedral, etc.)</li>
-        <li>Formal charge = Valence e⁻ − Nonbonding e⁻ − ½(Bonding e⁻)</li>
-      </ul>
-      <div class="highlight-box">Bond order: single=1, double=2, triple=3. Higher bond order = shorter & stronger bond.</div>
-    `
-  },
-  {
-    tag:"Unit 6",
-    title:"Molecular Geometry & Polarity",
-    body:`
-      <ul>
-        <li>VSEPR shapes: linear (180°), bent (104.5°), trigonal planar (120°), tetrahedral (109.5°), trigonal bipyramidal (90°/120°), octahedral (90°)</li>
-        <li>Lone pairs reduce bond angles slightly</li>
-        <li>Polar molecule: asymmetric charge distribution (e.g., H₂O, HCl)</li>
-        <li>Nonpolar: symmetric (CO₂, CCl₄, BF₃)</li>
-        <li>Dipole moment (μ) = charge × distance; in debye (D)</li>
-      </ul>
-    `
-  },
-  {
-    tag:"Unit 7",
-    title:"Gases",
-    body:`
-      <ul>
-        <li>Boyle's Law: P₁V₁ = P₂V₂ (constant T)</li>
-        <li>Charles's Law: V₁/T₁ = V₂/T₂ (constant P)</li>
-        <li>Gay-Lussac: P₁/T₁ = P₂/T₂ (constant V)</li>
-        <li>Combined Gas Law: P₁V₁/T₁ = P₂V₂/T₂</li>
-        <li>Ideal Gas: PV = nRT (R = 0.08206 L·atm/mol·K)</li>
-        <li>Dalton's Law of Partial Pressures: Pₜₒₜ = ΣPᵢ</li>
-        <li>Graham's Law: rate ∝ 1/√M (lighter gas diffuses faster)</li>
-        <li>STP: 0°C, 1 atm, 1 mol gas = 22.4 L</li>
-      </ul>
-    `
-  },
-  {
-    tag:"Unit 8",
-    title:"Thermochemistry",
-    body:`
-      <ul>
-        <li>Enthalpy (H): heat at constant pressure. ΔH = H_products − H_reactants</li>
-        <li>Exothermic: ΔH < 0 (releases heat). Endothermic: ΔH > 0 (absorbs heat)</li>
-        <li>Hess's Law: ΔH is path independent; add equations algebraically</li>
-        <li>Standard enthalpy of formation (ΔH°f): formation of 1 mol from elements</li>
-        <li>ΔH°rxn = Σ ΔH°f(products) − Σ ΔH°f(reactants)</li>
-        <li>Calorimetry: q = mcΔT (c of water = 4.184 J/g·°C)</li>
-        <li>Bond enthalpies: ΔH ≈ Σ(bonds broken) − Σ(bonds formed)</li>
-      </ul>
-    `
-  },
-  {
-    tag:"Unit 9",
-    title:"Solutions & Colligative Properties",
-    body:`
-      <ul>
-        <li>Molarity (M) = moles solute / liters solution</li>
-        <li>Molality (m) = moles solute / kg solvent</li>
-        <li>Mole fraction (χ) = moles component / total moles</li>
-        <li><b>Colligative properties</b> (depend on number of particles, not identity):</li>
-        <li>Vapor pressure lowering: ΔP = χ_solute × P°_solvent (Raoult's Law)</li>
-        <li>Boiling point elevation: ΔT_b = K_b × m</li>
-        <li>Freezing point depression: ΔT_f = K_f × m</li>
-        <li>Osmotic pressure: π = MRT</li>
-        <li>"Like dissolves like" — polar in polar, nonpolar in nonpolar</li>
-      </ul>
-    `
-  },
-  {
-    tag:"Unit 10",
-    title:"Acids, Bases & Equilibrium",
-    body:`
-      <ul>
-        <li>Arrhenius: acid = H⁺ donor; base = OH⁻ donor</li>
-        <li>Brønsted-Lowry: acid = proton donor; base = proton acceptor</li>
-        <li>Lewis: acid = e⁻ pair acceptor; base = e⁻ pair donor</li>
-        <li>pH = −log[H⁺]; pOH = −log[OH⁻]; pH + pOH = 14 at 25°C</li>
-        <li>Strong acids: HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄</li>
-        <li>Equilibrium: Kc = [products]^n / [reactants]^m (no solids/liquids)</li>
-        <li>Le Chatelier's principle: system shifts to oppose changes in concentration, T, or P</li>
-        <li>Buffer: weak acid + conjugate base (or weak base + conjugate acid)</li>
-      </ul>
-    `
-  },
-  {
-    tag:"Unit 11",
-    title:"Oxidation-Reduction (Redox)",
-    body:`
-      <ul>
-        <li>Oxidation: loss of electrons (OIL — Oxidation Is Loss)</li>
-        <li>Reduction: gain of electrons (RIG — Reduction Is Gain)</li>
-        <li>Oxidizing agent: oxidizes others; gets reduced itself</li>
-        <li>Reducing agent: reduces others; gets oxidized itself</li>
-        <li>Oxidation number rules: O = −2 (usually), H = +1, monoatomic ion = charge, neutral compound = 0</li>
-        <li>Balancing redox: half-reaction method (acidic/basic media)</li>
-      </ul>
-      <div class="highlight-box yellow">OILRIG: Oxidation Is Loss, Reduction Is Gain</div>
-    `
-  },
-  {
-    tag:"Unit 12",
-    title:"Organic Chemistry Basics",
-    body:`
-      <ul>
-        <li>Carbon: 4 valence electrons, forms 4 bonds</li>
-        <li>Hydrocarbons: alkanes (C–C only), alkenes (C=C), alkynes (C≡C), aromatics (benzene ring)</li>
-        <li>Functional groups: OH (alcohol), COOH (carboxylic acid), NH₂ (amine), C=O (ketone/aldehyde)</li>
-        <li>IUPAC naming: find longest chain, number from end closest to branch</li>
-        <li>Isomers: same formula, different structure (structural) or arrangement (stereoisomers)</li>
-        <li>Organic reactions: addition, substitution, elimination, condensation, hydrolysis</li>
-      </ul>
-    `
+const ELITE_COUNTRIES = ["Russia","Germany","France","Spain","Argentina","Japan","Portugal","Pakistan","Iran"];
+const ALL_COUNTRIES   = ["China","United States","United Kingdom","Russia","Germany","France","Italy","Spain",
+  "Canada","Mexico","Brazil","Argentina","Nigeria","Ghana","Kenya","Japan","Portugal","Pakistan","Ireland","Uganda","Denmark","Iran"];
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let currentUser = null;
+let chatHistory = [];
+
+// ═══════════════════════════════════════════
+//  NAV
+// ═══════════════════════════════════════════
+function nav(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + el.dataset.panel).classList.add('active');
+}
+
+function showPanel(name) {
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.panel === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════
+function setOutput(id, html, cls = '') {
+  const el = document.getElementById(id);
+  el.innerHTML = `<span class="output-${cls || 'success'}">${html}</span>`;
+}
+
+function fmtTime(ms) {
+  const s = Math.floor(ms / 1000);
+  const m = Math.floor(s / 60) % 60;
+  const h = Math.floor(s / 3600) % 24;
+  const d = Math.floor(s / 86400);
+  return `${d}d ${h}h ${m}m`;
+}
+
+function showAlert(id, msg, type='error') {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type} show`;
+  el.textContent = msg;
+}
+
+async function fetchWarAPI(path) {
+  // Note: direct browser calls to HTTP from HTTPS will be blocked by mixed-content policy.
+  // In production, route through a backend proxy.
+  const r = await fetch(WAR_API + path, { headers: { 'User-Agent': 'android-async-http' } });
+  return r;
+}
+
+// ═══════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════
+async function doLogin() {
+  const id  = document.getElementById('loginId').value.trim();
+  const key = document.getElementById('loginKey').value.trim();
+  if (!id || !key) { showAlert('loginAlert', '⚠ Both fields required.'); return; }
+
+  document.getElementById('loginBtnText').innerHTML = '<div class="spinner" style="border-top-color:#020408"></div> VERIFYING...';
+
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/Bt6x?Id=eq.${encodeURIComponent(id)}&Key=eq.${encodeURIComponent(key)}&select=*`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    const data = await r.json();
+    if (r.ok && data.length > 0) {
+      currentUser = data[0];
+      onLogin();
+    } else {
+      showAlert('loginAlert', '🇪🇺 ACCESS DENIED — Invalid ID or Key.');
+    }
+  } catch(e) {
+    showAlert('loginAlert', '❌ Connection error: ' + e.message);
   }
-];
-
-// ════════════ FLASHCARDS (60 cards) ════════════
-const FLASHCARDS = [
-  // Matter & Measurement
-  {cat:"Matter",q:"What is the difference between a physical change and a chemical change?",a:"A physical change alters form or appearance but not chemical composition (e.g., melting ice). A chemical change produces a new substance with different properties (e.g., burning wood)."},
-  {cat:"Matter",q:"What are the three states of matter and their key differences?",a:"Solid: definite shape & volume, particles tightly packed. Liquid: definite volume, no definite shape. Gas: no definite shape or volume, particles far apart."},
-  {cat:"Matter",q:"What is the difference between a homogeneous and heterogeneous mixture?",a:"Homogeneous (solution): uniform composition throughout (e.g., saltwater). Heterogeneous: non-uniform, components visibly distinct (e.g., salad)."},
-  {cat:"Matter",q:"Define density and give its SI unit.",a:"Density = mass / volume. SI unit is kg/m³, but g/cm³ or g/mL is commonly used in chemistry."},
-  {cat:"Matter",q:"What is the difference between an element and a compound?",a:"An element is a pure substance made of one type of atom (e.g., Fe). A compound is a pure substance made of two or more elements chemically combined in fixed ratios (e.g., H₂O)."},
-
-  // Atoms
-  {cat:"Atoms",q:"What are the three subatomic particles and their charges?",a:"Proton: +1 charge, in nucleus. Neutron: 0 charge, in nucleus. Electron: −1 charge, in electron cloud."},
-  {cat:"Atoms",q:"What are isotopes? Give an example.",a:"Isotopes are atoms of the same element with the same atomic number (Z) but different mass numbers (A). Example: Carbon-12 (6 protons, 6 neutrons) and Carbon-14 (6 protons, 8 neutrons)."},
-  {cat:"Atoms",q:"How do you calculate the number of neutrons in an atom?",a:"Neutrons = Mass number (A) − Atomic number (Z). Example: Cl-35 has 35 − 17 = 18 neutrons."},
-  {cat:"Atoms",q:"What is atomic mass and how is it calculated?",a:"Atomic mass is the weighted average of all naturally occurring isotopes of an element. Atomic mass = Σ (fractional abundance × isotope mass)."},
-  {cat:"Atoms",q:"What is the difference between a cation and an anion?",a:"A cation is a positively charged ion formed by losing electrons (e.g., Na⁺). An anion is a negatively charged ion formed by gaining electrons (e.g., Cl⁻)."},
-
-  // Stoichiometry
-  {cat:"Stoichiometry",q:"What is the mole and what is Avogadro's number?",a:"A mole is the SI unit for amount of substance. 1 mole = 6.022 × 10²³ particles (Avogadro's number)."},
-  {cat:"Stoichiometry",q:"How do you find molar mass?",a:"Add up the atomic masses of all atoms in the formula. Example: H₂O = 2(1.008) + 16.00 = 18.02 g/mol."},
-  {cat:"Stoichiometry",q:"What is a limiting reagent?",a:"The limiting reagent is the reactant that is completely consumed first, limiting the amount of product that can be formed."},
-  {cat:"Stoichiometry",q:"How do you calculate percent yield?",a:"% yield = (actual yield / theoretical yield) × 100%. Theoretical yield is calculated from stoichiometry."},
-  {cat:"Stoichiometry",q:"How do you determine an empirical formula from percent composition?",a:"1. Assume 100 g sample → % = grams. 2. Divide each mass by atomic mass → moles. 3. Divide all by smallest moles → whole-number ratio."},
-
-  // Electronic Structure
-  {cat:"Electrons",q:"State the Pauli exclusion principle.",a:"No two electrons in the same atom can have the same set of four quantum numbers. This means each orbital holds maximum 2 electrons with opposite spins."},
-  {cat:"Electrons",q:"State Hund's rule.",a:"When filling orbitals of equal energy (degenerate), electrons fill each orbital singly first before pairing up. All single electrons have the same spin."},
-  {cat:"Electrons",q:"What are the four quantum numbers and what does each describe?",a:"n = principal (energy level, size). l = azimuthal (subshell shape: 0=s,1=p,2=d,3=f). mₗ = magnetic (orbital orientation). mₛ = spin (+½ or −½)."},
-  {cat:"Electrons",q:"Write the electron configuration for Iron (Z=26).",a:"Fe: 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶. Abbreviated: [Ar] 4s² 3d⁶"},
-  {cat:"Electrons",q:"What is the difference between ground state and excited state?",a:"Ground state: electrons occupy lowest available energy levels. Excited state: one or more electrons have absorbed energy and moved to higher energy levels."},
-
-  // Chemical Bonding
-  {cat:"Bonding",q:"What is an ionic bond?",a:"An ionic bond forms between a metal and nonmetal through complete transfer of electrons. The metal becomes a cation (+) and the nonmetal becomes an anion (−). Held by electrostatic attraction."},
-  {cat:"Bonding",q:"What is a covalent bond?",a:"A covalent bond forms between two nonmetals through sharing of electron pairs. Can be single (1 pair), double (2 pairs), or triple (3 pairs)."},
-  {cat:"Bonding",q:"What determines if a bond is polar covalent vs nonpolar covalent?",a:"Electronegativity difference (ΔEN): < 0.4 = nonpolar covalent; 0.4–1.7 = polar covalent; > 1.7 = ionic. Polar bonds have unequal electron sharing."},
-  {cat:"Bonding",q:"What is VSEPR theory?",a:"Valence Shell Electron Pair Repulsion: electron pairs (bonding and lone pairs) around a central atom repel each other and arrange to minimize repulsion, determining molecular geometry."},
-  {cat:"Bonding",q:"What is a coordinate covalent (dative) bond?",a:"A bond where both electrons in the shared pair come from the same atom. Example: NH₃ + H⁺ → NH₄⁺, where nitrogen donates both electrons."},
-
-  // Molecular Geometry
-  {cat:"Geometry",q:"What is the bond angle and shape for a tetrahedral molecule?",a:"Tetrahedral geometry has 4 bonding pairs, 0 lone pairs around the central atom. Bond angle = 109.5°. Example: CH₄."},
-  {cat:"Geometry",q:"Why is the bond angle in water 104.5° and not 109.5°?",a:"Water (H₂O) has 2 bonding pairs and 2 lone pairs. Lone pairs exert greater repulsion than bonding pairs, compressing the H-O-H angle from 109.5° to 104.5°."},
-  {cat:"Geometry",q:"What shape does CO₂ have and is it polar?",a:"CO₂ is linear (180°) with 2 double bonds and no lone pairs on carbon. Although C=O bonds are polar, they are equal and opposite → net dipole = 0 → nonpolar molecule."},
-  {cat:"Geometry",q:"What is the geometry of BF₃?",a:"BF₃ has 3 bonding pairs, 0 lone pairs → trigonal planar, bond angle = 120°. It is nonpolar due to symmetry. Note: B is electron deficient."},
-  {cat:"Geometry",q:"What are the 5 electron-domain geometries and their bond angles?",a:"Linear (180°), Trigonal planar (120°), Tetrahedral (109.5°), Trigonal bipyramidal (90°/120°), Octahedral (90°)."},
-
-  // Gases
-  {cat:"Gases",q:"State Boyle's Law.",a:"At constant temperature, the pressure and volume of a gas are inversely proportional: P₁V₁ = P₂V₂."},
-  {cat:"Gases",q:"State Charles's Law.",a:"At constant pressure, the volume of a gas is directly proportional to its absolute temperature: V₁/T₁ = V₂/T₂. Temperature must be in Kelvin."},
-  {cat:"Gases",q:"What is the ideal gas law equation?",a:"PV = nRT. Where P = pressure (atm), V = volume (L), n = moles, R = 0.08206 L·atm/mol·K, T = temperature (K)."},
-  {cat:"Gases",q:"What is STP and the molar volume of a gas at STP?",a:"STP (Standard Temperature and Pressure) = 0°C (273.15 K) and 1 atm. At STP, 1 mole of any ideal gas occupies 22.4 L."},
-  {cat:"Gases",q:"State Graham's Law of Effusion.",a:"The rate of effusion of a gas is inversely proportional to the square root of its molar mass: rate₁/rate₂ = √(M₂/M₁). Lighter gases move faster."},
-
-  // Thermochemistry
-  {cat:"Thermo",q:"What is the difference between exothermic and endothermic reactions?",a:"Exothermic: releases heat to surroundings, ΔH < 0 (products have less energy). Endothermic: absorbs heat from surroundings, ΔH > 0 (products have more energy)."},
-  {cat:"Thermo",q:"State Hess's Law.",a:"The total enthalpy change of a reaction is the same regardless of the pathway — it depends only on initial and final states. Equations can be added algebraically."},
-  {cat:"Thermo",q:"What is the formula for calorimetry (heat transfer)?",a:"q = mcΔT. Where q = heat (J), m = mass (g), c = specific heat capacity (J/g·°C), ΔT = change in temperature."},
-  {cat:"Thermo",q:"What is standard enthalpy of formation (ΔH°f)?",a:"The enthalpy change when 1 mole of a compound is formed from its constituent elements in their standard states at 25°C and 1 atm. ΔH°f of elements = 0."},
-  {cat:"Thermo",q:"How do you calculate ΔH°rxn using standard enthalpies of formation?",a:"ΔH°rxn = Σ[ΔH°f(products)] − Σ[ΔH°f(reactants)]. Multiply each ΔH°f by the stoichiometric coefficient."},
-
-  // Solutions
-  {cat:"Solutions",q:"What is molarity and how is it calculated?",a:"Molarity (M) = moles of solute / liters of solution. Units: mol/L or M. Most common concentration unit in general chemistry."},
-  {cat:"Solutions",q:"What are colligative properties? Name four.",a:"Properties that depend on the number of solute particles, not their identity: (1) Vapor pressure lowering, (2) Boiling point elevation, (3) Freezing point depression, (4) Osmotic pressure."},
-  {cat:"Solutions",q:"What is Raoult's Law?",a:"P_solution = χ_solvent × P°_solvent. The vapor pressure of a solution equals the mole fraction of the solvent times the vapor pressure of the pure solvent."},
-  {cat:"Solutions",q:"What is Henry's Law?",a:"The solubility of a gas in a liquid is directly proportional to the partial pressure of that gas above the liquid: C = kH × P."},
-  {cat:"Solutions",q:"Explain 'like dissolves like' with an example.",a:"Polar solvents dissolve polar/ionic solutes; nonpolar solvents dissolve nonpolar solutes. Example: NaCl (polar/ionic) dissolves in water (polar) but not in hexane (nonpolar)."},
-
-  // Acids & Bases
-  {cat:"Acids/Bases",q:"What are the strong acids you must memorize?",a:"HCl (hydrochloric), HBr (hydrobromic), HI (hydroiodic), HNO₃ (nitric), H₂SO₄ (sulfuric), HClO₄ (perchloric). These fully dissociate in water."},
-  {cat:"Acids/Bases",q:"What is the relationship between pH and pOH at 25°C?",a:"pH + pOH = 14 at 25°C. pH = −log[H⁺], pOH = −log[OH⁻]. Neutral solution: pH = pOH = 7."},
-  {cat:"Acids/Bases",q:"What is a buffer solution?",a:"A buffer resists changes in pH when small amounts of acid or base are added. It contains a weak acid and its conjugate base (or weak base + conjugate acid) in comparable amounts."},
-  {cat:"Acids/Bases",q:"State Le Chatelier's Principle.",a:"When a system at equilibrium is disturbed (by changing concentration, temperature, or pressure), it shifts to partially counteract the disturbance and re-establish equilibrium."},
-  {cat:"Acids/Bases",q:"What is Kw and what is its value at 25°C?",a:"Kw is the water dissociation constant: H₂O ⇌ H⁺ + OH⁻. Kw = [H⁺][OH⁻] = 1.0 × 10⁻¹⁴ at 25°C."},
-
-  // Redox
-  {cat:"Redox",q:"What does OILRIG stand for?",a:"OIL RIG = Oxidation Is Loss (of electrons), Reduction Is Gain (of electrons). Memory device for redox reactions."},
-  {cat:"Redox",q:"What is the oxidation state of oxygen in most compounds?",a:"Oxygen is usually −2, except in peroxides (H₂O₂) where it is −1, and in OF₂ where it is +2."},
-  {cat:"Redox",q:"What is the oxidation number of hydrogen in compounds?",a:"Hydrogen is +1 when bonded to nonmetals (e.g., HCl), and −1 when bonded to metals (hydrides, e.g., NaH)."},
-  {cat:"Redox",q:"What is an oxidizing agent? A reducing agent?",a:"Oxidizing agent: causes oxidation of another substance; it gets reduced (gains e⁻). Reducing agent: causes reduction of another substance; it gets oxidized (loses e⁻)."},
-  {cat:"Redox",q:"In electrochemistry, what happens at the anode vs cathode?",a:"Anode: oxidation occurs (loses electrons). Cathode: reduction occurs (gains electrons). Memory: AN OX, RED CAT."},
-
-  // Organic
-  {cat:"Organic",q:"What is the general formula for alkanes, alkenes, and alkynes?",a:"Alkanes: CₙH₂ₙ₊₂ (single bonds). Alkenes: CₙH₂ₙ (one double bond). Alkynes: CₙH₂ₙ₋₂ (one triple bond)."},
-  {cat:"Organic",q:"What are the main functional groups in organic chemistry?",a:"Hydroxyl (–OH, alcohol), Carbonyl (C=O, ketone/aldehyde), Carboxyl (–COOH, acid), Amino (–NH₂, amine), Ester (–COO–), Ether (–O–), Halide (–X)."},
-  {cat:"Organic",q:"What is the difference between structural isomers and stereoisomers?",a:"Structural (constitutional) isomers: same molecular formula, different connectivity. Stereoisomers: same connectivity, different spatial arrangement (includes enantiomers and diastereomers)."},
-  {cat:"Organic",q:"What are enantiomers?",a:"Non-superimposable mirror image molecules. Occur when a carbon has 4 different substituents (chiral center). They rotate plane-polarized light in opposite directions."},
-  {cat:"Organic",q:"Name the four basic types of organic reactions.",a:"(1) Addition: atoms added across multiple bond. (2) Substitution: one atom/group replaced by another. (3) Elimination: atoms removed to form a double bond. (4) Condensation/Hydrolysis: joining/breaking with loss/gain of water."},
-];
-
-// ════════════════════════════════════════════
-// QUIZ QUESTIONS (60+ unique questions)
-// ════════════════════════════════════════════
-const QUESTIONS = [
-  // Matter
-  {topic:"Matter",q:"Which of the following is a chemical change?",opts:["Melting ice","Dissolving sugar in water","Burning wood","Breaking glass"],ans:2,exp:"Burning wood produces new substances (CO₂, H₂O, ash) through a chemical reaction — it cannot be easily reversed."},
-  {topic:"Matter",q:"A substance with definite volume but no definite shape is a:",opts:["Solid","Liquid","Gas","Plasma"],ans:1,exp:"Liquids have definite volume (fixed amount of particles) but take the shape of their container, so no definite shape."},
-  {topic:"Matter",q:"What is the SI unit of temperature?",opts:["Celsius","Fahrenheit","Kelvin","Rankine"],ans:2,exp:"Kelvin (K) is the SI base unit of temperature. K = °C + 273.15."},
-  {topic:"Matter",q:"Saltwater is an example of a:",opts:["Pure substance","Compound","Homogeneous mixture","Heterogeneous mixture"],ans:2,exp:"Saltwater has uniform composition throughout (salt dissolved in water), making it a homogeneous mixture (solution)."},
-  {topic:"Matter",q:"The number of significant figures in 0.00340 is:",opts:["2","3","5","6"],ans:1,exp:"Leading zeros are not significant. The significant figures are 3, 4, and 0 (trailing zero after decimal) = 3 significant figures."},
-
-  // Atoms
-  {topic:"Atoms",q:"An atom has 17 protons and 18 neutrons. Its mass number is:",opts:["17","18","35","1"],ans:2,exp:"Mass number = protons + neutrons = 17 + 18 = 35. This is Chlorine-35."},
-  {topic:"Atoms",q:"Which particles are found in the nucleus?",opts:["Electrons and protons","Protons and neutrons","Electrons and neutrons","Only protons"],ans:1,exp:"The nucleus contains protons and neutrons (collectively called nucleons). Electrons orbit outside the nucleus."},
-  {topic:"Atoms",q:"Carbon-12 and Carbon-14 are:",opts:["Allotropes","Isotopes","Isobars","Ions"],ans:1,exp:"Both have 6 protons (same element, Z=6) but different neutrons/mass numbers — they are isotopes."},
-  {topic:"Atoms",q:"An element with Z=11 has lost one electron. What is its charge?",opts:["-1","+1","-2","+2"],ans:1,exp:"Losing 1 electron means the atom now has one more proton than electrons → charge = +1. This is Na⁺."},
-  {topic:"Atoms",q:"The atomic number of an element equals its number of:",opts:["Neutrons","Electrons (neutral atom)","Protons","Mass number"],ans:2,exp:"Atomic number (Z) = number of protons. For a neutral atom, protons = electrons. But the question says 'protons' is also correct — in a neutral atom, protons = electrons, but Z specifically equals protons."},
-
-  // Stoichiometry
-  {topic:"Stoichiometry",q:"How many moles are in 44 g of CO₂? (Molar mass CO₂ = 44 g/mol)",opts:["0.5 mol","1 mol","2 mol","88 mol"],ans:1,exp:"n = mass / molar mass = 44 g / 44 g/mol = 1 mol."},
-  {topic:"Stoichiometry",q:"Avogadro's number is approximately:",opts:["6.022 × 10²³","3.14 × 10¹⁰","6.022 × 10⁻²³","1.38 × 10⁻²³"],ans:0,exp:"Avogadro's number Nₐ = 6.022 × 10²³. It represents the number of particles in 1 mole."},
-  {topic:"Stoichiometry",q:"In a reaction, the actual yield is 18 g and theoretical yield is 24 g. Percent yield is:",opts:["133%","75%","18%","42%"],ans:1,exp:"% yield = (actual / theoretical) × 100 = (18/24) × 100 = 75%."},
-  {topic:"Stoichiometry",q:"What is the empirical formula of C₆H₁₂O₆?",opts:["C₂H₄O₂","CH₂O","C₃H₆O₃","C₆H₁₂O₆"],ans:1,exp:"Divide all subscripts by their GCF (6): 6/6=1, 12/6=2, 6/6=1 → CH₂O."},
-  {topic:"Stoichiometry",q:"The limiting reagent in a reaction is:",opts:["The cheapest reactant","The reactant in excess","The reactant completely consumed first","The reactant with highest molar mass"],ans:2,exp:"The limiting reagent is the first reactant to be completely consumed, which limits the amount of product formed."},
-
-  // Electronic Structure
-  {topic:"Electrons",q:"The maximum number of electrons in the 3rd energy level (n=3) is:",opts:["8","18","32","2"],ans:1,exp:"Max electrons = 2n² = 2(3)² = 18. The 3rd shell contains 3s, 3p, and 3d subshells."},
-  {topic:"Electrons",q:"Which subshell fills first: 4s or 3d?",opts:["4s","3d","They fill simultaneously","Depends on the element"],ans:0,exp:"According to the Aufbau principle, 4s (n+l=4) has lower energy than 3d (n+l=5), so 4s fills first."},
-  {topic:"Electrons",q:"Hund's rule states that electrons:",opts:["Fill the lowest energy orbital first","Cannot have same spin","Fill each degenerate orbital singly before pairing","Always pair up first"],ans:2,exp:"Hund's rule: electrons occupy each degenerate orbital singly before any pairing occurs, with parallel spins."},
-  {topic:"Electrons",q:"What is the electron configuration of Na (Z=11)?",opts:["1s² 2s² 2p⁶ 3s¹","1s² 2s² 2p⁵ 3s²","1s² 2s² 2p⁶ 3p¹","[Ne] 3p¹"],ans:0,exp:"Na: 1s² 2s² 2p⁶ 3s¹. The 11th electron enters the 3s subshell. Also written [Ne] 3s¹."},
-  {topic:"Electrons",q:"Which quantum number describes the orientation of an orbital?",opts:["Principal (n)","Azimuthal (l)","Magnetic (mₗ)","Spin (mₛ)"],ans:2,exp:"The magnetic quantum number (mₗ) describes the orientation of the orbital in space. Its values range from −l to +l."},
-
-  // Bonding
-  {topic:"Bonding",q:"NaCl is an example of:",opts:["Covalent bonding","Ionic bonding","Metallic bonding","Hydrogen bonding"],ans:1,exp:"NaCl forms between sodium (metal) and chlorine (nonmetal) through complete electron transfer: Na donates 1 electron to Cl."},
-  {topic:"Bonding",q:"Which molecule has a triple bond?",opts:["H₂O","N₂","O₂","CO₂"],ans:1,exp:"N₂ has a triple bond (N≡N), making it very stable. O₂ has a double bond. H₂O and CO₂ have double bonds."},
-  {topic:"Bonding",q:"A bond between two atoms with electronegativity difference of 0.3 is:",opts:["Ionic","Polar covalent","Nonpolar covalent","Metallic"],ans:2,exp:"ΔEN < 0.4 = nonpolar covalent. The electrons are shared almost equally, giving no significant dipole."},
-  {topic:"Bonding",q:"What does VSEPR stand for?",opts:["Very Strong Electron Pair Repulsion","Valence Shell Electron Pair Repulsion","Valence Shell Energy Pair Rotation","Variable Shell Electron Pair Rule"],ans:1,exp:"VSEPR = Valence Shell Electron Pair Repulsion. Electron pairs arrange to minimize repulsion, determining shape."},
-  {topic:"Bonding",q:"How many valence electrons does carbon have?",opts:["2","4","6","8"],ans:1,exp:"Carbon is in Group 14 (IVA), so it has 4 valence electrons. This is why it forms 4 bonds."},
-
-  // Geometry
-  {topic:"Geometry",q:"What is the molecular geometry of NH₃?",opts:["Trigonal planar","Tetrahedral","Trigonal pyramidal","Linear"],ans:2,exp:"NH₃ has 3 bonding pairs + 1 lone pair. Electron geometry = tetrahedral, but molecular geometry = trigonal pyramidal. Bond angle ≈ 107°."},
-  {topic:"Geometry",q:"Which molecule is nonpolar despite having polar bonds?",opts:["HCl","H₂O","CO₂","NH₃"],ans:2,exp:"CO₂ is linear — the two polar C=O bonds point in opposite directions and cancel out, giving zero net dipole moment."},
-  {topic:"Geometry",q:"The bond angle in methane (CH₄) is:",opts:["90°","104.5°","109.5°","120°"],ans:2,exp:"CH₄ is tetrahedral with 4 equivalent bonding pairs and no lone pairs → 109.5°."},
-  {topic:"Geometry",q:"How many lone pairs does the central atom in H₂O have?",opts:["0","1","2","3"],ans:2,exp:"Oxygen has 6 valence electrons. 2 are used in bonds with H, leaving 4 = 2 lone pairs on the central oxygen."},
-  {topic:"Geometry",q:"What shape does BeCl₂ have?",opts:["Bent","Linear","Trigonal planar","Tetrahedral"],ans:1,exp:"BeCl₂: Be has 2 bonding pairs, no lone pairs → linear, bond angle = 180°. Be is electron deficient."},
-
-  // Gases
-  {topic:"Gases",q:"A gas occupies 4 L at 2 atm. What volume at 1 atm (constant T)?",opts:["1 L","2 L","4 L","8 L"],ans:3,exp:"Boyle's Law: P₁V₁ = P₂V₂ → (2)(4) = (1)(V₂) → V₂ = 8 L. Pressure drops, volume increases."},
-  {topic:"Gases",q:"At STP, 1 mole of an ideal gas occupies:",opts:["11.2 L","22.4 L","44.8 L","2.24 L"],ans:1,exp:"Standard molar volume at STP (0°C, 1 atm) = 22.4 L/mol. This is a key value to memorize."},
-  {topic:"Gases",q:"In PV = nRT, the value of R in L·atm/mol·K is:",opts:["8.314","0.08206","1.987","6.022"],ans:1,exp:"R = 0.08206 L·atm/mol·K (used when pressure is in atm and volume in liters)."},
-  {topic:"Gases",q:"Dalton's Law states that total pressure of a gas mixture equals:",opts:["The pressure of the heaviest gas","The average of all partial pressures","The sum of all partial pressures","The product of partial pressures"],ans:2,exp:"Dalton's Law of Partial Pressures: Pₜₒₜ = P₁ + P₂ + P₃ + … Each gas behaves independently."},
-  {topic:"Gases",q:"At constant pressure, doubling the absolute temperature of a gas:",opts:["Doubles the volume","Halves the volume","Quadruples the volume","Has no effect"],ans:0,exp:"Charles's Law: V/T = constant. If T doubles, V doubles (they are directly proportional at constant P)."},
-
-  // Thermochemistry
-  {topic:"Thermo",q:"Which of the following is an exothermic reaction?",opts:["Melting ice","Dissolving NH₄NO₃ in water","Burning methane","Photosynthesis"],ans:2,exp:"Burning methane (CH₄ + 2O₂ → CO₂ + 2H₂O) releases energy (heat and light), so ΔH < 0 = exothermic."},
-  {topic:"Thermo",q:"The specific heat of water is 4.184 J/g·°C. How much heat to raise 50 g by 10°C?",opts:["2092 J","418 J","209 J","4184 J"],ans:0,exp:"q = mcΔT = (50 g)(4.184 J/g·°C)(10°C) = 2092 J = 2.092 kJ."},
-  {topic:"Thermo",q:"According to Hess's Law, enthalpy is:",opts:["Path dependent","State function (path independent)","Always negative","Equal to temperature"],ans:1,exp:"Enthalpy is a state function — ΔH depends only on the initial and final states, not the pathway taken."},
-  {topic:"Thermo",q:"What is the standard enthalpy of formation of any element in its standard state?",opts:["1 kJ/mol","-1 kJ/mol","0 kJ/mol","Depends on the element"],ans:2,exp:"By definition, ΔH°f = 0 for any element in its most stable standard state (e.g., O₂(g), C(graphite), Fe(s))."},
-  {topic:"Thermo",q:"Breaking chemical bonds requires:",opts:["Releasing energy","Absorbing energy","No energy change","Only catalysts"],ans:1,exp:"Bond breaking is endothermic (requires energy input). Bond formation is exothermic (releases energy). Net ΔH = bonds broken − bonds formed."},
-
-  // Solutions
-  {topic:"Solutions",q:"What is the molarity of 2 moles of NaCl dissolved in 500 mL solution?",opts:["1 M","2 M","4 M","0.5 M"],ans:2,exp:"M = moles / liters = 2 mol / 0.500 L = 4 M."},
-  {topic:"Solutions",q:"Adding a nonvolatile solute to a solvent will:",opts:["Raise vapor pressure","Lower vapor pressure","Have no effect on vapor pressure","Increase evaporation rate"],ans:1,exp:"Raoult's Law: adding solute lowers the mole fraction of solvent, thus lowering vapor pressure of the solution."},
-  {topic:"Solutions",q:"Which colligative property is used to determine molar mass of a polymer?",opts:["Vapor pressure lowering","Boiling point elevation","Osmotic pressure","Freezing point depression"],ans:2,exp:"Osmotic pressure (π = MRT) is most sensitive and useful for high-MW solutes like polymers and biomolecules."},
-  {topic:"Solutions",q:"Antifreeze works by which colligative property?",opts:["Vapor pressure lowering","Boiling point elevation","Freezing point depression","Osmotic pressure"],ans:2,exp:"Ethylene glycol (antifreeze) lowers the freezing point of water (ΔTf = Kf × m), preventing it from freezing in winter."},
-  {topic:"Solutions",q:"Which substance would you expect to dissolve best in water?",opts:["CCl₄","Hexane (C₆H₁₄)","Ethanol (C₂H₅OH)","I₂"],ans:2,exp:"Ethanol has an –OH group, making it polar and capable of hydrogen bonding with water. Water is polar — 'like dissolves like.'"},
-
-  // Acids/Bases
-  {topic:"Acids/Bases",q:"What is the pH of a solution with [H⁺] = 10⁻³ M?",opts:["3","11","7","-3"],ans:0,exp:"pH = −log[H⁺] = −log(10⁻³) = 3. Since pH < 7, this is an acidic solution."},
-  {topic:"Acids/Bases",q:"Which of these is a strong acid?",opts:["HF","CH₃COOH","HCl","H₂CO₃"],ans:2,exp:"HCl (hydrochloric acid) is a strong acid — it fully dissociates: HCl → H⁺ + Cl⁻. HF and acetic acid are weak acids."},
-  {topic:"Acids/Bases",q:"A Brønsted-Lowry acid is defined as:",opts:["An electron pair donor","An electron pair acceptor","A proton donor","A proton acceptor"],ans:2,exp:"Brønsted-Lowry definition: acid = proton (H⁺) donor; base = proton acceptor. This is broader than Arrhenius definition."},
-  {topic:"Acids/Bases",q:"At 25°C, the product [H⁺][OH⁻] equals:",opts:["14","7","1.0 × 10⁻⁷","1.0 × 10⁻¹⁴"],ans:3,exp:"Kw = [H⁺][OH⁻] = 1.0 × 10⁻¹⁴ at 25°C. This is the water autoionization constant."},
-  {topic:"Acids/Bases",q:"Le Chatelier's Principle says a system at equilibrium will:",opts:["Always shift right when disturbed","Always shift left when disturbed","Shift to counteract a disturbance","Remain unchanged after a disturbance"],ans:2,exp:"Le Chatelier's Principle: the system shifts in the direction that partially offsets the imposed change, to restore equilibrium."},
-
-  // Redox
-  {topic:"Redox",q:"In the reaction 2Na + Cl₂ → 2NaCl, sodium is:",opts:["Reduced","Oxidized","Neither","Both"],ans:1,exp:"Na goes from 0 to +1 — it loses an electron, which is oxidation. Na is the reducing agent."},
-  {topic:"Redox",q:"What is the oxidation number of Mn in KMnO₄?",opts:["+3","+5","+7","+4"],ans:2,exp:"K = +1, O = −2 (×4 = −8). So: +1 + Mn − 8 = 0 → Mn = +7."},
-  {topic:"Redox",q:"Which statement about a galvanic cell is correct?",opts:["Anode is positive","Cathode undergoes oxidation","Reduction occurs at the cathode","Oxidation occurs at the cathode"],ans:2,exp:"In a galvanic (voltaic) cell: cathode = reduction (RED CAT), anode = oxidation. Cathode is the positive electrode."},
-  {topic:"Redox",q:"The species that causes another to be oxidized is called:",opts:["Reducing agent","Oxidizing agent","Acid","Catalyst"],ans:1,exp:"The oxidizing agent accepts electrons from the other species, causing it to be oxidized. The oxidizing agent itself gets reduced."},
-  {topic:"Redox",q:"What is the oxidation number of sulfur in H₂SO₄?",opts:["+2","+4","+6","-2"],ans:2,exp:"H = +1 (×2=+2), O = −2 (×4=−8). Total = 0: +2 + S − 8 = 0 → S = +6."},
-
-  // Organic
-  {topic:"Organic",q:"What is the molecular formula of butane?",opts:["C₃H₈","C₄H₁₀","C₄H₈","C₅H₁₂"],ans:1,exp:"Alkanes: CₙH₂ₙ₊₂. For butane (n=4): C₄H₂(4)+2 = C₄H₁₀."},
-  {topic:"Organic",q:"Which functional group characterizes alcohols?",opts:["–COOH","–NH₂","–OH","C=O"],ans:2,exp:"Alcohols contain the hydroxyl group (–OH) attached to a carbon chain. Example: ethanol (CH₃CH₂OH)."},
-  {topic:"Organic",q:"What type of isomers are non-superimposable mirror images?",opts:["Constitutional isomers","Conformational isomers","Enantiomers","Diastereomers"],ans:2,exp:"Enantiomers are non-superimposable mirror images, typically due to a chiral carbon (carbon with 4 different substituents)."},
-  {topic:"Organic",q:"Which reaction adds atoms across a C=C double bond?",opts:["Substitution","Elimination","Addition","Condensation"],ans:2,exp:"Addition reactions add atoms or groups across the double bond of alkenes, converting C=C to C–C. Example: H₂ + CH₂=CH₂ → CH₃CH₃."},
-  {topic:"Organic",q:"What is the name of CH₃COOH?",opts:["Methanol","Acetaldehyde","Acetic acid","Acetone"],ans:2,exp:"CH₃COOH contains a carboxyl group (–COOH) → carboxylic acid. Its common name is acetic acid (found in vinegar)."},
-];
-
-// ════════════════════════════════════════════
-// REFERENCE DATA
-// ════════════════════════════════════════════
-const REF_CARDS = [
-  {title:"Gas Laws", items:[
-    {l:"Boyle's Law", v:"P₁V₁ = P₂V₂"},
-    {l:"Charles's Law", v:"V₁/T₁ = V₂/T₂"},
-    {l:"Gay-Lussac", v:"P₁/T₁ = P₂/T₂"},
-    {l:"Ideal Gas", v:"PV = nRT"},
-    {l:"R (L·atm)", v:"0.08206 L·atm/mol·K"},
-    {l:"STP Molar Vol", v:"22.4 L/mol"},
-  ]},
-  {title:"Thermochemistry", items:[
-    {l:"Calorimetry", v:"q = mcΔT"},
-    {l:"c(water)", v:"4.184 J/g·°C"},
-    {l:"Hess's Law", v:"ΔH = path independent"},
-    {l:"ΔH°rxn", v:"Σ ΔH°f(prod) − Σ ΔH°f(react)"},
-    {l:"Exothermic", v:"ΔH < 0"},
-    {l:"Endothermic", v:"ΔH > 0"},
-  ]},
-  {title:"Solutions", items:[
-    {l:"Molarity", v:"M = mol / L"},
-    {l:"Molality", v:"m = mol / kg"},
-    {l:"Raoult's Law", v:"P = χ·P°"},
-    {l:"ΔTb", v:"Kb × m"},
-    {l:"ΔTf", v:"Kf × m"},
-    {l:"Osmotic π", v:"MRT"},
-  ]},
-  {title:"Acids & Bases", items:[
-    {l:"pH", v:"−log[H⁺]"},
-    {l:"pOH", v:"−log[OH⁻]"},
-    {l:"pH + pOH", v:"= 14 at 25°C"},
-    {l:"Kw", v:"1.0 × 10⁻¹⁴"},
-    {l:"Henderson-H.", v:"pH = pKa + log([A⁻]/[HA])"},
-  ]},
-  {title:"Stoichiometry", items:[
-    {l:"Moles", v:"n = m / M"},
-    {l:"Avogadro Nₐ", v:"6.022 × 10²³"},
-    {l:"% Yield", v:"(actual/theoretical)×100"},
-    {l:"% Composition", v:"(mass element/molar mass)×100"},
-  ]},
-  {title:"Key Constants", items:[
-    {l:"Speed of light c", v:"3.00 × 10⁸ m/s"},
-    {l:"Planck h", v:"6.626 × 10⁻³⁴ J·s"},
-    {l:"Boltzmann k", v:"1.38 × 10⁻²³ J/K"},
-    {l:"1 atm", v:"101.325 kPa = 760 mmHg"},
-    {l:"0°C", v:"= 273.15 K"},
-    {l:"1 cal", v:"= 4.184 J"},
-  ]},
-];
-
-const POLY_IONS = [
-  ["NH₄⁺","Ammonium"],["OH⁻","Hydroxide"],["NO₂⁻","Nitrite"],["NO₃⁻","Nitrate"],
-  ["SO₃²⁻","Sulfite"],["SO₄²⁻","Sulfate"],["HSO₄⁻","Hydrogen sulfate"],
-  ["CO₃²⁻","Carbonate"],["HCO₃⁻","Bicarbonate"],["PO₄³⁻","Phosphate"],
-  ["HPO₄²⁻","Hydrogen phosphate"],["H₂PO₄⁻","Dihydrogen phosphate"],
-  ["ClO⁻","Hypochlorite"],["ClO₂⁻","Chlorite"],["ClO₃⁻","Chlorate"],["ClO₄⁻","Perchlorate"],
-  ["MnO₄⁻","Permanganate"],["Cr₂O₇²⁻","Dichromate"],["CrO₄²⁻","Chromate"],["CN⁻","Cyanide"],
-];
-
-const SOLUBILITY = [
-  ["Li⁺, Na⁺, K⁺, NH₄⁺ salts","Soluble","No exceptions"],
-  ["Nitrate NO₃⁻ salts","Soluble","No exceptions"],
-  ["Acetate CH₃COO⁻","Soluble","Except Ag⁺"],
-  ["Cl⁻, Br⁻, I⁻ halides","Soluble","Except Ag⁺, Pb²⁺, Hg₂²⁺"],
-  ["Sulfates SO₄²⁻","Soluble","Except Ba²⁺, Pb²⁺, Sr²⁺, Ca²⁺"],
-  ["Hydroxides OH⁻","Insoluble","Except alkali metals, Ba²⁺, Sr²⁺"],
-  ["Carbonates CO₃²⁻","Insoluble","Except alkali metals, NH₄⁺"],
-  ["Phosphates PO₄³⁻","Insoluble","Except alkali metals, NH₄⁺"],
-  ["Sulfides S²⁻","Insoluble","Except alkali metals, Ca²⁺, Ba²⁺, Sr²⁺"],
-];
-
-const ELEMENTS = [
-  [1,"H","Hydrogen",1.008,"1"],[2,"He","Helium",4.003,"18"],
-  [3,"Li","Lithium",6.941,"1"],[4,"Be","Beryllium",9.012,"2"],
-  [5,"B","Boron",10.81,"13"],[6,"C","Carbon",12.01,"14"],
-  [7,"N","Nitrogen",14.01,"15"],[8,"O","Oxygen",16.00,"16"],
-  [9,"F","Fluorine",19.00,"17"],[10,"Ne","Neon",20.18,"18"],
-  [11,"Na","Sodium",22.99,"1"],[12,"Mg","Magnesium",24.31,"2"],
-  [13,"Al","Aluminum",26.98,"13"],[14,"Si","Silicon",28.09,"14"],
-  [15,"P","Phosphorus",30.97,"15"],[16,"S","Sulfur",32.07,"16"],
-  [17,"Cl","Chlorine",35.45,"17"],[18,"Ar","Argon",39.95,"18"],
-  [19,"K","Potassium",39.10,"1"],[20,"Ca","Calcium",40.08,"2"],
-  [21,"Sc","Scandium",44.96,"3"],[22,"Ti","Titanium",47.87,"4"],
-  [23,"V","Vanadium",50.94,"5"],[24,"Cr","Chromium",52.00,"6"],
-  [25,"Mn","Manganese",54.94,"7"],[26,"Fe","Iron",55.85,"8"],
-  [27,"Co","Cobalt",58.93,"9"],[28,"Ni","Nickel",58.69,"10"],
-  [29,"Cu","Copper",63.55,"11"],[30,"Zn","Zinc",65.38,"12"],
-  [31,"Ga","Gallium",69.72,"13"],[32,"Ge","Germanium",72.63,"14"],
-  [33,"As","Arsenic",74.92,"15"],[34,"Se","Selenium",78.97,"16"],
-  [35,"Br","Bromine",79.90,"17"],[36,"Kr","Krypton",83.80,"18"],
-];
-
-// ════════════════════════════════════════════
-// STATE
-// ════════════════════════════════════════════
-let currentCardIndex = 0;
-let filteredCards = [...FLASHCARDS];
-let currentCat = "All";
-let cardsReviewed = 0;
-let highScore = 0;
-
-let quizPool = [];
-let quizCurrent = 0;
-let quizScore = 0;
-let currentQuizQuestions = [];
-const QUIZ_SIZE = 15;
-
-// ════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', () => {
-  buildTopics();
-  buildCatFilter();
-  updateFlashcard();
-  buildRefGrid();
-  buildPolyTable();
-  buildSolTable();
-  buildPTTable();
-
-  document.addEventListener('keydown', e => {
-    const fc = document.getElementById('flashcards');
-    if (!fc.classList.contains('active')) return;
-    if (e.key === 'ArrowRight') nextCard();
-    if (e.key === 'ArrowLeft') prevCard();
-    if (e.key === ' ') { e.preventDefault(); flipCard(); }
-  });
-});
-
-// ── Section switching ──
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelector(`[data-tab="${id}"]`).classList.add('active');
+  document.getElementById('loginBtnText').textContent = 'AUTHENTICATE';
 }
 
-// ── Topics ──
-function buildTopics() {
-  const g = document.getElementById('topicsGrid');
-  TOPICS.forEach(t => {
-    const card = document.createElement('div');
-    card.className = 'topic-card';
-    card.innerHTML = `<div class="topic-tag">${t.tag}</div><div class="topic-title">${t.title}</div><div class="topic-body">${t.body}</div>`;
-    g.appendChild(card);
-  });
+function onLogin() {
+  // Update header
+  document.getElementById('userBadge').textContent = currentUser.Name || 'OPERATOR';
+  document.getElementById('userBadge').classList.add('logged');
+
+  // Update profile
+  document.getElementById('profileName').textContent = currentUser.Name || '—';
+  document.getElementById('profileRole').textContent = '[ ' + (currentUser.Role || '—') + ' ]';
+  document.getElementById('profileId').textContent   = 'ID: ' + (currentUser.Id || '—');
+
+  // Show sidebar + dashboard
+  document.getElementById('sidebar').style.display = 'flex';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-dashboard').classList.add('active');
+
+  // Start server monitor
+  doCS(true);
 }
 
-// ── Flashcards ──
-function buildCatFilter() {
-  const cats = ['All', ...new Set(FLASHCARDS.map(c => c.cat))];
-  const f = document.getElementById('catFilter');
-  cats.forEach(c => {
-    const ch = document.createElement('button');
-    ch.className = 'filter-chip' + (c === 'All' ? ' active' : '');
-    ch.textContent = c;
-    ch.onclick = () => {
-      document.querySelectorAll('.filter-chip').forEach(x => x.classList.remove('active'));
-      ch.classList.add('active');
-      currentCat = c;
-      filteredCards = c === 'All' ? [...FLASHCARDS] : FLASHCARDS.filter(x => x.cat === c);
-      currentCardIndex = 0;
-      document.getElementById('flashcard').classList.remove('flipped');
-      updateFlashcard();
-    };
-    f.appendChild(ch);
-  });
+function doLogout() {
+  currentUser = null;
+  chatHistory = [];
+  document.getElementById('userBadge').textContent = 'NOT AUTHENTICATED';
+  document.getElementById('userBadge').classList.remove('logged');
+  document.getElementById('sidebar').style.display = 'none';
+  document.getElementById('serverDot').className = 'status-dot';
+  document.getElementById('serverLabel').textContent = 'CHECKING...';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-login').classList.add('active');
+  document.getElementById('loginId').value = '';
+  document.getElementById('loginKey').value = '';
 }
 
-function updateFlashcard() {
-  const card = filteredCards[currentCardIndex];
-  document.getElementById('cardQ').textContent = card.q;
-  document.getElementById('cardA').textContent = card.a;
-  document.getElementById('flashcard').classList.remove('flipped');
-  const total = filteredCards.length;
-  document.getElementById('cardCounter').textContent = `${currentCardIndex+1} / ${total}`;
-  const pct = ((currentCardIndex+1)/total)*100;
-  document.getElementById('flashProgress').style.width = pct + '%';
-}
+// ═══════════════════════════════════════════
+//  WAR SCANNER
+// ═══════════════════════════════════════════
+async function doWar() {
+  if (!currentUser) return;
+  const mode    = document.getElementById('warMode').value;
+  const country = document.getElementById('warCountry').value.trim();
+  const targets = mode === 'ELITE' ? ELITE_COUNTRIES : [country || 'Russia'];
 
-function flipCard() {
-  document.getElementById('flashcard').classList.toggle('flipped');
-}
+  setOutput('warOutput', '⏳ Scanning...', 'info');
 
-function nextCard() {
-  currentCardIndex = (currentCardIndex + 1) % filteredCards.length;
-  updateFlashcard();
-}
+  let all = [];
+  for (const c of targets) {
+    try {
+      const enc = encodeURIComponent(c);
+      const r = await fetch(`${WAR_API}/RestSimulator?Operation=getWarsByCountry&country=${enc}&sender_company_id=3521724&user_id=D31C0B83672E475A9C3373C376BF6DD9&version_code=15`,
+        { headers: {'User-Agent':'android-async-http'} });
+      const text = await r.text();
+      if (text.toLowerCase().includes('no_operation_found')) continue;
+      const data = JSON.parse(text);
+      const wars = data.wars || [];
+      for (const w of wars) {
+        if (w.end_time_millis >= 0) {
+          // Check lock
+          let status = '❓';
+          try {
+            const lr = await fetch(`${WAR_API}/wars/${w.id}/contributors?country=${enc}&size=1`,
+              { headers: {'User-Agent':'android-async-http'} });
+            status = lr.status === 500 ? '🔒 LOCKED' : '🟢 OPEN';
+          } catch { status = '❌ ERR'; }
 
-function prevCard() {
-  currentCardIndex = (currentCardIndex - 1 + filteredCards.length) % filteredCards.length;
-  updateFlashcard();
-}
-
-function shuffleCards() {
-  for (let i = filteredCards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+          const atk = w.attacking_points || 0;
+          const def = w.attacked_points  || 0;
+          const winner = atk > def ? `⚔️ ${w.attacking_cou} winning`
+                       : def > atk ? `🛡️ ${w.attacked_country} winning`
+                       : '🤝 Tied';
+          all.push({ country: c, atk: w.attacking_cou||'?', def: w.attacked_country||'?',
+                     id: w.id, status, atkPts: atk, defPts: def, winner });
+        }
+      }
+    } catch(e) { /* skip */ }
   }
-  currentCardIndex = 0;
-  updateFlashcard();
-}
 
-function markCard(good) {
-  cardsReviewed++;
-  document.getElementById('cardCount').textContent = cardsReviewed;
-  nextCard();
-}
+  if (!all.length) { setOutput('warOutput', '⚠️ No ongoing wars found.', 'warn'); return; }
 
-// ── Quiz ──
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
+  let out = `⚔️ WAR SCAN — ${mode === 'ELITE' ? 'ELITE' : targets[0].toUpperCase()}\n${'─'.repeat(60)}\n\n`;
+  for (const w of all) {
+    out += `🌍 ${w.country}\n`;
+    out += `  ${w.atk}  vs  ${w.def}\n`;
+    out += `  Status : ${w.status}\n`;
+    out += `  Score  : ${w.atkPts} — ${w.defPts}\n`;
+    out += `  ${w.winner}\n`;
+    out += `  ID: ${w.id}\n\n`;
   }
-  return a;
+  setOutput('warOutput', out, 'success');
 }
 
-function startQuiz() {
-  currentQuizQuestions = shuffle(QUESTIONS).slice(0, QUIZ_SIZE);
-  quizCurrent = 0;
-  quizScore = 0;
-  document.getElementById('quizSetup').style.display = 'none';
-  document.getElementById('quizArea').style.display = 'block';
-  document.getElementById('quizResult').style.display = 'none';
-  document.getElementById('nextQBtn').style.display = 'none';
-  renderQuestion();
+// ═══════════════════════════════════════════
+//  RESOLUTIONS
+// ═══════════════════════════════════════════
+async function doRes() {
+  if (!currentUser) return;
+  const mode    = document.getElementById('resMode').value;
+  const country = document.getElementById('resCountry').value.trim();
+  const targets = mode === 'ALL' ? ALL_COUNTRIES : mode === 'ELITE' ? ELITE_COUNTRIES : [country || 'Russia'];
+
+  setOutput('resOutput', `⏳ Scanning ${targets.length} country/countries...`, 'info');
+
+  let all = [], failed = [];
+  for (const c of targets) {
+    try {
+      const enc = encodeURIComponent(c);
+      const r = await fetch(`${WAR_API}/RestSimulator?Operation=getActiveResolutions&country=${enc}&sender_company_id=3521724&user_id=D31C0B83672E475A9C3373C376BF6DD9&version_code=15`,
+        { headers: {'User-Agent':'android-async-http'} });
+      const text = await r.text();
+      if (text.toLowerCase().includes('no_operation')) { failed.push(c); continue; }
+      const data = JSON.parse(text);
+      for (const res of (data.resolutions || [])) {
+        all.push({ from: res.country_name||'?', target: res.country_to_attack||'?',
+                   yes: res.vote_for||0, no: res.vote_against||0,
+                   end: res.end_time||0, id: res.id||'?' });
+      }
+    } catch { failed.push(c); }
+  }
+
+  all.sort((a,b) => a.end - b.end);
+
+  if (!all.length) { setOutput('resOutput', '⚠️ No active resolutions found.' + (failed.length ? `\nFailed: ${failed.join(', ')}` : ''), 'warn'); return; }
+
+  let out = `🗳️ RESOLUTIONS — ${mode.toUpperCase()}\n`;
+  out += `${'END IN'.padEnd(13)}${'FROM'.padEnd(18)}${'TARGET'.padEnd(18)}YES    NO     ID\n`;
+  out += '─'.repeat(70) + '\n';
+  for (const r of all) {
+    out += `${fmtTime(r.end).padEnd(13)}${String(r.from).padEnd(18)}${String(r.target).padEnd(18)}${String(r.yes).padEnd(7)}${String(r.no).padEnd(7)}${r.id}\n`;
+  }
+  if (failed.length) out += `\n⚠️ NO_OPERATION: ${failed.join(', ')}`;
+  setOutput('resOutput', out, 'success');
 }
 
-function renderQuestion() {
-  const q = currentQuizQuestions[quizCurrent];
-  document.getElementById('qMeta').textContent = `Question ${quizCurrent+1} of ${QUIZ_SIZE}`;
-  document.getElementById('qScoreLive').textContent = `Score: ${quizScore}`;
-  document.getElementById('qProgress').style.width = ((quizCurrent)/QUIZ_SIZE*100)+'%';
-  document.getElementById('nextQBtn').style.display = 'none';
+// ═══════════════════════════════════════════
+//  CONTRIBUTORS
+// ═══════════════════════════════════════════
+async function doCW() {
+  if (!currentUser) return;
+  const warId = document.getElementById('cwWarId').value.trim();
+  const c1    = document.getElementById('cwCountry1').value.trim();
+  const c2    = document.getElementById('cwCountry2').value.trim();
+  const size  = document.getElementById('cwSize').value.trim() || '1000';
+  if (!warId || !c1 || !c2) { setOutput('cwOutput', '❌ Please fill War ID, Country 1, Country 2.', 'error'); return; }
 
-  const optsHTML = q.opts.map((o,i) => {
-    const key = ['A','B','C','D'][i];
-    return `<div class="option" id="opt${i}" onclick="selectAnswer(${i})"><span class="opt-key">${key}</span>${o}</div>`;
-  }).join('');
+  setOutput('cwOutput', `⏳ Fetching contributors for war ${warId}...`, 'info');
 
-  document.getElementById('quizCard').innerHTML = `
-    <div class="q-number">Question ${quizCurrent+1} · ${q.topic}</div>
-    <div class="q-text">${q.q}</div>
-    <div class="options">${optsHTML}</div>
-    <div class="explanation" id="qExp"><strong>Explanation:</strong> ${q.exp}</div>
-  `;
+  async function fetchCW(country) {
+    try {
+      const r = await fetch(`${WAR_API}/wars/${warId}/contributors?country=${encodeURIComponent(country)}&size=${size}`,
+        { headers: {'User-Agent':'android-async-http'} });
+      if (r.status === 500) return 'LOCKED';
+      if (!r.ok) return [];
+      return await r.json();
+    } catch { return 'ERROR'; }
+  }
+
+  const [r1, r2] = await Promise.all([fetchCW(c1), fetchCW(c2)]);
+
+  function fmtCW(country, data) {
+    if (data === 'LOCKED') return `🔒 ${country} — WAR LOCKED\n`;
+    if (data === 'ERROR')  return `❌ ${country} — Fetch error\n`;
+    if (!Array.isArray(data) || !data.length) return `⚠️ ${country} — No contributors\n`;
+    const sorted = data.sort((a,b) => (b.score||0)-(a.score||0));
+    const total  = sorted.reduce((s,c) => s+(c.score||0), 0);
+    let out = `🌍 ${country} — ${sorted.length} contributors | Total: ${total.toLocaleString()}\n${'─'.repeat(50)}\n`;
+    const medals = ['🥇','🥈','🥉'];
+    sorted.forEach((c,i) => {
+      const m = medals[i] || `${i+1}.`.padStart(3);
+      out += `${m} ${String(c.name||'?').padEnd(28)}${(c.score||0).toLocaleString()}\n`;
+    });
+    out += '─'.repeat(50) + '\n';
+    return out;
+  }
+
+  const out = `⚔️ WAR ${warId} — CONTRIBUTORS | Size: ${size}\n${'═'.repeat(55)}\n\n` + fmtCW(c1,r1) + '\n' + fmtCW(c2,r2);
+  setOutput('cwOutput', out, 'success');
 }
 
-function selectAnswer(chosen) {
-  const q = currentQuizQuestions[quizCurrent];
-  const opts = document.querySelectorAll('.option');
-  opts.forEach((el, i) => {
-    el.classList.add('disabled');
-    if (i === q.ans) el.classList.add('correct');
-    else if (i === chosen && chosen !== q.ans) el.classList.add('wrong');
-  });
-  if (chosen === q.ans) quizScore++;
-  document.getElementById('qExp').classList.add('show');
-  document.getElementById('qScoreLive').textContent = `Score: ${quizScore}`;
-  document.getElementById('nextQBtn').style.display = 'inline-block';
-  if (quizCurrent === QUIZ_SIZE - 1) {
-    document.getElementById('nextQBtn').textContent = 'See Results →';
+// ═══════════════════════════════════════════
+//  SPEED TRACKER
+// ═══════════════════════════════════════════
+async function doST() {
+  if (!currentUser) return;
+  const warId = document.getElementById('stWarId').value.trim();
+  const c1    = document.getElementById('stCountry1').value.trim();
+  const c2    = document.getElementById('stCountry2').value.trim();
+  if (!warId || !c1 || !c2) { setOutput('stOutput','❌ Fill all three fields.','error'); return; }
+
+  document.getElementById('stBtn').disabled = true;
+  document.getElementById('stCountdown').style.display = 'flex';
+  setOutput('stOutput','','info');
+
+  async function fetchSnap(country) {
+    try {
+      const r = await fetch(`${WAR_API}/wars/${warId}/contributors?country=${encodeURIComponent(country)}&size=1000`,
+        { headers: {'User-Agent':'android-async-http'} });
+      if (!r.ok) return {};
+      const data = await r.json();
+      if (!Array.isArray(data)) return {};
+      return Object.fromEntries(data.map(c => [c.name, c.score||0]));
+    } catch { return {}; }
+  }
+
+  document.getElementById('stCountdownText').textContent = '📸 Snapshot 1/2 — taking baseline...';
+  const snap1 = { [c1]: await fetchSnap(c1), [c2]: await fetchSnap(c2) };
+
+  // Countdown 60s
+  for (let i = 60; i > 0; i--) {
+    document.getElementById('stCountdownText').textContent = `⏳ Waiting ${i}s for snapshot 2...`;
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  document.getElementById('stCountdownText').textContent = '📸 Snapshot 2/2 — calculating speeds...';
+  const snap2 = { [c1]: await fetchSnap(c1), [c2]: await fetchSnap(c2) };
+
+  function buildReport(country) {
+    const s1 = snap1[country], s2 = snap2[country];
+    if (!Object.keys(s2).length) return `⚠️ ${country} — No data\n`;
+    const sorted = Object.entries(s2).sort((a,b) => b[1]-a[1]);
+    const medals = ['🥇','🥈','🥉'];
+    let totalSpeed = 0;
+    let out = `⚡ [${country}] — War ${warId}\n${'─'.repeat(55)}\n`;
+    sorted.forEach(([name, score], i) => {
+      const prev  = s1[name] || 0;
+      const speed = score - prev; // per minute (60s interval)
+      totalSpeed += speed;
+      const arrow = speed > 0 ? '🔺' : speed < 0 ? '🔻' : '➡️';
+      const m = medals[i] || '';
+      out += `${arrow} ${String(name).padEnd(28)}${String(score).padEnd(10)}${speed >= 0 ? '+' : ''}${speed}/min ${m}\n`;
+    });
+    out += `${'─'.repeat(55)}\n🌟 Total speed: ${totalSpeed >= 0 ? '+' : ''}${totalSpeed}/min\n\n`;
+    return out;
+  }
+
+  const out = `⚡ SPEED TRACKER — War ${warId}\n${'═'.repeat(55)}\n\n` + buildReport(c1) + buildReport(c2);
+  setOutput('stOutput', out, 'success');
+
+  document.getElementById('stBtn').disabled = false;
+  document.getElementById('stCountdown').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════
+//  COUNTRY CHAT
+// ═══════════════════════════════════════════
+async function doCM() {
+  if (!currentUser) return;
+  const country = document.getElementById('cmCountry').value.trim();
+  if (!country) { setOutput('cmOutput','❌ Enter a country name.','error'); return; }
+
+  setOutput('cmOutput', `⏳ Fetching chat for ${country}...`, 'info');
+
+  try {
+    const params = new URLSearchParams({
+      Operation: 'fetcCountryChatMessages',
+      chat_message_id: 0,
+      country,
+      sender_company_id: 4579286,
+      version_code: 23,
+    });
+    const r = await fetch(`${WAR_API}/RestSimulator?${params}`, {
+      headers: { 'User-Agent':'android-async-http', 'user_id':'C28759C6A78E4E22AC93D78F107E5C72' }
+    });
+    const data = await r.json();
+    const msgs = data.messages || [];
+    if (!msgs.length) { setOutput('cmOutput','⚠️ No messages found for ' + country, 'warn'); return; }
+
+    let out = `💬 COUNTRY CHAT — ${country.toUpperCase()}\n${'═'.repeat(60)}\n\n`;
+    for (const m of msgs) {
+      out += `🏢 ${m.company_name||'?'} (${m.company_id||'?'})\n`;
+      out += `🕒 ${m.date_time||'?'}  |  📌 ${m.id||'?'}\n`;
+      out += `💬 ${(m.message_text||'').trim()||'(no text)'}\n`;
+      out += '─'.repeat(60) + '\n';
+    }
+    setOutput('cmOutput', out, 'success');
+  } catch(e) {
+    setOutput('cmOutput', '❌ Error: ' + e.message, 'error');
   }
 }
 
-function nextQuestion() {
-  quizCurrent++;
-  if (quizCurrent >= QUIZ_SIZE) {
-    showResults();
-  } else {
-    renderQuestion();
+// ═══════════════════════════════════════════
+//  BT5 SERVER STATUS
+// ═══════════════════════════════════════════
+async function doCS(silent=false) {
+  if (!silent) setOutput('csOutput', '⏳ Pinging BT5...', 'info');
+  const CS_URL = `${WAR_API}/RestSimulator?Operation=getWarsByCountry&sender_company_id=3521724&user_id=D31C0B83672E475A9C3373C376BF6DD9&version_code=15&country=Iran`;
+
+  const start = Date.now();
+  let status = 'OFFLINE', elapsed = 0;
+  try {
+    await fetch(CS_URL, { headers:{'User-Agent':'Mozilla/5.0'} });
+    elapsed = (Date.now() - start) / 1000;
+    if      (elapsed <= 10) status = 'VERY GOOD 💚';
+    else if (elapsed <= 20) status = 'GOOD 🟢';
+    else if (elapsed <= 30) status = 'SLOW 🟠';
+    else                    status = 'OFFLINE 🔴';
+  } catch {
+    status = 'OFFLINE 🔴';
+    elapsed = 35;
+  }
+
+  const isOnline = !status.includes('OFFLINE');
+  document.getElementById('serverDot').className   = 'status-dot' + (isOnline ? ' online' : '');
+  document.getElementById('serverLabel').textContent = isOnline ? 'BT5 ONLINE' : 'BT5 OFFLINE';
+  document.getElementById('csValue').textContent    = 'BT5 ' + status;
+  document.getElementById('csTime').textContent     = elapsed.toFixed(2);
+  document.getElementById('csChecked').textContent  = new Date().toLocaleTimeString();
+  document.getElementById('dashServerVal').textContent = isOnline ? status : 'OFFLINE';
+  document.getElementById('dashServerVal').className   = 'card-value ' + (isOnline ? 'text-accent2' : 'text-danger');
+
+  if (!silent) {
+    const out = `🖥️ BT5 SERVER STATUS\n${'─'.repeat(40)}\nStatus  : BT5 ${status}\nLatency : ${elapsed.toFixed(2)}s\nChecked : ${new Date().toLocaleString()}\n`;
+    setOutput('csOutput', out, isOnline ? 'success' : 'error');
   }
 }
 
-function showResults() {
-  document.getElementById('quizArea').style.display = 'none';
-  const res = document.getElementById('quizResult');
-  res.style.display = 'block';
-  const pct = Math.round((quizScore/QUIZ_SIZE)*100);
-  document.getElementById('resultScore').textContent = `${quizScore}/${QUIZ_SIZE}`;
-  if (quizScore > highScore) {
-    highScore = quizScore;
-    document.getElementById('highScore').textContent = `${highScore}/${QUIZ_SIZE}`;
-    document.getElementById('statBest').textContent = `${Math.round(highScore/QUIZ_SIZE*100)}%`;
+// ═══════════════════════════════════════════
+//  BT6 SCRIPT VIEWER
+// ═══════════════════════════════════════════
+async function doBT6() {
+  const filename = document.getElementById('bt6File').value.trim();
+  if (!filename.endsWith('.py') || filename.includes('/') || filename.includes('..')) {
+    setOutput('bt6Output','❌ Only .py files allowed, no path traversal.','error'); return;
   }
-  let grade, msg;
-  if (pct >= 90) { grade = 'A — Excellent!'; msg = "Outstanding performance. You're well prepared!"; }
-  else if (pct >= 80) { grade = 'B — Very Good'; msg = "Great work! Review any missed topics."; }
-  else if (pct >= 70) { grade = 'C — Good'; msg = "Decent understanding — revisit weaker areas."; }
-  else if (pct >= 60) { grade = 'D — Needs Work'; msg = "Keep studying! Use the flashcards more."; }
-  else { grade = 'F — Study More!'; msg = "Don't give up — go through all the topics again."; }
-  document.getElementById('resultGrade').textContent = grade;
-  document.getElementById('resultMsg').textContent = msg;
-  document.getElementById('quizSetup').style.display = 'block';
-}
-
-function endQuiz() {
-  document.getElementById('quizArea').style.display = 'none';
-  document.getElementById('quizResult').style.display = 'none';
-  document.getElementById('quizSetup').style.display = 'block';
-}
-
-// ── Reference ──
-function buildRefGrid() {
-  const g = document.getElementById('refGrid');
-  REF_CARDS.forEach(rc => {
-    const card = document.createElement('div');
-    card.className = 'ref-card';
-    const items = rc.items.map(i => `<div class="ref-item"><span class="ref-label">${i.l}</span><span class="ref-val">${i.v}</span></div>`).join('');
-    card.innerHTML = `<h3>${rc.title}</h3>${items}`;
-    g.appendChild(card);
-  });
-}
-
-function buildPolyTable() {
-  const t = document.getElementById('polyTable');
-  t.innerHTML = `<thead><tr><th>Formula</th><th>Name</th><th>Formula</th><th>Name</th></tr></thead><tbody></tbody>`;
-  const tb = t.querySelector('tbody');
-  for (let i = 0; i < POLY_IONS.length; i += 2) {
-    const b = POLY_IONS[i], c = POLY_IONS[i+1] || ['',''];
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${b[0]}</td><td style="color:var(--text2)">${b[1]}</td><td>${c[0]}</td><td style="color:var(--text2)">${c[1]}</td>`;
-    tb.appendChild(tr);
+  setOutput('bt6Output', `⏳ Fetching ${filename} from Supabase...`, 'info');
+  try {
+    const r = await fetch(SCRIPT_BASE + filename);
+    if (r.status === 404) { setOutput('bt6Output','❌ Script not found: ' + filename,'error'); return; }
+    if (!r.ok) { setOutput('bt6Output','❌ HTTP ' + r.status,'error'); return; }
+    const code = await r.text();
+    setOutput('bt6Output', `# ${filename}\n# Fetched from Elite Storage\n${'─'.repeat(50)}\n\n` + code, 'info');
+  } catch(e) {
+    setOutput('bt6Output','❌ Fetch error: ' + e.message,'error');
   }
 }
 
-function buildSolTable() {
-  const t = document.getElementById('solTable');
-  t.innerHTML = `<thead><tr><th>Ion / Salt</th><th>Solubility</th><th>Exceptions</th></tr></thead><tbody></tbody>`;
-  const tb = t.querySelector('tbody');
-  SOLUBILITY.forEach(row => {
-    const tr = document.createElement('tr');
-    const solColor = row[1] === 'Soluble' ? 'var(--accent3)' : 'var(--danger)';
-    tr.innerHTML = `<td style="color:var(--text2);font-family:'DM Sans'">${row[0]}</td><td style="color:${solColor}">${row[1]}</td><td style="color:var(--text3)">${row[2]}</td>`;
-    tb.appendChild(tr);
-  });
+// ═══════════════════════════════════════════
+//  CLAUDE CHAT
+// ═══════════════════════════════════════════
+async function doChat() {
+  if (!currentUser) return;
+  const input = document.getElementById('chatInput').value.trim();
+  if (!input) return;
+  document.getElementById('chatInput').value = '';
+
+  appendMsg('user', input);
+  chatHistory.push({ role:'user', content: input });
+
+  const typingEl = appendMsg('bot', '...');
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': CLAUDE_KEY,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1024,
+        system: `You are a sharp, witty AI assistant for the ELITE command terminal. The user's name is ${currentUser.Name||'Operator'} and their role is ${currentUser.Role||'User'}. Be helpful, direct, and occasionally sarcastic.`,
+        messages: chatHistory,
+      })
+    });
+    const data = await r.json();
+    const reply = data.content?.[0]?.text || '⚠️ No response.';
+    typingEl.textContent = reply;
+    chatHistory.push({ role:'assistant', content: reply });
+  } catch(e) {
+    typingEl.textContent = '❌ Error: ' + e.message;
+  }
+
+  const msgs = document.getElementById('chatMessages');
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
-function buildPTTable() {
-  const t = document.getElementById('ptTable');
-  t.innerHTML = `<thead><tr><th>Z</th><th>Symbol</th><th>Name</th><th>Molar Mass</th><th>Group</th></tr></thead><tbody></tbody>`;
-  const tb = t.querySelector('tbody');
-  ELEMENTS.forEach(el => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${el[0]}</td><td style="color:var(--accent);font-weight:700;font-family:'Syne'">${el[1]}</td><td style="color:var(--text)">${el[2]}</td><td style="color:var(--accent3)">${el[3]}</td><td style="color:var(--text3)">${el[4]}</td>`;
-    tb.appendChild(tr);
-  });
+function appendMsg(role, text) {
+  const msgs = document.getElementById('chatMessages');
+  const div  = document.createElement('div');
+  div.className = `msg msg-${role === 'user' ? 'user' : 'bot'}`;
+  const label = role === 'user' ? (currentUser?.Name || 'YOU') : 'CLAUDE AI';
+  div.innerHTML = `<div><div class="msg-label">${label}</div><div class="msg-bubble">${text}</div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div.querySelector('.msg-bubble');
 }
+
+// ═══════════════════════════════════════════
+//  ROAST
+// ═══════════════════════════════════════════
+async function doRoast() {
+  if (!currentUser) return;
+  const target = document.getElementById('roastTarget').value.trim();
+  if (!target) return;
+  const out = document.getElementById('roastOutput');
+  out.textContent = '🔥 Loading destruction...';
+  out.classList.add('show');
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': CLAUDE_KEY,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system: 'You are a savage roast comedian. Deliver a brutal, funny, creative roast. Keep it sharp, witty, and hilarious — not genuinely cruel. Under 150 words.',
+        messages: [{ role:'user', content:'Roast this: ' + target }]
+      })
+    });
+    const data = await r.json();
+    out.textContent = data.content?.[0]?.text || '⚠️ No roast generated.';
+  } catch(e) {
+    out.textContent = '❌ ' + e.message;
+  }
+}
+
+// ═══════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════
+document.getElementById('loginKey').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+// Auto-check server on load
+setTimeout(() => doCS(true), 500);
 </script>
 </body>
 </html>
