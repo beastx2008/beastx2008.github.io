@@ -3,1535 +3,678 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ELITE — Command Terminal</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<title>STA 202 – Study App</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:       #020408;
-  --surface:  #060d14;
-  --panel:    #0a1520;
-  --border:   #0f2a3f;
-  --accent:   #00c8ff;
-  --accent2:  #00ff9d;
-  --danger:   #ff3c3c;
-  --warn:     #ffb800;
-  --muted:    #2a4a60;
-  --text:     #c8e8f8;
-  --dim:      #4a7a9a;
-  --glow:     0 0 20px rgba(0,200,255,0.3);
-  --glow2:    0 0 20px rgba(0,255,157,0.3);
-}
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #1a2236;
+    --border: #2a3a55;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --green: #00e676;
+    --red: #ff4757;
+    --text: #e8edf5;
+    --muted: #7a8aaa;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Space Mono',monospace; min-height:100vh; }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0d1b2e 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 1.2rem 1.5rem;
+    position: sticky; top:0; z-index:100;
+  }
+  header h1 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:var(--accent); letter-spacing:2px; }
+  header p { font-size:0.65rem; color:var(--muted); margin-top:2px; }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 15px;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+  nav {
+    display:flex; gap:0; overflow-x:auto;
+    background:var(--surface); border-bottom:1px solid var(--border);
+    scrollbar-width:none;
+  }
+  nav::-webkit-scrollbar { display:none; }
+  nav button {
+    flex-shrink:0; padding:0.8rem 1.1rem; background:none; border:none;
+    color:var(--muted); font-family:'Syne',sans-serif; font-size:0.75rem; font-weight:600;
+    cursor:pointer; border-bottom:3px solid transparent; transition:all 0.2s; white-space:nowrap;
+  }
+  nav button.active { color:var(--accent); border-bottom-color:var(--accent); }
+  nav button:hover:not(.active) { color:var(--text); }
 
-/* ── GRID BG ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
+  .page { display:none; padding:1rem; max-width:700px; margin:0 auto; }
+  .page.active { display:block; }
 
-/* ── SCANLINE ── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.15) 2px,
-    rgba(0,0,0,0.15) 4px
-  );
-  pointer-events: none;
-  z-index: 0;
-}
+  /* ===== TOPICS ===== */
+  .topic-card {
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:1rem; margin-bottom:0.8rem; cursor:pointer;
+    border-left:4px solid var(--accent); transition:all 0.2s;
+  }
+  .topic-card:hover { border-left-color:var(--accent2); transform:translateX(3px); }
+  .topic-card h3 { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; color:var(--accent); }
+  .topic-card .body { display:none; margin-top:0.8rem; font-size:0.75rem; line-height:1.7; color:var(--text); }
+  .topic-card.open .body { display:block; }
+  .topic-card p { font-size:0.68rem; color:var(--muted); margin-top:3px; }
+  .formula {
+    background:#0a1525; border:1px solid var(--accent); border-radius:6px;
+    padding:0.5rem 0.8rem; margin:0.5rem 0; font-size:0.78rem;
+    color:var(--accent); font-family:'Space Mono',monospace;
+  }
+  .note { background:#1a1a0a; border-left:3px solid var(--accent2); padding:0.5rem 0.8rem; border-radius:0 6px 6px 0; font-size:0.72rem; color:#ffcc80; margin:0.4rem 0; }
 
-/* ── LAYOUT ── */
-#app { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  /* ===== FLASHCARDS ===== */
+  .fc-wrapper { display:flex; flex-direction:column; align-items:center; gap:1rem; padding-top:0.5rem; }
+  .fc-progress { font-size:0.7rem; color:var(--muted); }
+  .fc-card {
+    width:100%; max-width:480px; min-height:200px;
+    perspective:1000px; cursor:pointer;
+  }
+  .fc-inner {
+    position:relative; width:100%; min-height:200px;
+    transform-style:preserve-3d; transition:transform 0.5s;
+    border-radius:14px;
+  }
+  .fc-card.flipped .fc-inner { transform:rotateY(180deg); }
+  .fc-front, .fc-back {
+    position:absolute; width:100%; min-height:200px; border-radius:14px;
+    backface-visibility:hidden; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; padding:1.5rem; text-align:center;
+  }
+  .fc-front { background:var(--card); border:2px solid var(--accent); }
+  .fc-back { background:linear-gradient(135deg,#0d2137,#1a3050); border:2px solid var(--accent2); transform:rotateY(180deg); }
+  .fc-front .label { font-size:0.6rem; color:var(--muted); margin-bottom:0.5rem; font-family:'Syne',sans-serif; letter-spacing:2px; }
+  .fc-front .q { font-size:0.85rem; font-weight:700; font-family:'Syne',sans-serif; }
+  .fc-back .a { font-size:0.78rem; line-height:1.6; color:#b0e8ff; }
+  .fc-nav { display:flex; gap:1rem; }
+  .fc-nav button {
+    padding:0.6rem 1.5rem; border:none; border-radius:8px; cursor:pointer;
+    font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem;
+  }
+  .btn-prev { background:var(--card); color:var(--text); border:1px solid var(--border); }
+  .btn-next { background:var(--accent); color:#000; }
+  .fc-hint { font-size:0.65rem; color:var(--muted); }
 
-/* ── HEADER ── */
-header {
-  border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(6,13,20,0.95);
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+  /* ===== QUIZ ===== */
+  .quiz-q { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:0.8rem; }
+  .quiz-q .qnum { font-size:0.6rem; color:var(--accent); font-family:'Syne',sans-serif; letter-spacing:2px; margin-bottom:0.5rem; }
+  .quiz-q .qtext { font-size:0.82rem; font-weight:600; font-family:'Syne',sans-serif; margin-bottom:0.8rem; line-height:1.5; }
+  .quiz-opts button {
+    display:block; width:100%; text-align:left; padding:0.6rem 0.9rem;
+    background:var(--bg); border:1px solid var(--border); border-radius:8px;
+    color:var(--text); font-family:'Space Mono',monospace; font-size:0.72rem;
+    cursor:pointer; margin-bottom:0.4rem; transition:all 0.15s;
+  }
+  .quiz-opts button:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
+  .quiz-opts button.correct { background:#0a2a1a; border-color:var(--green); color:var(--green); }
+  .quiz-opts button.wrong { background:#2a0a0a; border-color:var(--red); color:var(--red); }
+  .quiz-explanation { font-size:0.7rem; color:#ffcc80; background:#1a1200; border-left:3px solid var(--accent2); padding:0.5rem 0.8rem; border-radius:0 6px 6px 0; margin-top:0.5rem; display:none; line-height:1.6; }
+  .quiz-score { text-align:center; padding:2rem; }
+  .quiz-score .score-val { font-size:3rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent); }
+  .quiz-score p { color:var(--muted); font-size:0.75rem; margin-top:0.5rem; }
+  .btn-restart { background:var(--accent); color:#000; border:none; border-radius:8px; padding:0.7rem 2rem; font-family:'Syne',sans-serif; font-weight:700; cursor:pointer; margin-top:1rem; }
 
-.logo {
-  font-family: 'Orbitron', monospace;
-  font-weight: 900;
-  font-size: 22px;
-  letter-spacing: 8px;
-  color: var(--accent);
-  text-shadow: var(--glow);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.logo-flag { font-size: 18px; }
-.logo-sub {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--dim);
-  letter-spacing: 3px;
-  display: block;
-  margin-top: -4px;
-}
+  /* ===== PAST Q ===== */
+  .pq-section { margin-bottom:1.5rem; }
+  .pq-section h2 { font-family:'Syne',sans-serif; font-size:0.85rem; color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:0.4rem; margin-bottom:0.8rem; }
+  .pq-item { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:0.7rem; }
+  .pq-item .qtext { font-size:0.78rem; font-family:'Syne',sans-serif; font-weight:600; margin-bottom:0.5rem; line-height:1.5; }
+  .pq-ans-btn { background:none; border:1px solid var(--accent); border-radius:6px; padding:0.4rem 0.9rem; color:var(--accent); font-family:'Syne',sans-serif; font-size:0.7rem; cursor:pointer; }
+  .pq-ans { display:none; font-size:0.72rem; line-height:1.7; color:#b0e8ff; margin-top:0.7rem; background:#0a1525; border-radius:6px; padding:0.7rem; }
+  .pq-item.open .pq-ans { display:block; }
 
-.header-status {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--dim);
-}
-.status-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--danger);
-  display: inline-block;
-  margin-right: 6px;
-  animation: pulse 2s infinite;
-}
-.status-dot.online { background: var(--accent2); }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-.user-badge {
-  padding: 4px 12px;
-  border: 1px solid var(--border);
-  color: var(--dim);
-  font-size: 11px;
-  font-family: 'Share Tech Mono', monospace;
-  letter-spacing: 1px;
-}
-.user-badge.logged { border-color: var(--accent2); color: var(--accent2); }
-
-/* ── MAIN LAYOUT ── */
-.container { display: flex; flex: 1; }
-
-/* ── SIDEBAR ── */
-aside {
-  width: 220px;
-  min-width: 220px;
-  border-right: 1px solid var(--border);
-  background: var(--surface);
-  padding: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.nav-section {
-  padding: 8px 16px 4px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 16px;
-  cursor: pointer;
-  color: var(--dim);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  border-left: 2px solid transparent;
-  transition: all 0.15s;
-  user-select: none;
-}
-.nav-item:hover { background: var(--panel); color: var(--text); border-left-color: var(--muted); }
-.nav-item.active { background: var(--panel); color: var(--accent); border-left-color: var(--accent); }
-.nav-item .nav-icon { font-size: 14px; width: 18px; text-align: center; }
-.nav-item .nav-cmd {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--muted);
-  margin-left: auto;
-}
-.nav-item.active .nav-cmd { color: var(--accent); opacity: 0.6; }
-
-/* ── MAIN PANEL ── */
-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-
-/* ── TERMINAL ── */
-.terminal {
-  flex: 1;
-  padding: 20px 24px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* scrollbar */
-.terminal::-webkit-scrollbar { width: 4px; }
-.terminal::-webkit-scrollbar-track { background: transparent; }
-.terminal::-webkit-scrollbar-thumb { background: var(--border); }
-
-/* ── PANELS / SECTIONS ── */
-.panel {
-  display: none;
-  animation: fadeIn 0.2s ease;
-}
-.panel.active { display: block; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
-
-.panel-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 13px;
-  letter-spacing: 4px;
-  color: var(--accent);
-  text-transform: uppercase;
-  padding: 0 0 16px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.panel-title::before {
-  content: '//';
-  color: var(--muted);
-  font-size: 11px;
-}
-
-/* ── FORM ELEMENTS ── */
-.form-group { margin-bottom: 16px; }
-.form-label {
-  display: block;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--dim);
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-
-input, select, textarea {
-  width: 100%;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 13px;
-  padding: 10px 14px;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  border-radius: 0;
-  -webkit-appearance: none;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), inset 0 0 20px rgba(0,200,255,0.03);
-}
-select option { background: var(--panel); }
-textarea { resize: vertical; min-height: 80px; }
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-
-/* ── BUTTONS ── */
-.btn {
-  padding: 10px 24px;
-  font-family: 'Orbitron', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  cursor: pointer;
-  border: 1px solid;
-  background: transparent;
-  transition: all 0.15s;
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.btn-primary {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.btn-primary:hover {
-  background: var(--accent);
-  color: var(--bg);
-  box-shadow: var(--glow);
-}
-.btn-success {
-  border-color: var(--accent2);
-  color: var(--accent2);
-}
-.btn-success:hover {
-  background: var(--accent2);
-  color: var(--bg);
-  box-shadow: var(--glow2);
-}
-.btn-danger {
-  border-color: var(--danger);
-  color: var(--danger);
-}
-.btn-danger:hover { background: var(--danger); color: #fff; }
-.btn-warn {
-  border-color: var(--warn);
-  color: var(--warn);
-}
-.btn:disabled { opacity: 0.3; cursor: not-allowed; }
-.btn-sm { padding: 6px 14px; font-size: 9px; letter-spacing: 2px; }
-
-/* ── OUTPUT BOX ── */
-.output-box {
-  background: #000;
-  border: 1px solid var(--border);
-  padding: 16px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  line-height: 1.8;
-  color: var(--accent2);
-  min-height: 120px;
-  max-height: 400px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  word-break: break-all;
-  margin-top: 16px;
-  position: relative;
-}
-.output-box::before {
-  content: 'OUTPUT';
-  position: absolute;
-  top: -9px; left: 12px;
-  background: #000;
-  padding: 0 6px;
-  font-size: 9px;
-  color: var(--dim);
-  letter-spacing: 2px;
-}
-.output-box::-webkit-scrollbar { width: 3px; }
-.output-box::-webkit-scrollbar-thumb { background: var(--border); }
-.output-empty { color: var(--muted); font-style: italic; }
-.output-error { color: var(--danger); }
-.output-success { color: var(--accent2); }
-.output-info { color: var(--accent); }
-.output-warn { color: var(--warn); }
-
-/* ── CARD GRID ── */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 8px; }
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-.card:hover { border-color: var(--muted); }
-.card-accent { border-top: 2px solid var(--accent); }
-.card-accent2 { border-top: 2px solid var(--accent2); }
-.card-danger  { border-top: 2px solid var(--danger); }
-.card-warn    { border-top: 2px solid var(--warn); }
-
-.card-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: var(--dim);
-  margin-bottom: 8px;
-}
-.card-value {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-  font-family: 'Share Tech Mono', monospace;
-}
-.card-sub { font-size: 11px; color: var(--dim); margin-top: 4px; }
-
-/* ── TABLE ── */
-.data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
-.data-table th {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--dim);
-  text-align: left;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
-  text-transform: uppercase;
-}
-.data-table td {
-  padding: 9px 12px;
-  border-bottom: 1px solid rgba(15,42,63,0.5);
-  font-family: 'Share Tech Mono', monospace;
-  color: var(--text);
-}
-.data-table tr:hover td { background: var(--panel); }
-.badge {
-  display: inline-block;
-  padding: 2px 8px;
-  font-size: 10px;
-  font-family: 'Share Tech Mono', monospace;
-  letter-spacing: 1px;
-}
-.badge-open   { background: rgba(0,255,157,0.1); color: var(--accent2); border: 1px solid var(--accent2); }
-.badge-locked { background: rgba(255,60,60,0.1);  color: var(--danger);  border: 1px solid var(--danger); }
-.badge-slow   { background: rgba(255,184,0,0.1);  color: var(--warn);   border: 1px solid var(--warn); }
-.badge-good   { background: rgba(0,200,255,0.1);  color: var(--accent); border: 1px solid var(--accent); }
-
-/* ── LOGIN SCREEN ── */
-.login-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-  gap: 0;
-}
-.login-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 40px 48px;
-  width: 100%;
-  max-width: 420px;
-  position: relative;
-}
-.login-box::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-}
-.login-logo {
-  font-family: 'Orbitron', monospace;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: 10px;
-  color: var(--accent);
-  text-shadow: var(--glow);
-  text-align: center;
-  margin-bottom: 4px;
-}
-.login-sub {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--dim);
-  letter-spacing: 4px;
-  text-align: center;
-  margin-bottom: 32px;
-}
-.login-divider {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 24px 0;
-}
-
-/* ── ALERT ── */
-.alert {
-  padding: 10px 14px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  margin-bottom: 12px;
-  border-left: 3px solid;
-  display: none;
-}
-.alert.show { display: block; }
-.alert-error   { border-color: var(--danger); background: rgba(255,60,60,0.05);  color: var(--danger); }
-.alert-success { border-color: var(--accent2); background: rgba(0,255,157,0.05); color: var(--accent2); }
-.alert-info    { border-color: var(--accent);  background: rgba(0,200,255,0.05); color: var(--accent); }
-
-/* ── SPINNER ── */
-.spinner {
-  display: inline-block;
-  width: 12px; height: 12px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── TABS ── */
-.tab-bar {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 20px;
-  gap: 0;
-}
-.tab {
-  padding: 10px 20px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--dim);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
-  user-select: none;
-}
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-/* ── PROFILE CARD ── */
-.profile-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-top: 2px solid var(--accent);
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 20px;
-}
-.profile-avatar {
-  width: 60px; height: 60px;
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  flex-shrink: 0;
-}
-.profile-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 3px;
-}
-.profile-role {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--accent2);
-  letter-spacing: 2px;
-  margin-top: 4px;
-}
-.profile-id {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--dim);
-  margin-top: 6px;
-}
-
-/* ── SERVER STATUS ── */
-.server-indicator {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  margin-bottom: 16px;
-}
-.server-indicator .label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--dim);
-  letter-spacing: 2px;
-  flex: 1;
-}
-.server-indicator .value {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-/* ── CONTRIBUTOR ROW ── */
-.contrib-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(15,42,63,0.4);
-}
-.contrib-rank {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--dim);
-  width: 28px;
-  text-align: right;
-  flex-shrink: 0;
-}
-.contrib-name {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  color: var(--text);
-  flex: 1;
-}
-.contrib-score {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  color: var(--accent);
-}
-.contrib-speed {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--accent2);
-  width: 80px;
-  text-align: right;
-}
-
-/* ── CHAT ── */
-.chat-messages {
-  flex: 1;
-  padding: 16px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: #000;
-  border: 1px solid var(--border);
-  min-height: 300px;
-  max-height: 400px;
-}
-.chat-messages::-webkit-scrollbar { width: 3px; }
-.chat-messages::-webkit-scrollbar-thumb { background: var(--border); }
-
-.msg {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.msg-user { flex-direction: row-reverse; }
-.msg-bubble {
-  padding: 10px 14px;
-  font-size: 13px;
-  line-height: 1.6;
-  max-width: 70%;
-  font-family: 'Rajdhani', sans-serif;
-}
-.msg-bot .msg-bubble  { background: var(--panel); border: 1px solid var(--border); color: var(--text); }
-.msg-user .msg-bubble { background: rgba(0,200,255,0.1); border: 1px solid var(--accent); color: var(--accent); }
-.msg-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  color: var(--dim);
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-.msg-user .msg-label { text-align: right; }
-
-.chat-input-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-.chat-input-row input { flex: 1; }
-
-/* ── ROAST ── */
-.roast-output {
-  background: rgba(255,60,60,0.05);
-  border: 1px solid var(--danger);
-  padding: 20px;
-  font-size: 15px;
-  line-height: 1.8;
-  color: var(--text);
-  margin-top: 16px;
-  display: none;
-  font-family: 'Rajdhani', sans-serif;
-  font-style: italic;
-}
-.roast-output.show { display: block; }
-
-/* ── MISC ── */
-.sep { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-.mono { font-family: 'Share Tech Mono', monospace; }
-.text-accent  { color: var(--accent); }
-.text-accent2 { color: var(--accent2); }
-.text-danger  { color: var(--danger); }
-.text-warn    { color: var(--warn); }
-.text-dim     { color: var(--dim); }
-.mt-8  { margin-top: 8px; }
-.mt-12 { margin-top: 12px; }
-.mt-16 { margin-top: 16px; }
-.flex  { display: flex; }
-.gap-8 { gap: 8px; }
-.gap-12 { gap: 12px; }
-.flex-wrap { flex-wrap: wrap; }
-.loading-row { display: flex; align-items: center; gap: 10px; color: var(--dim); font-family:'Share Tech Mono',monospace; font-size:12px; }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 700px) {
-  aside { display: none; }
-  .form-row, .form-row-3 { grid-template-columns: 1fr; }
-  .login-box { padding: 24px; }
-}
+  .section-title { font-family:'Syne',sans-serif; font-size:0.65rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:1rem; }
 </style>
 </head>
 <body>
-<div id="app">
 
-<!-- ══ HEADER ══════════════════════════════════ -->
 <header>
-  <div class="logo">
-    <span class="logo-flag">🇪🇺</span>
-    <div>
-      ELITE
-      <span class="logo-sub">COMMAND TERMINAL v2.0</span>
-    </div>
-  </div>
-  <div class="header-status">
-    <span><span class="status-dot" id="serverDot"></span><span id="serverLabel">CHECKING...</span></span>
-    <span class="user-badge" id="userBadge">NOT AUTHENTICATED</span>
-  </div>
+  <h1>STA 202 — STUDY MODE</h1>
+  <p>Statistics for Physical Sciences & Engineering · DELSU Abraka · 2024/2025</p>
 </header>
 
-<div class="container">
+<nav>
+  <button class="active" onclick="showPage('topics',this)">📚 Topics</button>
+  <button onclick="showPage('flashcards',this)">🃏 Flashcards</button>
+  <button onclick="showPage('quiz',this)">🧠 Quiz</button>
+  <button onclick="showPage('pastq',this)">📝 Past Q</button>
+</nav>
 
-<!-- ══ SIDEBAR ══════════════════════════════════ -->
-<aside id="sidebar" style="display:none">
-  <div class="nav-section">ACCESS</div>
-  <div class="nav-item active" data-panel="dashboard" onclick="nav(this)">
-    <span class="nav-icon">⚡</span> Dashboard
-    <span class="nav-cmd">/me</span>
-  </div>
+<!-- ========== TOPICS PAGE ========== -->
+<div id="topics" class="page active">
+  <p class="section-title">Tap any topic to expand</p>
 
-  <div class="nav-section">INTELLIGENCE</div>
-  <div class="nav-item" data-panel="war" onclick="nav(this)">
-    <span class="nav-icon">⚔️</span> War Scanner
-    <span class="nav-cmd">/war</span>
-  </div>
-  <div class="nav-item" data-panel="res" onclick="nav(this)">
-    <span class="nav-icon">🗳️</span> Resolutions
-    <span class="nav-cmd">/res</span>
-  </div>
-  <div class="nav-item" data-panel="cw" onclick="nav(this)">
-    <span class="nav-icon">🏹</span> Contributors
-    <span class="nav-cmd">/cw</span>
-  </div>
-  <div class="nav-item" data-panel="st" onclick="nav(this)">
-    <span class="nav-icon">⚡</span> Speed Tracker
-    <span class="nav-cmd">/st</span>
-  </div>
-  <div class="nav-item" data-panel="cm" onclick="nav(this)">
-    <span class="nav-icon">💬</span> Country Chat
-    <span class="nav-cmd">/cm</span>
-  </div>
-
-  <div class="nav-section">SERVER</div>
-  <div class="nav-item" data-panel="cs" onclick="nav(this)">
-    <span class="nav-icon">🖥️</span> BT5 Status
-    <span class="nav-cmd">/cs</span>
-  </div>
-  <div class="nav-item" data-panel="bt6" onclick="nav(this)">
-    <span class="nav-icon">📦</span> Script Runner
-    <span class="nav-cmd">/bt6</span>
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>1. Introduction to Statistics</h3>
+    <p>Definitions, types, branches, data, variables</p>
+    <div class="body">
+      <b>Statistics</b> — branch of mathematics dealing with collection, analysis and interpretation of numerical data for effective decision making.<br><br>
+      <b>Two main branches:</b><br>
+      • <b>Descriptive Statistics</b> — organises & presents data (charts, tables, averages)<br>
+      • <b>Inferential Statistics</b> — uses sample data to predict/conclude about a population<br><br>
+      <b>Data types:</b><br>
+      • <b>Primary data</b> — collected directly from the field (raw, unprocessed)<br>
+      • <b>Secondary data</b> — collected by someone else (NBS, CBN, WHO etc.)<br><br>
+      <b>Variables:</b><br>
+      • <b>Qualitative (Descriptive)</b> — non-numeric (colour, gender)<br>
+      • <b>Quantitative (Numeric)</b> — numeric: weight, height, temperature<br>
+      &nbsp;&nbsp;→ Discrete (whole numbers only) | Continuous (any value in range)<br><br>
+      <b>Statistics can be represented in 3 dimensions</b> (3D)<br>
+      <b>Statistics can be divided into 2 categories</b> (Descriptive & Inferential)<br>
+      <div class="note">📌 Population = entire group | Sample = subset selected for study</div>
+      <div class="note">📌 Inferential statistics → Parametric & Non-parametric</div>
+    </div>
   </div>
 
-  <div class="nav-section">AI</div>
-  <div class="nav-item" data-panel="chat" onclick="nav(this)">
-    <span class="nav-icon">🤖</span> Claude Chat
-    <span class="nav-cmd">/chat</span>
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>2. Charts & Data Presentation</h3>
+    <p>Pie chart, bar chart, histogram, multiple bar chart</p>
+    <div class="body">
+      <b>Types of charts:</b> Pictogram, Pie chart, Bar chart, Line graph, Histogram<br><br>
+      <b>Pie Chart:</b> Angle of each sector = (Value / Total) × 360°<br>
+      <div class="formula">Angle = (f / N) × 360°</div>
+      <b>Histogram:</b> 1-dimensional diagram; rectangles whose area ∝ frequency; width = class interval; no gaps between bars.<br><br>
+      <b>Bar Chart (Simple):</b> Bars separated by equal spaces; height ∝ frequency.<br><br>
+      <b>Multiple Bar Chart:</b> Grouped bars for comparison (e.g. male vs female per month).<br>
+      <div class="note">📌 Compound/Percentage bar chart stacks values within each bar to show composition.</div>
+    </div>
   </div>
-  <div class="nav-item" data-panel="roast" onclick="nav(this)">
-    <span class="nav-icon">🔥</span> Roast
-    <span class="nav-cmd">/roast</span>
+
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>3. Frequency Distribution</h3>
+    <p>Sturge's rule, class width, relative frequency</p>
+    <div class="body">
+      <b>Sturge's Rule</b> — determines number of classes (k):
+      <div class="formula">k = 1 + 3.322 × log₁₀(N)</div>
+      <b>Class Width (C):</b>
+      <div class="formula">C = Range / k &nbsp;=&nbsp; (Max – Min) / k</div>
+      <b>Relative Frequency:</b>
+      <div class="formula">Relative Frequency = f / N &nbsp;(or f/N × 100%)</div>
+      <b>Cumulative Frequency (CF):</b> running total of frequencies.<br><br>
+      <div class="note">📌 Range = Largest value − Smallest value</div>
+      <div class="note">📌 Always round class width UP to next whole number</div>
+    </div>
   </div>
-</aside>
 
-<!-- ══ MAIN ══════════════════════════════════════ -->
-<main>
-<div class="terminal" id="terminal">
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>4. Measures of Central Tendency</h3>
+    <p>Mean, Median, Mode — ungrouped & grouped</p>
+    <div class="body">
+      <b>Arithmetic Mean:</b>
+      <div class="formula">x̄ = Σfx / N &nbsp;(grouped) &nbsp;|&nbsp; x̄ = Σx / n &nbsp;(ungrouped)</div>
+      <b>Geometric Mean:</b>
+      <div class="formula">G = ⁿ√(x₁·x₂·...·xₙ)</div>
+      <b>Harmonic Mean:</b>
+      <div class="formula">H = n / Σ(1/xᵢ)</div>
+      In general: Harmonic Mean ≤ Geometric Mean ≤ Arithmetic Mean<br><br>
+      <b>Median (Grouped):</b>
+      <div class="formula">Median = L + [(N/2 – CF) / f] × C</div>
+      <b>Mode (Grouped):</b>
+      <div class="formula">Mode = L + [(Δ₁) / (Δ₁ + Δ₂)] × C</div>
+      where Δ₁ = modal freq – prev freq, Δ₂ = modal freq – next freq<br><br>
+      <div class="note">📌 For ungrouped data: Median = middle value when sorted; Mode = most frequent value</div>
+      <div class="note">📌 Bimodal = 2 modes; Trimodal = 3 modes</div>
+    </div>
+  </div>
 
-<!-- ── LOGIN ──────────────────────────────────── -->
-<div class="panel active" id="panel-login">
-  <div class="login-screen">
-    <div class="login-box">
-      <div class="login-logo">ELITE</div>
-      <div class="login-sub">🇪🇺 ACCESS TERMINAL 🇪🇺</div>
-      <div class="alert" id="loginAlert"></div>
-      <div class="form-group">
-        <label class="form-label">ACCESS ID</label>
-        <input type="text" id="loginId" placeholder="Enter your ID..." autocomplete="off">
-      </div>
-      <div class="form-group">
-        <label class="form-label">ACCESS KEY</label>
-        <input type="password" id="loginKey" placeholder="Enter your key..." autocomplete="off">
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">
-        <span id="loginBtnText">AUTHENTICATE</span>
-      </button>
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>5. Quartiles, Deciles & Percentiles</h3>
+    <p>Q1, Q3, D1, D3, P1, P3 formulas</p>
+    <div class="body">
+      <b>Quartiles (grouped data):</b>
+      <div class="formula">Q₁ = L + [(N/4 – CF) / f] × C</div>
+      <div class="formula">Q₃ = L + [(3N/4 – CF) / f] × C</div>
+      <b>Deciles:</b>
+      <div class="formula">D₁ = L + [(N/10 – CF) / f] × C</div>
+      <div class="formula">D₃ = L + [(3N/10 – CF) / f] × C</div>
+      <b>Percentiles:</b>
+      <div class="formula">P₁ = L + [(N/100 – CF) / f] × C</div>
+      <div class="formula">P₃ = L + [(3N/100 – CF) / f] × C</div>
+      <div class="note">📌 L = lower class boundary, CF = cumulative frequency BEFORE the class, f = class frequency, C = class width</div>
+    </div>
+  </div>
+
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>6. Measures of Dispersion</h3>
+    <p>Range, Variance, Standard Deviation, CV</p>
+    <div class="body">
+      <b>Range:</b> Max − Min<br><br>
+      <b>Variance (ungrouped):</b>
+      <div class="formula">σ² = Σ(x – x̄)² / n</div>
+      <b>Variance (grouped):</b>
+      <div class="formula">σ² = Σf(x – x̄)² / N</div>
+      <b>Standard Deviation:</b>
+      <div class="formula">σ = √(Variance)</div>
+      <b>Coefficient of Variation (CV):</b>
+      <div class="formula">CV = (σ / x̄) × 100%</div>
+      <div class="note">📌 CV is used to compare variability between two datasets with different means</div>
+      <div class="note">📌 Lower CV = more consistent/less variable data</div>
+    </div>
+  </div>
+
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>7. Probability</h3>
+    <p>Classical probability, addition & multiplication rules</p>
+    <div class="body">
+      <b>Classical Probability:</b>
+      <div class="formula">P(E) = Number of favourable outcomes / Total outcomes</div>
+      <b>Properties:</b> 0 ≤ P(E) ≤ 1 &nbsp;|&nbsp; P(E) + P(E') = 1<br><br>
+      <b>Addition Rule:</b>
+      <div class="formula">P(A∪B) = P(A) + P(B) – P(A∩B)</div>
+      For mutually exclusive: P(A∪B) = P(A) + P(B)<br><br>
+      <b>Multiplication Rule:</b>
+      <div class="formula">P(A∩B) = P(A) × P(B|A)</div>
+      For independent events: P(A∩B) = P(A) × P(B)<br><br>
+      <b>Combinations:</b>
+      <div class="formula">ⁿCᵣ = n! / [r!(n–r)!]</div>
+      <div class="note">📌 With replacement → independent events. Without replacement → dependent events.</div>
+      <div class="note">📌 Two dice: sample space = 36 outcomes</div>
+    </div>
+  </div>
+
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>8. Probability Theory (Advanced)</h3>
+    <p>Binomial distribution, Probability theorem</p>
+    <div class="body">
+      <b>Probability Theorem:</b> When a die is tossed, P(each face) = 1/6.<br>
+      When coin is tossed, P(Head) = P(Tail) = 1/2<br><br>
+      <b>Binomial Distribution:</b> For n trials, P(x successes) =
+      <div class="formula">P(X=x) = ⁿCₓ × pˣ × (1–p)ⁿ⁻ˣ</div>
+      <b>Mean of Binomial</b> = np &nbsp;|&nbsp; <b>Variance</b> = np(1–p)<br><br>
+      <div class="note">📌 A fair coin: P(Head) = P(Tail) = ½</div>
+    </div>
+  </div>
+
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>9. Correlation</h3>
+    <p>Pearson's r, Spearman's rank correlation</p>
+    <div class="body">
+      <b>Pearson's Correlation Coefficient (r):</b>
+      <div class="formula">r = [nΣxy – (Σx)(Σy)] / √{[nΣx²–(Σx)²][nΣy²–(Σy)²]}</div>
+      <b>Spearman's Rank Correlation:</b>
+      <div class="formula">r = 1 – [6Σd²] / [n(n²–1)]</div>
+      where d = difference in ranks<br><br>
+      <b>Interpretation:</b><br>
+      • r = +1 → Perfect positive correlation<br>
+      • r = –1 → Perfect negative correlation<br>
+      • r = 0 → No correlation<br>
+      • |r| close to 1 → Strong correlation<br>
+      <div class="note">📌 Correlation does NOT imply causation</div>
+    </div>
+  </div>
+
+  <div class="topic-card" onclick="toggle(this)">
+    <h3>10. Regression</h3>
+    <p>Regression line of Y on X, Normal equations</p>
+    <div class="body">
+      <b>Regression line of Y on X:</b>
+      <div class="formula">Y = a + bX</div>
+      <b>Normal Equations (solve simultaneously):</b>
+      <div class="formula">ΣY = na + bΣX</div>
+      <div class="formula">ΣXY = aΣX + bΣX²</div>
+      Once a and b are found, substitute any X value to predict Y.<br><br>
+      <div class="note">📌 b = slope (rate of change), a = Y-intercept</div>
+      <div class="note">📌 n = number of data pairs</div>
     </div>
   </div>
 </div>
 
-<!-- ── DASHBOARD ───────────────────────────────── -->
-<div class="panel" id="panel-dashboard">
-  <div class="panel-title">Dashboard</div>
-  <div class="profile-card" id="profileCard">
-    <div class="profile-avatar">👑</div>
-    <div>
-      <div class="profile-name" id="profileName">—</div>
-      <div class="profile-role" id="profileRole">—</div>
-      <div class="profile-id" id="profileId">ID: —</div>
-    </div>
-    <button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="doLogout()">LOGOUT</button>
-  </div>
-  <div class="card-grid">
-    <div class="card card-accent">
-      <div class="card-title">SESSION</div>
-      <div class="card-value text-accent2">ACTIVE</div>
-      <div class="card-sub">Authenticated via Supabase</div>
-    </div>
-    <div class="card card-accent2">
-      <div class="card-title">BT5 SERVER</div>
-      <div class="card-value" id="dashServerVal">—</div>
-      <div class="card-sub" id="dashServerSub">Run /cs to check</div>
-    </div>
-    <div class="card card-warn">
-      <div class="card-title">ELITE COUNTRIES</div>
-      <div class="card-value">9</div>
-      <div class="card-sub">Russia, Germany, France…</div>
-    </div>
-    <div class="card card-danger">
-      <div class="card-title">ALL COUNTRIES</div>
-      <div class="card-value">22</div>
-      <div class="card-sub">Full resolution radar coverage</div>
-    </div>
-  </div>
-</div>
-
-<!-- ── WAR SCANNER ─────────────────────────────── -->
-<div class="panel" id="panel-war">
-  <div class="panel-title">War Scanner</div>
-  <div class="form-row">
-    <div class="form-group">
-      <label class="form-label">Country</label>
-      <input type="text" id="warCountry" placeholder="e.g. Russia, Germany…">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Mode</label>
-      <select id="warMode">
-        <option value="single">Single Country</option>
-        <option value="ELITE">ELITE (9 countries)</option>
-      </select>
-    </div>
-  </div>
-  <div class="flex gap-8">
-    <button class="btn btn-primary" onclick="doWar()">⚔️ SCAN WARS</button>
-  </div>
-  <div class="output-box" id="warOutput"><span class="output-empty">No scan results yet.</span></div>
-</div>
-
-<!-- ── RESOLUTIONS ─────────────────────────────── -->
-<div class="panel" id="panel-res">
-  <div class="panel-title">Resolution Radar</div>
-  <div class="form-row">
-    <div class="form-group">
-      <label class="form-label">Country</label>
-      <input type="text" id="resCountry" placeholder="e.g. Iran, France…">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Mode</label>
-      <select id="resMode">
-        <option value="single">Single Country</option>
-        <option value="ELITE">ELITE (9 countries)</option>
-        <option value="ALL">ALL (22 countries)</option>
-      </select>
-    </div>
-  </div>
-  <div class="flex gap-8">
-    <button class="btn btn-primary" onclick="doRes()">🗳️ SCAN RESOLUTIONS</button>
-  </div>
-  <div class="output-box" id="resOutput"><span class="output-empty">No scan results yet.</span></div>
-</div>
-
-<!-- ── CONTRIBUTORS ────────────────────────────── -->
-<div class="panel" id="panel-cw">
-  <div class="panel-title">Contributor Viewer</div>
-  <div class="form-row-3">
-    <div class="form-group">
-      <label class="form-label">War ID</label>
-      <input type="text" id="cwWarId" placeholder="e.g. 57927">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Country 1</label>
-      <input type="text" id="cwCountry1" placeholder="e.g. Norway">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Country 2</label>
-      <input type="text" id="cwCountry2" placeholder="e.g. Germany">
-    </div>
-  </div>
-  <div class="form-group" style="max-width:160px">
-    <label class="form-label">Size</label>
-    <input type="number" id="cwSize" value="1000" min="1" max="2000">
-  </div>
-  <button class="btn btn-primary" onclick="doCW()">🏹 FETCH CONTRIBUTORS</button>
-  <div class="output-box" id="cwOutput"><span class="output-empty">No data yet.</span></div>
-</div>
-
-<!-- ── SPEED TRACKER ───────────────────────────── -->
-<div class="panel" id="panel-st">
-  <div class="panel-title">Speed Tracker</div>
-  <div class="alert alert-info show" style="margin-bottom:16px">
-    ⚡ Takes two snapshots 60 seconds apart. Page must stay open during tracking.
-  </div>
-  <div class="form-row-3">
-    <div class="form-group">
-      <label class="form-label">War ID</label>
-      <input type="text" id="stWarId" placeholder="e.g. 57855">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Country 1</label>
-      <input type="text" id="stCountry1" placeholder="e.g. Germany">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Country 2</label>
-      <input type="text" id="stCountry2" placeholder="e.g. Laos">
-    </div>
-  </div>
-  <button class="btn btn-primary" id="stBtn" onclick="doST()">⚡ START TRACKING</button>
-  <div id="stCountdown" style="display:none;margin-top:12px" class="loading-row">
-    <div class="spinner"></div>
-    <span id="stCountdownText">Taking snapshot 1...</span>
-  </div>
-  <div class="output-box" id="stOutput"><span class="output-empty">No tracking data yet.</span></div>
-</div>
-
-<!-- ── COUNTRY CHAT ────────────────────────────── -->
-<div class="panel" id="panel-cm">
-  <div class="panel-title">Country Chat Feed</div>
-  <div class="form-row">
-    <div class="form-group">
-      <label class="form-label">Country</label>
-      <input type="text" id="cmCountry" placeholder="e.g. Russia, Iran…">
-    </div>
-    <div class="form-group" style="display:flex;align-items:flex-end">
-      <button class="btn btn-primary" onclick="doCM()" style="width:100%">💬 FETCH CHAT</button>
-    </div>
-  </div>
-  <div class="output-box" id="cmOutput"><span class="output-empty">No messages yet.</span></div>
-</div>
-
-<!-- ── BT5 SERVER STATUS ───────────────────────── -->
-<div class="panel" id="panel-cs">
-  <div class="panel-title">BT5 Server Status</div>
-  <div class="server-indicator" id="csIndicator">
-    <span class="status-dot" id="csDot"></span>
-    <span class="label">BT5 GAME SERVER</span>
-    <span class="value" id="csValue">UNKNOWN</span>
-  </div>
-  <div class="card-grid" style="margin-bottom:16px">
-    <div class="card">
-      <div class="card-title">RESPONSE TIME</div>
-      <div class="card-value mono" id="csTime">—</div>
-      <div class="card-sub">seconds</div>
-    </div>
-    <div class="card">
-      <div class="card-title">LAST CHECKED</div>
-      <div class="card-value mono" id="csChecked" style="font-size:14px">—</div>
-      <div class="card-sub">local time</div>
-    </div>
-  </div>
-  <div class="flex gap-8">
-    <button class="btn btn-primary" onclick="doCS()">🖥️ CHECK NOW</button>
-  </div>
-  <div class="output-box" id="csOutput"><span class="output-empty">Press CHECK NOW to ping the server.</span></div>
-</div>
-
-<!-- ── SCRIPT RUNNER ───────────────────────────── -->
-<div class="panel" id="panel-bt6">
-  <div class="panel-title">BT6 Script Runner</div>
-  <div class="alert alert-info show">
-    📦 Scripts are fetched from Elite Supabase storage and executed server-side via the Telegram bot.
-    Use the Telegram bot for interactive scripts. This panel shows output only.
-  </div>
-  <div class="form-row" style="margin-top:16px">
-    <div class="form-group">
-      <label class="form-label">Script Filename</label>
-      <input type="text" id="bt6File" placeholder="e.g. st.py, ad.py, war.py">
-    </div>
-    <div class="form-group" style="display:flex;align-items:flex-end">
-      <button class="btn btn-primary" onclick="doBT6()" style="width:100%">📦 FETCH &amp; VIEW SCRIPT</button>
-    </div>
-  </div>
-  <div class="output-box" id="bt6Output"><span class="output-empty">Enter a filename to fetch its source code.</span></div>
-</div>
-
-<!-- ── CLAUDE CHAT ─────────────────────────────── -->
-<div class="panel" id="panel-chat">
-  <div class="panel-title">Claude AI Chat</div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="msg msg-bot">
-      <div>
-        <div class="msg-label">CLAUDE AI</div>
-        <div class="msg-bubble">Online and ready. What do you need, operator?</div>
+<!-- ========== FLASHCARDS PAGE ========== -->
+<div id="flashcards" class="page">
+  <p class="section-title">Tap card to reveal answer</p>
+  <div class="fc-wrapper">
+    <div class="fc-progress" id="fc-prog">Card 1 of 20</div>
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-inner" id="fc-inner">
+        <div class="fc-front">
+          <div class="label">QUESTION</div>
+          <div class="q" id="fc-q"></div>
+        </div>
+        <div class="fc-back">
+          <div class="a" id="fc-a"></div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="chat-input-row">
-    <input type="text" id="chatInput" placeholder="Type your message…" onkeydown="if(event.key==='Enter')doChat()">
-    <button class="btn btn-primary" onclick="doChat()">SEND</button>
+    <div class="fc-hint">👆 Tap card to flip</div>
+    <div class="fc-nav">
+      <button class="btn-prev" onclick="fcMove(-1)">← Prev</button>
+      <button class="btn-next" onclick="fcMove(1)">Next →</button>
+    </div>
   </div>
 </div>
 
-<!-- ── ROAST ───────────────────────────────────── -->
-<div class="panel" id="panel-roast">
-  <div class="panel-title">Roast Engine 🔥</div>
-  <div class="form-group">
-    <label class="form-label">Target (person, thing, or concept)</label>
-    <input type="text" id="roastTarget" placeholder="Who or what should be destroyed?">
-  </div>
-  <button class="btn btn-danger" onclick="doRoast()">🔥 EXECUTE ROAST</button>
-  <div class="roast-output" id="roastOutput"></div>
+<!-- ========== QUIZ PAGE ========== -->
+<div id="quiz" class="page">
+  <div id="quiz-container"></div>
+  <div id="quiz-score" class="quiz-score" style="display:none"></div>
 </div>
 
-</div><!-- /terminal -->
-</main>
-</div><!-- /container -->
-</div><!-- /app -->
+<!-- ========== PAST QUESTIONS PAGE ========== -->
+<div id="pastq" class="page">
+  <p class="section-title">STA 202 — 2024/2025 Past Questions</p>
+
+  <div class="pq-section">
+    <h2>SECTION A — Objective (MCQ)</h2>
+
+    <div class="pq-item">
+      <div class="qtext">1. How many major types of data collection exist in Statistics?<br>A) 1 &nbsp; B) 2 &nbsp; C) 3 &nbsp; D) 4</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Answer: B) 2</b> — Primary data collection and Secondary data collection.</div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">2. Statistics can be divided into ___ categories.<br>A) 4 &nbsp; B) 3 &nbsp; C) 2 &nbsp; D) 1</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Answer: C) 2</b> — Descriptive Statistics and Inferential Statistics.</div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">3. Statistics can be represented in ___ dimensions.<br>A) 6 &nbsp; B) 5 &nbsp; C) 4 &nbsp; D) 3</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Answer: D) 3</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">4. Which of the following is NOT an importance of studying Statistics?<br>A) Understanding implications of selected decisions<br>B) Understanding numerical information<br>C) Effective demonstrated responsibilities<br>D) Effective decision making</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Answer: C) Effective demonstrated responsibilities</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">5. Which is NOT an official source of secondary data collection?<br>A) NAS &nbsp; B) NBS &nbsp; C) CBN &nbsp; D) WHO</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Answer: A) National Association of Scientists (NAS)</b> — NBS, CBN, and WHO are all official sources.</div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">7. ___ involves numeric attributes such as weight, shoe size, height, temperature.<br>A) Qualitative Variables &nbsp; B) Quantitative Variables &nbsp; C) Primary data sources &nbsp; D) Secondary data sources</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Answer: B) Quantitative Variables</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">10. Qualitative variables are also called ___.<br>A) Numeric variables &nbsp; B) Descriptive variables &nbsp; C) Dimensional variables &nbsp; D) Statistical variables</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Answer: B) Descriptive variables</b></div>
+    </div>
+  </div>
+
+  <div class="pq-section">
+    <h2>SECTION B — Fill-in-the-blank (Key Answers)</h2>
+
+    <div class="pq-item">
+      <div class="qtext">1. ___ is the process of obtaining measurements or counts on variable of interest.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Data Collection</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">3. ___ Statistics is a kind of guess work, using past statistical results to predict present or future situations.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Inferential Statistics</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">4. ___ is information in raw form collected for the purpose of investigation.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Data</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">5. ___ data are collected directly from the field of enquiries and have not undergone any form of processing.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Primary data</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">8. Quantitative variables are also called ___.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Numeric variables</b></div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">10. The diagram involving rectangles whose area is proportional to frequency of a variable and width = class interval is the ___.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans"><b>Histogram</b></div>
+    </div>
+  </div>
+
+  <div class="pq-section">
+    <h2>SECTION C — Graphs & Charts</h2>
+
+    <div class="pq-item">
+      <div class="qtext">Q1. Students admitted: Science–190, Arts–172, Humanities–154, Engineering–136, Law–118, Medicine–108. Draw a pie chart. Calculate the angle for each sector.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        <b>Total = 878</b><br>
+        • Science: 190/878 × 360 = <b>77.9°</b> (21.6%)<br>
+        • Arts: 172/878 × 360 = <b>70.5°</b> (19.6%)<br>
+        • Humanities: 154/878 × 360 = <b>63.1°</b> (17.5%)<br>
+        • Engineering: 136/878 × 360 = <b>55.7°</b> (15.5%)<br>
+        • Law: 118/878 × 360 = <b>48.4°</b> (13.4%)<br>
+        • Medicine: 108/878 × 360 = <b>44.3°</b> (12.3%)<br>
+        <b>Sum ≈ 360°</b> ✓
+      </div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">Q3. Maternity recorded births (6 months): draw a Multiple Bar Chart for male vs female per month.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        Data: Month 1: M=20, F=30 | Month 2: M=30, F=50 | Month 3: M=55, F=65 | Month 4: M=60, F=40 | Month 5: M=40, F=50 | Month 6: M=70, F=45<br><br>
+        Draw grouped bars for each month with Male (solid) and Female (hatched) side by side. Label x-axis as Months, y-axis as Number of Births. Include a key/legend.
+      </div>
+    </div>
+  </div>
+
+  <div class="pq-section">
+    <h2>SECTION D — Grouped Frequency & Statistics</h2>
+
+    <div class="pq-item">
+      <div class="qtext">Using Sturge's rule, construct a grouped frequency table for the given 50-value dataset, then calculate: (a) Mean (b) Harmonic Mean (c) Q1 and Q3.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        <b>Step 1 — Sturge's Rule:</b> N=50, k = 1 + 3.322×log₁₀(50) = 1 + 3.322×1.699 ≈ 6.64 → <b>k = 7 classes</b><br>
+        <b>Range</b> = 50 – 1 = 49; <b>C</b> = 49/7 ≈ 7 (use 7)<br><br>
+        <b>Classes:</b> 1–7, 8–14, 15–21, 22–28, 29–35, 36–42, 43–50<br><br>
+        <b>Mean</b> = Σfx / N (use midpoints of each class)<br>
+        <b>Harmonic Mean</b> = N / Σ(f/x)<br>
+        <b>Q1</b> = L + [(N/4 – CF)/f] × C; Q3 = L + [(3N/4 – CF)/f] × C<br>
+        <div style="color:#ffcc80; margin-top:0.5rem;">📌 Build the full table then apply formulas to the correct class rows.</div>
+      </div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">(a) Calculate the Median (b) Calculate the Mode (c) Find D1 and D3 of the distribution.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        <b>Median</b> = L + [(N/2 – CF)/f] × C &nbsp; → locate the class containing the N/2 th value<br>
+        <b>Mode</b> = L + [Δ₁/(Δ₁+Δ₂)] × C &nbsp; → the modal class has the highest frequency<br>
+        <b>D1</b> = L + [(N/10 – CF)/f] × C<br>
+        <b>D3</b> = L + [(3N/10 – CF)/f] × C
+      </div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">(a) Calculate Standard Deviation (b) Variance (c) Find P1 and P3.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        <b>Variance</b> σ² = Σf(x–x̄)² / N<br>
+        <b>Standard Deviation</b> σ = √(σ²)<br>
+        <b>P1</b> = L + [(N/100 – CF)/f] × C<br>
+        <b>P3</b> = L + [(3N/100 – CF)/f] × C
+      </div>
+    </div>
+  </div>
+
+  <div class="pq-section">
+    <h2>SECTION E — Probability</h2>
+
+    <div class="pq-item">
+      <div class="qtext">Two dice tossed simultaneously. Find the probability the sum is: (a) > 8 (b) Prime (c) Odd (d) < 10 (e) > 7 and < 9.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        Total sample space = 36<br>
+        <b>(a) Sum > 8:</b> sums 9,10,11,12 → outcomes: 4+3+2+1 = 10 → <b>P = 10/36 = 5/18</b><br>
+        <b>(b) Prime sums</b> (2,3,5,7,11): count pairs → 1+2+4+6+2 = 15 → <b>P = 15/36 = 5/12</b><br>
+        <b>(c) Odd sums</b> (3,5,7,9,11): count pairs → 2+4+6+4+2 = 18 → <b>P = 18/36 = 1/2</b><br>
+        <b>(d) Sum < 10:</b> sums 2–9 → 36 – 10 = 26 outcomes → <b>P = 26/36 = 13/18</b><br>
+        <b>(e) Sum > 7 and < 9 (sum = 8):</b> (2,6),(3,5),(4,4),(5,3),(6,2) = 5 → <b>P = 5/36</b>
+      </div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">A bag: 3 Red, 6 Blue, 5 Green, 4 White balls. Two picked WITHOUT replacement. Find P(a) both same colour (b) one Red, one White (c) first Blue, second Green (d) first Green, second White (e) none White.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        Total = 18 balls<br>
+        <b>(a) Both same colour:</b> P = [C(3,2)+C(6,2)+C(5,2)+C(4,2)] / C(18,2)<br>
+        = [3+15+10+6]/153 = 34/153<br>
+        <b>(b) One Red, one White:</b> P = (3×4)/C(18,2) = 12/153 = 4/51<br>
+        <b>(c) First Blue, second Green:</b> P = (6/18)×(5/17) = 30/306 = 5/51<br>
+        <b>(d) First Green, second White:</b> P = (5/18)×(4/17) = 20/306 = 10/153<br>
+        <b>(e) None White:</b> P = C(14,2)/C(18,2) = 91/153 = 7/√ — simplify as needed
+      </div>
+    </div>
+
+    <div class="pq-item">
+      <div class="qtext">A fair coin tossed n times. P(8 heads) = P(10 heads). Find 3n.</div>
+      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
+      <div class="pq-ans">
+        P(X=8) = P(X=10): &nbsp; ⁿC₈ × (½)ⁿ = ⁿC₁₀ × (½)ⁿ<br>
+        ∴ ⁿC₈ = ⁿC₁₀<br>
+        This means n = 8+10 = <b>18</b><br>
+        ∴ 3n = 3 × 18 = <b>54</b>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-// ═══════════════════════════════════════════
-//  CONFIG
-// ═══════════════════════════════════════════
-const SUPABASE_URL  = "https://lwrwxkxoqnvcljlwfhbs.supabase.co";
-const SUPABASE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3cnd4a3hvcW52Y2xqbHdmaGJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5MTE1NTcsImV4cCI6MjA3NDQ4NzU1N30.1zxAaCFZDpje5ylUms6z2RR8yc7divuOJvulkfia2yc";
-const CLAUDE_KEY    = "YOUR_CLAUDE_API_KEY"; // ← replace with your key
-const WAR_API       = "http://52.24.104.170:8086";
-const SCRIPT_BASE   = `${SUPABASE_URL}/storage/v1/object/public/BXM1/`;
-
-const ELITE_COUNTRIES = ["Russia","Germany","France","Spain","Argentina","Japan","Portugal","Pakistan","Iran"];
-const ALL_COUNTRIES   = ["China","United States","United Kingdom","Russia","Germany","France","Italy","Spain",
-  "Canada","Mexico","Brazil","Argentina","Nigeria","Ghana","Kenya","Japan","Portugal","Pakistan","Ireland","Uganda","Denmark","Iran"];
-
-// ═══════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════
-let currentUser = null;
-let chatHistory = [];
-
-// ═══════════════════════════════════════════
-//  NAV
-// ═══════════════════════════════════════════
-function nav(el) {
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('panel-' + el.dataset.panel).classList.add('active');
+// ===== NAVIGATION =====
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id === 'flashcards') renderFC();
+  if(id === 'quiz') renderQuiz();
 }
 
-function showPanel(name) {
-  document.querySelectorAll('.nav-item').forEach(n => {
-    n.classList.toggle('active', n.dataset.panel === name);
+// ===== TOPICS =====
+function toggle(el) { el.classList.toggle('open'); }
+
+// ===== PAST Q =====
+function toggleAns(btn) {
+  const item = btn.closest('.pq-item');
+  item.classList.toggle('open');
+  btn.textContent = item.classList.contains('open') ? 'Hide Answer' : 'Show Answer';
+}
+
+// ===== FLASHCARDS =====
+const cards = [
+  {q:"What is the formula for Sturge's Rule?", a:"k = 1 + 3.322 × log₁₀(N)\nwhere N = total number of observations"},
+  {q:"State the formula for Class Width (C).", a:"C = Range / k = (Max – Min) / k\nAlways round UP"},
+  {q:"What is Relative Frequency?", a:"Relative Frequency = f / N\nor f/N × 100% for percentage"},
+  {q:"Formula for Arithmetic Mean (grouped data)?", a:"x̄ = Σfx / N\nwhere x = class midpoint, f = frequency"},
+  {q:"Formula for Median of grouped data?", a:"Median = L + [(N/2 – CF) / f] × C"},
+  {q:"Formula for Mode of grouped data?", a:"Mode = L + [Δ₁ / (Δ₁ + Δ₂)] × C\nΔ₁ = modal f – prev f\nΔ₂ = modal f – next f"},
+  {q:"Formula for Q1 (first quartile)?", a:"Q₁ = L + [(N/4 – CF) / f] × C"},
+  {q:"Formula for Q3 (third quartile)?", a:"Q₃ = L + [(3N/4 – CF) / f] × C"},
+  {q:"Formula for Variance (grouped data)?", a:"σ² = Σf(x – x̄)² / N"},
+  {q:"Formula for Standard Deviation?", a:"σ = √[Σf(x – x̄)² / N]\nSD = √(Variance)"},
+  {q:"What is the Coefficient of Variation (CV)?", a:"CV = (σ / x̄) × 100%\nUsed to compare variability between datasets"},
+  {q:"What is the formula for Pearson's r?", a:"r = [nΣxy – (Σx)(Σy)] / √{[nΣx²–(Σx)²][nΣy²–(Σy)²]}"},
+  {q:"What is Spearman's Rank Correlation formula?", a:"r = 1 – 6Σd² / [n(n²–1)]\nd = difference in corresponding ranks"},
+  {q:"What are the Normal Equations for regression Y = a + bX?", a:"ΣY = na + bΣX\nΣXY = aΣX + bΣX²\nSolve simultaneously for a and b"},
+  {q:"State the classical probability formula.", a:"P(E) = No. of favourable outcomes / Total outcomes\n0 ≤ P(E) ≤ 1"},
+  {q:"P(A∪B) formula for non-mutually exclusive events?", a:"P(A∪B) = P(A) + P(B) – P(A∩B)"},
+  {q:"What is the total sample space when two dice are tossed?", a:"36 outcomes (6 × 6 = 36)"},
+  {q:"What is the relationship: Harmonic ≤ Geometric ≤ Arithmetic?", a:"H.M ≤ G.M ≤ A.M\nThis always holds for positive values"},
+  {q:"The angle of a sector in a pie chart?", a:"Angle = (Value / Total) × 360°"},
+  {q:"What is a Histogram?", a:"A 1-dimensional diagram of rectangles where:\n• Area ∝ frequency\n• Width = class interval\n• No gaps between bars"},
+];
+
+let fcIdx = 0;
+function renderFC() {
+  document.getElementById('fc-q').textContent = cards[fcIdx].q;
+  document.getElementById('fc-a').textContent = cards[fcIdx].a;
+  document.getElementById('fc-prog').textContent = `Card ${fcIdx+1} of ${cards.length}`;
+  document.getElementById('fc-card').classList.remove('flipped');
+}
+function flipCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
+function fcMove(dir) {
+  fcIdx = (fcIdx + dir + cards.length) % cards.length;
+  renderFC();
+}
+
+// ===== QUIZ =====
+const questions = [
+  {q:"Sturge's rule: k = ?", opts:["1 + 3.322 log N","1 + 2.302 log N","N/2 + 1","Range / N"], ans:0, exp:"k = 1 + 3.322 × log₁₀(N) — this gives the number of classes for grouped frequency tables."},
+  {q:"The formula for class width is:", opts:["Max × Min / k","(Max – Min) / k","Σf / N","N / k"], ans:1, exp:"Class Width C = Range / k = (Max – Min) / k, always rounded up."},
+  {q:"For grouped data, Median = ?", opts:["L + [(N/2–CF)/f]×C","Σfx/N","L + [(Δ₁)/(Δ₁+Δ₂)]×C","L + [(N/4–CF)/f]×C"], ans:0, exp:"The median formula uses N/2. Q1 uses N/4, Mode uses the delta formula."},
+  {q:"Coefficient of Variation (CV) = ?", opts:["σ/x̄","(σ/x̄)×100%","x̄/σ × 100%","Σf/N"], ans:1, exp:"CV = (Standard Deviation / Mean) × 100%, used to compare variability."},
+  {q:"When two dice are tossed simultaneously, the total sample space is:", opts:["12","18","36","48"], ans:2, exp:"Each die has 6 faces, so total = 6 × 6 = 36 equally likely outcomes."},
+  {q:"P(A∪B) for mutually exclusive events equals:", opts:["P(A)×P(B)","P(A)+P(B)–P(A∩B)","P(A)+P(B)","P(A)/P(B)"], ans:2, exp:"Mutually exclusive means P(A∩B)=0, so P(A∪B) = P(A)+P(B)."},
+  {q:"Spearman's rank correlation formula uses:", opts:["Σd² / n","1 – 6Σd²/[n(n²–1)]","nΣxy / Σx²","Σfx / N"], ans:1, exp:"r = 1 – 6Σd²/[n(n²–1)] where d = difference in ranks of paired data."},
+  {q:"For regression Y = a + bX, which is a Normal Equation?", opts:["ΣY = na + bΣX","ΣX = na + bΣY","ΣXY = na + bΣX²","ΣY = a + bΣXY"], ans:0, exp:"The two normal equations are: ΣY = na + bΣX and ΣXY = aΣX + bΣX²."},
+  {q:"Which inequality always holds for positive numbers?", opts:["AM ≤ GM ≤ HM","HM ≤ GM ≤ AM","GM ≤ HM ≤ AM","AM = GM = HM"], ans:1, exp:"Harmonic Mean ≤ Geometric Mean ≤ Arithmetic Mean — always true for positive values."},
+  {q:"Statistics can be divided into how many categories?", opts:["4","3","2","1"], ans:2, exp:"Descriptive Statistics and Inferential Statistics — 2 categories."},
+  {q:"The angle of a pie chart sector for a value V in total T is:", opts:["V/T × 180°","V/T × 100","V/T × 360°","T/V × 360°"], ans:2, exp:"Angle = (Value / Total) × 360°"},
+  {q:"Qualitative variables are also called:", opts:["Numeric","Descriptive","Dimensional","Statistical"], ans:1, exp:"Qualitative (non-numeric) variables are also called Descriptive variables."},
+  {q:"Primary data is:", opts:["Already processed data","Data from NBS","Data collected directly from the field","Data published in books"], ans:2, exp:"Primary data is collected directly from the field and has not undergone any form of processing."},
+  {q:"D₃ (third decile) formula for grouped data?", opts:["L+[(3N/4–CF)/f]×C","L+[(3N/10–CF)/f]×C","L+[(3N/100–CF)/f]×C","L+[(N/3–CF)/f]×C"], ans:1, exp:"Deciles divide distribution into 10 parts. D₃ = L + [(3N/10 – CF)/f] × C."},
+  {q:"Variance of grouped data equals:", opts:["Σf(x–x̄)/N","√[Σf(x–x̄)²/N]","Σf(x–x̄)²/N","Σfx/N"], ans:2, exp:"σ² = Σf(x–x̄)²/N. Standard deviation is the square root of variance."},
+];
+
+let quizAnswered = [];
+function renderQuiz() {
+  const c = document.getElementById('quiz-container');
+  const s = document.getElementById('quiz-score');
+  c.style.display = 'block'; s.style.display = 'none';
+  quizAnswered = new Array(questions.length).fill(false);
+  c.innerHTML = questions.map((q,i) => `
+    <div class="quiz-q" id="qq${i}">
+      <div class="qnum">QUESTION ${i+1} OF ${questions.length}</div>
+      <div class="qtext">${q.q}</div>
+      <div class="quiz-opts">
+        ${q.opts.map((o,j)=>`<button onclick="checkAns(${i},${j})">${['A','B','C','D'][j]}) ${o}</button>`).join('')}
+      </div>
+      <div class="quiz-explanation" id="qexp${i}">${q.exp}</div>
+    </div>
+  `).join('') + `<button class="btn-restart" onclick="showScore()" style="width:100%;margin-top:1rem;">📊 See My Score</button>`;
+}
+
+function checkAns(qi, chosen) {
+  if(quizAnswered[qi]) return;
+  quizAnswered[qi] = chosen === questions[qi].ans ? 'correct' : 'wrong';
+  const btns = document.querySelectorAll(`#qq${qi} .quiz-opts button`);
+  btns.forEach((b,j) => {
+    b.disabled = true;
+    if(j === questions[qi].ans) b.classList.add('correct');
+    else if(j === chosen) b.classList.add('wrong');
   });
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById(`qexp${qi}`).style.display = 'block';
 }
 
-// ═══════════════════════════════════════════
-//  UTILS
-// ═══════════════════════════════════════════
-function setOutput(id, html, cls = '') {
-  const el = document.getElementById(id);
-  el.innerHTML = `<span class="output-${cls || 'success'}">${html}</span>`;
+function showScore() {
+  const score = quizAnswered.filter(a => a === 'correct').length;
+  document.getElementById('quiz-container').style.display = 'none';
+  const s = document.getElementById('quiz-score');
+  s.style.display = 'block';
+  const pct = Math.round(score/questions.length*100);
+  const grade = pct >= 70 ? '🎉 Excellent!' : pct >= 50 ? '👍 Good effort!' : '📖 Keep studying!';
+  s.innerHTML = `
+    <div class="score-val">${score}/${questions.length}</div>
+    <p>${pct}% — ${grade}</p>
+    <button class="btn-restart" onclick="renderQuiz()">🔄 Retake Quiz</button>
+  `;
 }
 
-function fmtTime(ms) {
-  const s = Math.floor(ms / 1000);
-  const m = Math.floor(s / 60) % 60;
-  const h = Math.floor(s / 3600) % 24;
-  const d = Math.floor(s / 86400);
-  return `${d}d ${h}h ${m}m`;
-}
-
-function showAlert(id, msg, type='error') {
-  const el = document.getElementById(id);
-  el.className = `alert alert-${type} show`;
-  el.textContent = msg;
-}
-
-async function fetchWarAPI(path) {
-  // Note: direct browser calls to HTTP from HTTPS will be blocked by mixed-content policy.
-  // In production, route through a backend proxy.
-  const r = await fetch(WAR_API + path, { headers: { 'User-Agent': 'android-async-http' } });
-  return r;
-}
-
-// ═══════════════════════════════════════════
-//  AUTH
-// ═══════════════════════════════════════════
-async function doLogin() {
-  const id  = document.getElementById('loginId').value.trim();
-  const key = document.getElementById('loginKey').value.trim();
-  if (!id || !key) { showAlert('loginAlert', '⚠ Both fields required.'); return; }
-
-  document.getElementById('loginBtnText').innerHTML = '<div class="spinner" style="border-top-color:#020408"></div> VERIFYING...';
-
-  try {
-    const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/Bt6x?Id=eq.${encodeURIComponent(id)}&Key=eq.${encodeURIComponent(key)}&select=*`,
-      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-    );
-    const data = await r.json();
-    if (r.ok && data.length > 0) {
-      currentUser = data[0];
-      onLogin();
-    } else {
-      showAlert('loginAlert', '🇪🇺 ACCESS DENIED — Invalid ID or Key.');
-    }
-  } catch(e) {
-    showAlert('loginAlert', '❌ Connection error: ' + e.message);
-  }
-  document.getElementById('loginBtnText').textContent = 'AUTHENTICATE';
-}
-
-function onLogin() {
-  // Update header
-  document.getElementById('userBadge').textContent = currentUser.Name || 'OPERATOR';
-  document.getElementById('userBadge').classList.add('logged');
-
-  // Update profile
-  document.getElementById('profileName').textContent = currentUser.Name || '—';
-  document.getElementById('profileRole').textContent = '[ ' + (currentUser.Role || '—') + ' ]';
-  document.getElementById('profileId').textContent   = 'ID: ' + (currentUser.Id || '—');
-
-  // Show sidebar + dashboard
-  document.getElementById('sidebar').style.display = 'flex';
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-dashboard').classList.add('active');
-
-  // Start server monitor
-  doCS(true);
-}
-
-function doLogout() {
-  currentUser = null;
-  chatHistory = [];
-  document.getElementById('userBadge').textContent = 'NOT AUTHENTICATED';
-  document.getElementById('userBadge').classList.remove('logged');
-  document.getElementById('sidebar').style.display = 'none';
-  document.getElementById('serverDot').className = 'status-dot';
-  document.getElementById('serverLabel').textContent = 'CHECKING...';
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-login').classList.add('active');
-  document.getElementById('loginId').value = '';
-  document.getElementById('loginKey').value = '';
-}
-
-// ═══════════════════════════════════════════
-//  WAR SCANNER
-// ═══════════════════════════════════════════
-async function doWar() {
-  if (!currentUser) return;
-  const mode    = document.getElementById('warMode').value;
-  const country = document.getElementById('warCountry').value.trim();
-  const targets = mode === 'ELITE' ? ELITE_COUNTRIES : [country || 'Russia'];
-
-  setOutput('warOutput', '⏳ Scanning...', 'info');
-
-  let all = [];
-  for (const c of targets) {
-    try {
-      const enc = encodeURIComponent(c);
-      const r = await fetch(`${WAR_API}/RestSimulator?Operation=getWarsByCountry&country=${enc}&sender_company_id=3521724&user_id=D31C0B83672E475A9C3373C376BF6DD9&version_code=15`,
-        { headers: {'User-Agent':'android-async-http'} });
-      const text = await r.text();
-      if (text.toLowerCase().includes('no_operation_found')) continue;
-      const data = JSON.parse(text);
-      const wars = data.wars || [];
-      for (const w of wars) {
-        if (w.end_time_millis >= 0) {
-          // Check lock
-          let status = '❓';
-          try {
-            const lr = await fetch(`${WAR_API}/wars/${w.id}/contributors?country=${enc}&size=1`,
-              { headers: {'User-Agent':'android-async-http'} });
-            status = lr.status === 500 ? '🔒 LOCKED' : '🟢 OPEN';
-          } catch { status = '❌ ERR'; }
-
-          const atk = w.attacking_points || 0;
-          const def = w.attacked_points  || 0;
-          const winner = atk > def ? `⚔️ ${w.attacking_cou} winning`
-                       : def > atk ? `🛡️ ${w.attacked_country} winning`
-                       : '🤝 Tied';
-          all.push({ country: c, atk: w.attacking_cou||'?', def: w.attacked_country||'?',
-                     id: w.id, status, atkPts: atk, defPts: def, winner });
-        }
-      }
-    } catch(e) { /* skip */ }
-  }
-
-  if (!all.length) { setOutput('warOutput', '⚠️ No ongoing wars found.', 'warn'); return; }
-
-  let out = `⚔️ WAR SCAN — ${mode === 'ELITE' ? 'ELITE' : targets[0].toUpperCase()}\n${'─'.repeat(60)}\n\n`;
-  for (const w of all) {
-    out += `🌍 ${w.country}\n`;
-    out += `  ${w.atk}  vs  ${w.def}\n`;
-    out += `  Status : ${w.status}\n`;
-    out += `  Score  : ${w.atkPts} — ${w.defPts}\n`;
-    out += `  ${w.winner}\n`;
-    out += `  ID: ${w.id}\n\n`;
-  }
-  setOutput('warOutput', out, 'success');
-}
-
-// ═══════════════════════════════════════════
-//  RESOLUTIONS
-// ═══════════════════════════════════════════
-async function doRes() {
-  if (!currentUser) return;
-  const mode    = document.getElementById('resMode').value;
-  const country = document.getElementById('resCountry').value.trim();
-  const targets = mode === 'ALL' ? ALL_COUNTRIES : mode === 'ELITE' ? ELITE_COUNTRIES : [country || 'Russia'];
-
-  setOutput('resOutput', `⏳ Scanning ${targets.length} country/countries...`, 'info');
-
-  let all = [], failed = [];
-  for (const c of targets) {
-    try {
-      const enc = encodeURIComponent(c);
-      const r = await fetch(`${WAR_API}/RestSimulator?Operation=getActiveResolutions&country=${enc}&sender_company_id=3521724&user_id=D31C0B83672E475A9C3373C376BF6DD9&version_code=15`,
-        { headers: {'User-Agent':'android-async-http'} });
-      const text = await r.text();
-      if (text.toLowerCase().includes('no_operation')) { failed.push(c); continue; }
-      const data = JSON.parse(text);
-      for (const res of (data.resolutions || [])) {
-        all.push({ from: res.country_name||'?', target: res.country_to_attack||'?',
-                   yes: res.vote_for||0, no: res.vote_against||0,
-                   end: res.end_time||0, id: res.id||'?' });
-      }
-    } catch { failed.push(c); }
-  }
-
-  all.sort((a,b) => a.end - b.end);
-
-  if (!all.length) { setOutput('resOutput', '⚠️ No active resolutions found.' + (failed.length ? `\nFailed: ${failed.join(', ')}` : ''), 'warn'); return; }
-
-  let out = `🗳️ RESOLUTIONS — ${mode.toUpperCase()}\n`;
-  out += `${'END IN'.padEnd(13)}${'FROM'.padEnd(18)}${'TARGET'.padEnd(18)}YES    NO     ID\n`;
-  out += '─'.repeat(70) + '\n';
-  for (const r of all) {
-    out += `${fmtTime(r.end).padEnd(13)}${String(r.from).padEnd(18)}${String(r.target).padEnd(18)}${String(r.yes).padEnd(7)}${String(r.no).padEnd(7)}${r.id}\n`;
-  }
-  if (failed.length) out += `\n⚠️ NO_OPERATION: ${failed.join(', ')}`;
-  setOutput('resOutput', out, 'success');
-}
-
-// ═══════════════════════════════════════════
-//  CONTRIBUTORS
-// ═══════════════════════════════════════════
-async function doCW() {
-  if (!currentUser) return;
-  const warId = document.getElementById('cwWarId').value.trim();
-  const c1    = document.getElementById('cwCountry1').value.trim();
-  const c2    = document.getElementById('cwCountry2').value.trim();
-  const size  = document.getElementById('cwSize').value.trim() || '1000';
-  if (!warId || !c1 || !c2) { setOutput('cwOutput', '❌ Please fill War ID, Country 1, Country 2.', 'error'); return; }
-
-  setOutput('cwOutput', `⏳ Fetching contributors for war ${warId}...`, 'info');
-
-  async function fetchCW(country) {
-    try {
-      const r = await fetch(`${WAR_API}/wars/${warId}/contributors?country=${encodeURIComponent(country)}&size=${size}`,
-        { headers: {'User-Agent':'android-async-http'} });
-      if (r.status === 500) return 'LOCKED';
-      if (!r.ok) return [];
-      return await r.json();
-    } catch { return 'ERROR'; }
-  }
-
-  const [r1, r2] = await Promise.all([fetchCW(c1), fetchCW(c2)]);
-
-  function fmtCW(country, data) {
-    if (data === 'LOCKED') return `🔒 ${country} — WAR LOCKED\n`;
-    if (data === 'ERROR')  return `❌ ${country} — Fetch error\n`;
-    if (!Array.isArray(data) || !data.length) return `⚠️ ${country} — No contributors\n`;
-    const sorted = data.sort((a,b) => (b.score||0)-(a.score||0));
-    const total  = sorted.reduce((s,c) => s+(c.score||0), 0);
-    let out = `🌍 ${country} — ${sorted.length} contributors | Total: ${total.toLocaleString()}\n${'─'.repeat(50)}\n`;
-    const medals = ['🥇','🥈','🥉'];
-    sorted.forEach((c,i) => {
-      const m = medals[i] || `${i+1}.`.padStart(3);
-      out += `${m} ${String(c.name||'?').padEnd(28)}${(c.score||0).toLocaleString()}\n`;
-    });
-    out += '─'.repeat(50) + '\n';
-    return out;
-  }
-
-  const out = `⚔️ WAR ${warId} — CONTRIBUTORS | Size: ${size}\n${'═'.repeat(55)}\n\n` + fmtCW(c1,r1) + '\n' + fmtCW(c2,r2);
-  setOutput('cwOutput', out, 'success');
-}
-
-// ═══════════════════════════════════════════
-//  SPEED TRACKER
-// ═══════════════════════════════════════════
-async function doST() {
-  if (!currentUser) return;
-  const warId = document.getElementById('stWarId').value.trim();
-  const c1    = document.getElementById('stCountry1').value.trim();
-  const c2    = document.getElementById('stCountry2').value.trim();
-  if (!warId || !c1 || !c2) { setOutput('stOutput','❌ Fill all three fields.','error'); return; }
-
-  document.getElementById('stBtn').disabled = true;
-  document.getElementById('stCountdown').style.display = 'flex';
-  setOutput('stOutput','','info');
-
-  async function fetchSnap(country) {
-    try {
-      const r = await fetch(`${WAR_API}/wars/${warId}/contributors?country=${encodeURIComponent(country)}&size=1000`,
-        { headers: {'User-Agent':'android-async-http'} });
-      if (!r.ok) return {};
-      const data = await r.json();
-      if (!Array.isArray(data)) return {};
-      return Object.fromEntries(data.map(c => [c.name, c.score||0]));
-    } catch { return {}; }
-  }
-
-  document.getElementById('stCountdownText').textContent = '📸 Snapshot 1/2 — taking baseline...';
-  const snap1 = { [c1]: await fetchSnap(c1), [c2]: await fetchSnap(c2) };
-
-  // Countdown 60s
-  for (let i = 60; i > 0; i--) {
-    document.getElementById('stCountdownText').textContent = `⏳ Waiting ${i}s for snapshot 2...`;
-    await new Promise(r => setTimeout(r, 1000));
-  }
-
-  document.getElementById('stCountdownText').textContent = '📸 Snapshot 2/2 — calculating speeds...';
-  const snap2 = { [c1]: await fetchSnap(c1), [c2]: await fetchSnap(c2) };
-
-  function buildReport(country) {
-    const s1 = snap1[country], s2 = snap2[country];
-    if (!Object.keys(s2).length) return `⚠️ ${country} — No data\n`;
-    const sorted = Object.entries(s2).sort((a,b) => b[1]-a[1]);
-    const medals = ['🥇','🥈','🥉'];
-    let totalSpeed = 0;
-    let out = `⚡ [${country}] — War ${warId}\n${'─'.repeat(55)}\n`;
-    sorted.forEach(([name, score], i) => {
-      const prev  = s1[name] || 0;
-      const speed = score - prev; // per minute (60s interval)
-      totalSpeed += speed;
-      const arrow = speed > 0 ? '🔺' : speed < 0 ? '🔻' : '➡️';
-      const m = medals[i] || '';
-      out += `${arrow} ${String(name).padEnd(28)}${String(score).padEnd(10)}${speed >= 0 ? '+' : ''}${speed}/min ${m}\n`;
-    });
-    out += `${'─'.repeat(55)}\n🌟 Total speed: ${totalSpeed >= 0 ? '+' : ''}${totalSpeed}/min\n\n`;
-    return out;
-  }
-
-  const out = `⚡ SPEED TRACKER — War ${warId}\n${'═'.repeat(55)}\n\n` + buildReport(c1) + buildReport(c2);
-  setOutput('stOutput', out, 'success');
-
-  document.getElementById('stBtn').disabled = false;
-  document.getElementById('stCountdown').style.display = 'none';
-}
-
-// ═══════════════════════════════════════════
-//  COUNTRY CHAT
-// ═══════════════════════════════════════════
-async function doCM() {
-  if (!currentUser) return;
-  const country = document.getElementById('cmCountry').value.trim();
-  if (!country) { setOutput('cmOutput','❌ Enter a country name.','error'); return; }
-
-  setOutput('cmOutput', `⏳ Fetching chat for ${country}...`, 'info');
-
-  try {
-    const params = new URLSearchParams({
-      Operation: 'fetcCountryChatMessages',
-      chat_message_id: 0,
-      country,
-      sender_company_id: 4579286,
-      version_code: 23,
-    });
-    const r = await fetch(`${WAR_API}/RestSimulator?${params}`, {
-      headers: { 'User-Agent':'android-async-http', 'user_id':'C28759C6A78E4E22AC93D78F107E5C72' }
-    });
-    const data = await r.json();
-    const msgs = data.messages || [];
-    if (!msgs.length) { setOutput('cmOutput','⚠️ No messages found for ' + country, 'warn'); return; }
-
-    let out = `💬 COUNTRY CHAT — ${country.toUpperCase()}\n${'═'.repeat(60)}\n\n`;
-    for (const m of msgs) {
-      out += `🏢 ${m.company_name||'?'} (${m.company_id||'?'})\n`;
-      out += `🕒 ${m.date_time||'?'}  |  📌 ${m.id||'?'}\n`;
-      out += `💬 ${(m.message_text||'').trim()||'(no text)'}\n`;
-      out += '─'.repeat(60) + '\n';
-    }
-    setOutput('cmOutput', out, 'success');
-  } catch(e) {
-    setOutput('cmOutput', '❌ Error: ' + e.message, 'error');
-  }
-}
-
-// ═══════════════════════════════════════════
-//  BT5 SERVER STATUS
-// ═══════════════════════════════════════════
-async function doCS(silent=false) {
-  if (!silent) setOutput('csOutput', '⏳ Pinging BT5...', 'info');
-  const CS_URL = `${WAR_API}/RestSimulator?Operation=getWarsByCountry&sender_company_id=3521724&user_id=D31C0B83672E475A9C3373C376BF6DD9&version_code=15&country=Iran`;
-
-  const start = Date.now();
-  let status = 'OFFLINE', elapsed = 0;
-  try {
-    await fetch(CS_URL, { headers:{'User-Agent':'Mozilla/5.0'} });
-    elapsed = (Date.now() - start) / 1000;
-    if      (elapsed <= 10) status = 'VERY GOOD 💚';
-    else if (elapsed <= 20) status = 'GOOD 🟢';
-    else if (elapsed <= 30) status = 'SLOW 🟠';
-    else                    status = 'OFFLINE 🔴';
-  } catch {
-    status = 'OFFLINE 🔴';
-    elapsed = 35;
-  }
-
-  const isOnline = !status.includes('OFFLINE');
-  document.getElementById('serverDot').className   = 'status-dot' + (isOnline ? ' online' : '');
-  document.getElementById('serverLabel').textContent = isOnline ? 'BT5 ONLINE' : 'BT5 OFFLINE';
-  document.getElementById('csValue').textContent    = 'BT5 ' + status;
-  document.getElementById('csTime').textContent     = elapsed.toFixed(2);
-  document.getElementById('csChecked').textContent  = new Date().toLocaleTimeString();
-  document.getElementById('dashServerVal').textContent = isOnline ? status : 'OFFLINE';
-  document.getElementById('dashServerVal').className   = 'card-value ' + (isOnline ? 'text-accent2' : 'text-danger');
-
-  if (!silent) {
-    const out = `🖥️ BT5 SERVER STATUS\n${'─'.repeat(40)}\nStatus  : BT5 ${status}\nLatency : ${elapsed.toFixed(2)}s\nChecked : ${new Date().toLocaleString()}\n`;
-    setOutput('csOutput', out, isOnline ? 'success' : 'error');
-  }
-}
-
-// ═══════════════════════════════════════════
-//  BT6 SCRIPT VIEWER
-// ═══════════════════════════════════════════
-async function doBT6() {
-  const filename = document.getElementById('bt6File').value.trim();
-  if (!filename.endsWith('.py') || filename.includes('/') || filename.includes('..')) {
-    setOutput('bt6Output','❌ Only .py files allowed, no path traversal.','error'); return;
-  }
-  setOutput('bt6Output', `⏳ Fetching ${filename} from Supabase...`, 'info');
-  try {
-    const r = await fetch(SCRIPT_BASE + filename);
-    if (r.status === 404) { setOutput('bt6Output','❌ Script not found: ' + filename,'error'); return; }
-    if (!r.ok) { setOutput('bt6Output','❌ HTTP ' + r.status,'error'); return; }
-    const code = await r.text();
-    setOutput('bt6Output', `# ${filename}\n# Fetched from Elite Storage\n${'─'.repeat(50)}\n\n` + code, 'info');
-  } catch(e) {
-    setOutput('bt6Output','❌ Fetch error: ' + e.message,'error');
-  }
-}
-
-// ═══════════════════════════════════════════
-//  CLAUDE CHAT
-// ═══════════════════════════════════════════
-async function doChat() {
-  if (!currentUser) return;
-  const input = document.getElementById('chatInput').value.trim();
-  if (!input) return;
-  document.getElementById('chatInput').value = '';
-
-  appendMsg('user', input);
-  chatHistory.push({ role:'user', content: input });
-
-  const typingEl = appendMsg('bot', '...');
-  try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': CLAUDE_KEY,
-        'anthropic-version': '2023-06-01',
-        'Content-Type': 'application/json',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1024,
-        system: `You are a sharp, witty AI assistant for the ELITE command terminal. The user's name is ${currentUser.Name||'Operator'} and their role is ${currentUser.Role||'User'}. Be helpful, direct, and occasionally sarcastic.`,
-        messages: chatHistory,
-      })
-    });
-    const data = await r.json();
-    const reply = data.content?.[0]?.text || '⚠️ No response.';
-    typingEl.textContent = reply;
-    chatHistory.push({ role:'assistant', content: reply });
-  } catch(e) {
-    typingEl.textContent = '❌ Error: ' + e.message;
-  }
-
-  const msgs = document.getElementById('chatMessages');
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function appendMsg(role, text) {
-  const msgs = document.getElementById('chatMessages');
-  const div  = document.createElement('div');
-  div.className = `msg msg-${role === 'user' ? 'user' : 'bot'}`;
-  const label = role === 'user' ? (currentUser?.Name || 'YOU') : 'CLAUDE AI';
-  div.innerHTML = `<div><div class="msg-label">${label}</div><div class="msg-bubble">${text}</div></div>`;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
-  return div.querySelector('.msg-bubble');
-}
-
-// ═══════════════════════════════════════════
-//  ROAST
-// ═══════════════════════════════════════════
-async function doRoast() {
-  if (!currentUser) return;
-  const target = document.getElementById('roastTarget').value.trim();
-  if (!target) return;
-  const out = document.getElementById('roastOutput');
-  out.textContent = '🔥 Loading destruction...';
-  out.classList.add('show');
-
-  try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': CLAUDE_KEY,
-        'anthropic-version': '2023-06-01',
-        'Content-Type': 'application/json',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
-        system: 'You are a savage roast comedian. Deliver a brutal, funny, creative roast. Keep it sharp, witty, and hilarious — not genuinely cruel. Under 150 words.',
-        messages: [{ role:'user', content:'Roast this: ' + target }]
-      })
-    });
-    const data = await r.json();
-    out.textContent = data.content?.[0]?.text || '⚠️ No roast generated.';
-  } catch(e) {
-    out.textContent = '❌ ' + e.message;
-  }
-}
-
-// ═══════════════════════════════════════════
-//  BOOT
-// ═══════════════════════════════════════════
-document.getElementById('loginKey').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-
-// Auto-check server on load
-setTimeout(() => doCS(true), 500);
+// Init
+renderFC();
 </script>
 </body>
 </html>
