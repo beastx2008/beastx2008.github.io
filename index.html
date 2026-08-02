@@ -3,678 +3,811 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STA 202 – Study App</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>DELSU Chem Bench — Exam Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --card: #1a2236;
-    --border: #2a3a55;
-    --accent: #00d4ff;
-    --accent2: #ff6b35;
-    --green: #00e676;
-    --red: #ff4757;
-    --text: #e8edf5;
-    --muted: #7a8aaa;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'Space Mono',monospace; min-height:100vh; }
+:root{
+  --ink:#1B2027;
+  --panel:#242B33;
+  --panel-2:#2C3540;
+  --bone:#EDEAE0;
+  --muted:#9AA5AE;
+  --line:#3A4450;
+  --gold:#C89B3C;
+  --teal:#5C93A8;
+  --rust:#B06A46;
+  --sage:#8A9A78;
+  --plum:#9C7FA0;
+  --clay:#C97D5C;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--ink);
+  color:var(--bone);
+  font-family:'Source Serif 4', serif;
+  min-height:100vh;
+}
+::selection{background:var(--gold);color:#1B2027;}
+h1,h2,h3{font-family:'Fraunces', serif;font-weight:600;margin:0 0 .4em;}
+.mono{font-family:'IBM Plex Mono', monospace;}
+a{color:inherit;}
 
-  header {
-    background: linear-gradient(135deg, #0a0e1a 0%, #0d1b2e 100%);
-    border-bottom: 2px solid var(--accent);
-    padding: 1.2rem 1.5rem;
-    position: sticky; top:0; z-index:100;
-  }
-  header h1 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:var(--accent); letter-spacing:2px; }
-  header p { font-size:0.65rem; color:var(--muted); margin-top:2px; }
+/* ---------- shell layout ---------- */
+.shell{display:flex;min-height:100vh;}
+.drawer{
+  width:270px;flex:0 0 270px;
+  background:var(--panel);
+  border-right:1px solid var(--line);
+  padding:28px 0 20px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.drawer-head{padding:0 22px 20px;border-bottom:1px solid var(--line);margin-bottom:10px;}
+.drawer-head .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;}
+.drawer-head h1{font-size:22px;line-height:1.2;margin-top:6px;}
+.drawer-head .sub{font-size:12.5px;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace;}
 
-  nav {
-    display:flex; gap:0; overflow-x:auto;
-    background:var(--surface); border-bottom:1px solid var(--border);
-    scrollbar-width:none;
-  }
-  nav::-webkit-scrollbar { display:none; }
-  nav button {
-    flex-shrink:0; padding:0.8rem 1.1rem; background:none; border:none;
-    color:var(--muted); font-family:'Syne',sans-serif; font-size:0.75rem; font-weight:600;
-    cursor:pointer; border-bottom:3px solid transparent; transition:all 0.2s; white-space:nowrap;
-  }
-  nav button.active { color:var(--accent); border-bottom-color:var(--accent); }
-  nav button:hover:not(.active) { color:var(--text); }
+.course-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 22px;cursor:pointer;
+  border-left:3px solid transparent;
+  transition:background .15s;
+}
+.course-item:hover{background:var(--panel-2);}
+.course-item.active{background:var(--panel-2);border-left-color:var(--accent);}
+.course-item .swatch{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:0 0 9px;}
+.course-item .label{font-size:14.5px;line-height:1.3;}
+.course-item .code{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.06em;}
 
-  .page { display:none; padding:1rem; max-width:700px; margin:0 auto; }
-  .page.active { display:block; }
+.progress-note{margin:18px 22px 0;padding-top:14px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);line-height:1.6;}
 
-  /* ===== TOPICS ===== */
-  .topic-card {
-    background:var(--card); border:1px solid var(--border); border-radius:10px;
-    padding:1rem; margin-bottom:0.8rem; cursor:pointer;
-    border-left:4px solid var(--accent); transition:all 0.2s;
-  }
-  .topic-card:hover { border-left-color:var(--accent2); transform:translateX(3px); }
-  .topic-card h3 { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; color:var(--accent); }
-  .topic-card .body { display:none; margin-top:0.8rem; font-size:0.75rem; line-height:1.7; color:var(--text); }
-  .topic-card.open .body { display:block; }
-  .topic-card p { font-size:0.68rem; color:var(--muted); margin-top:3px; }
-  .formula {
-    background:#0a1525; border:1px solid var(--accent); border-radius:6px;
-    padding:0.5rem 0.8rem; margin:0.5rem 0; font-size:0.78rem;
-    color:var(--accent); font-family:'Space Mono',monospace;
-  }
-  .note { background:#1a1a0a; border-left:3px solid var(--accent2); padding:0.5rem 0.8rem; border-radius:0 6px 6px 0; font-size:0.72rem; color:#ffcc80; margin:0.4rem 0; }
+/* ---------- main ---------- */
+main{flex:1;min-width:0;padding:36px 44px 80px;max-width:980px;}
+.course-header{margin-bottom:8px;}
+.course-header .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);}
+.course-header h2{font-size:32px;margin-top:6px;}
+.course-header .desc{color:var(--muted);font-size:15px;max-width:60ch;margin-top:4px;}
 
-  /* ===== FLASHCARDS ===== */
-  .fc-wrapper { display:flex; flex-direction:column; align-items:center; gap:1rem; padding-top:0.5rem; }
-  .fc-progress { font-size:0.7rem; color:var(--muted); }
-  .fc-card {
-    width:100%; max-width:480px; min-height:200px;
-    perspective:1000px; cursor:pointer;
-  }
-  .fc-inner {
-    position:relative; width:100%; min-height:200px;
-    transform-style:preserve-3d; transition:transform 0.5s;
-    border-radius:14px;
-  }
-  .fc-card.flipped .fc-inner { transform:rotateY(180deg); }
-  .fc-front, .fc-back {
-    position:absolute; width:100%; min-height:200px; border-radius:14px;
-    backface-visibility:hidden; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; padding:1.5rem; text-align:center;
-  }
-  .fc-front { background:var(--card); border:2px solid var(--accent); }
-  .fc-back { background:linear-gradient(135deg,#0d2137,#1a3050); border:2px solid var(--accent2); transform:rotateY(180deg); }
-  .fc-front .label { font-size:0.6rem; color:var(--muted); margin-bottom:0.5rem; font-family:'Syne',sans-serif; letter-spacing:2px; }
-  .fc-front .q { font-size:0.85rem; font-weight:700; font-family:'Syne',sans-serif; }
-  .fc-back .a { font-size:0.78rem; line-height:1.6; color:#b0e8ff; }
-  .fc-nav { display:flex; gap:1rem; }
-  .fc-nav button {
-    padding:0.6rem 1.5rem; border:none; border-radius:8px; cursor:pointer;
-    font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem;
-  }
-  .btn-prev { background:var(--card); color:var(--text); border:1px solid var(--border); }
-  .btn-next { background:var(--accent); color:#000; }
-  .fc-hint { font-size:0.65rem; color:var(--muted); }
+.tabbar{display:flex;gap:6px;margin:24px 0 26px;border-bottom:1px solid var(--line);}
+.tabbtn{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
+  background:none;border:none;color:var(--muted);padding:10px 4px;margin-right:22px;cursor:pointer;
+  border-bottom:2px solid transparent;
+}
+.tabbtn.active{color:var(--bone);border-bottom-color:var(--accent);}
 
-  /* ===== QUIZ ===== */
-  .quiz-q { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:0.8rem; }
-  .quiz-q .qnum { font-size:0.6rem; color:var(--accent); font-family:'Syne',sans-serif; letter-spacing:2px; margin-bottom:0.5rem; }
-  .quiz-q .qtext { font-size:0.82rem; font-weight:600; font-family:'Syne',sans-serif; margin-bottom:0.8rem; line-height:1.5; }
-  .quiz-opts button {
-    display:block; width:100%; text-align:left; padding:0.6rem 0.9rem;
-    background:var(--bg); border:1px solid var(--border); border-radius:8px;
-    color:var(--text); font-family:'Space Mono',monospace; font-size:0.72rem;
-    cursor:pointer; margin-bottom:0.4rem; transition:all 0.15s;
-  }
-  .quiz-opts button:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
-  .quiz-opts button.correct { background:#0a2a1a; border-color:var(--green); color:var(--green); }
-  .quiz-opts button.wrong { background:#2a0a0a; border-color:var(--red); color:var(--red); }
-  .quiz-explanation { font-size:0.7rem; color:#ffcc80; background:#1a1200; border-left:3px solid var(--accent2); padding:0.5rem 0.8rem; border-radius:0 6px 6px 0; margin-top:0.5rem; display:none; line-height:1.6; }
-  .quiz-score { text-align:center; padding:2rem; }
-  .quiz-score .score-val { font-size:3rem; font-family:'Syne',sans-serif; font-weight:800; color:var(--accent); }
-  .quiz-score p { color:var(--muted); font-size:0.75rem; margin-top:0.5rem; }
-  .btn-restart { background:var(--accent); color:#000; border:none; border-radius:8px; padding:0.7rem 2rem; font-family:'Syne',sans-serif; font-weight:700; cursor:pointer; margin-top:1rem; }
+.panel{display:none;}
+.panel.active{display:block;}
 
-  /* ===== PAST Q ===== */
-  .pq-section { margin-bottom:1.5rem; }
-  .pq-section h2 { font-family:'Syne',sans-serif; font-size:0.85rem; color:var(--accent); border-bottom:1px solid var(--border); padding-bottom:0.4rem; margin-bottom:0.8rem; }
-  .pq-item { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:0.7rem; }
-  .pq-item .qtext { font-size:0.78rem; font-family:'Syne',sans-serif; font-weight:600; margin-bottom:0.5rem; line-height:1.5; }
-  .pq-ans-btn { background:none; border:1px solid var(--accent); border-radius:6px; padding:0.4rem 0.9rem; color:var(--accent); font-family:'Syne',sans-serif; font-size:0.7rem; cursor:pointer; }
-  .pq-ans { display:none; font-size:0.72rem; line-height:1.7; color:#b0e8ff; margin-top:0.7rem; background:#0a1525; border-radius:6px; padding:0.7rem; }
-  .pq-item.open .pq-ans { display:block; }
+/* notes */
+.note-block{margin-bottom:26px;}
+.note-block h3{font-size:19px;color:var(--accent);}
+.note-block ul{margin:8px 0 0;padding-left:20px;}
+.note-block li{margin-bottom:6px;line-height:1.55;font-size:15px;}
+.note-block p{line-height:1.6;font-size:15px;}
+table.datatab{border-collapse:collapse;width:100%;margin-top:10px;font-size:14px;}
+table.datatab th,table.datatab td{border:1px solid var(--line);padding:7px 10px;text-align:left;}
+table.datatab th{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--accent);letter-spacing:.05em;}
 
-  .section-title { font-family:'Syne',sans-serif; font-size:0.65rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:1rem; }
+/* specimen cards (flashcards) */
+.deck-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:16px;}
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;}
+.spec-card{
+  perspective:1200px;height:180px;cursor:pointer;
+}
+.spec-inner{
+  position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;
+}
+.spec-card.flipped .spec-inner{transform:rotateY(180deg);}
+.spec-face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:2px;
+  padding:16px 16px 14px;display:flex;flex-direction:column;
+}
+.spec-face::before{
+  content:'';position:absolute;top:10px;left:10px;width:8px;height:8px;border-radius:50%;
+  background:var(--ink);border:1px solid var(--line);
+}
+.spec-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-left:20px;}
+.spec-body{flex:1;display:flex;align-items:center;font-size:14.5px;line-height:1.45;margin-top:8px;}
+.spec-face.back{transform:rotateY(180deg);background:var(--ink);}
+.spec-hint{margin-top:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);text-align:right;}
+.spec-card.known .spec-face:not(.back){border-color:var(--accent);}
+.spec-mark{position:absolute;top:8px;right:10px;font-size:11px;}
+
+.deck-controls{margin-top:16px;display:flex;gap:10px;}
+.btn{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;
+  background:var(--panel-2);border:1px solid var(--line);color:var(--bone);padding:9px 14px;cursor:pointer;border-radius:2px;
+}
+.btn:hover{border-color:var(--accent);}
+.btn.primary{background:var(--accent);color:#1B2027;border-color:var(--accent);font-weight:600;}
+
+/* quiz */
+.quiz-wrap{max-width:640px;}
+.q-progress{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:14px;}
+.q-card{background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:24px;}
+.q-text{font-size:17px;line-height:1.5;margin-bottom:18px;}
+.q-opt{
+  display:block;width:100%;text-align:left;background:var(--ink);border:1px solid var(--line);color:var(--bone);
+  padding:11px 14px;margin-bottom:9px;border-radius:2px;cursor:pointer;font-size:14.5px;font-family:'Source Serif 4',serif;
+}
+.q-opt:hover{border-color:var(--accent);}
+.q-opt.correct{border-color:var(--sage);background:#26302a;}
+.q-opt.wrong{border-color:var(--clay);background:#332321;}
+.q-opt[disabled]{cursor:default;}
+.q-explain{margin-top:12px;font-size:13.5px;color:var(--muted);line-height:1.5;font-style:italic;}
+.q-result{text-align:center;padding:40px 20px;}
+.q-result .score{font-family:'Fraunces',serif;font-size:48px;color:var(--accent);}
+
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;}
+
+@media(max-width:820px){
+  .shell{flex-direction:column;}
+  .drawer{width:100%;height:auto;position:relative;flex:none;}
+  main{padding:26px 20px 60px;}
+}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>STA 202 — STUDY MODE</h1>
-  <p>Statistics for Physical Sciences & Engineering · DELSU Abraka · 2024/2025</p>
-</header>
-
-<nav>
-  <button class="active" onclick="showPage('topics',this)">📚 Topics</button>
-  <button onclick="showPage('flashcards',this)">🃏 Flashcards</button>
-  <button onclick="showPage('quiz',this)">🧠 Quiz</button>
-  <button onclick="showPage('pastq',this)">📝 Past Q</button>
-</nav>
-
-<!-- ========== TOPICS PAGE ========== -->
-<div id="topics" class="page active">
-  <p class="section-title">Tap any topic to expand</p>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>1. Introduction to Statistics</h3>
-    <p>Definitions, types, branches, data, variables</p>
-    <div class="body">
-      <b>Statistics</b> — branch of mathematics dealing with collection, analysis and interpretation of numerical data for effective decision making.<br><br>
-      <b>Two main branches:</b><br>
-      • <b>Descriptive Statistics</b> — organises & presents data (charts, tables, averages)<br>
-      • <b>Inferential Statistics</b> — uses sample data to predict/conclude about a population<br><br>
-      <b>Data types:</b><br>
-      • <b>Primary data</b> — collected directly from the field (raw, unprocessed)<br>
-      • <b>Secondary data</b> — collected by someone else (NBS, CBN, WHO etc.)<br><br>
-      <b>Variables:</b><br>
-      • <b>Qualitative (Descriptive)</b> — non-numeric (colour, gender)<br>
-      • <b>Quantitative (Numeric)</b> — numeric: weight, height, temperature<br>
-      &nbsp;&nbsp;→ Discrete (whole numbers only) | Continuous (any value in range)<br><br>
-      <b>Statistics can be represented in 3 dimensions</b> (3D)<br>
-      <b>Statistics can be divided into 2 categories</b> (Descriptive & Inferential)<br>
-      <div class="note">📌 Population = entire group | Sample = subset selected for study</div>
-      <div class="note">📌 Inferential statistics → Parametric & Non-parametric</div>
+<div class="shell">
+  <nav class="drawer" id="drawer">
+    <div class="drawer-head">
+      <div class="eyebrow">Delta State University · Abraka</div>
+      <h1>Chem&nbsp;Bench</h1>
+      <div class="sub">specimen index / exam prep</div>
     </div>
-  </div>
+    <div id="courseList"></div>
+    <div class="progress-note" id="progressNote"></div>
+  </nav>
 
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>2. Charts & Data Presentation</h3>
-    <p>Pie chart, bar chart, histogram, multiple bar chart</p>
-    <div class="body">
-      <b>Types of charts:</b> Pictogram, Pie chart, Bar chart, Line graph, Histogram<br><br>
-      <b>Pie Chart:</b> Angle of each sector = (Value / Total) × 360°<br>
-      <div class="formula">Angle = (f / N) × 360°</div>
-      <b>Histogram:</b> 1-dimensional diagram; rectangles whose area ∝ frequency; width = class interval; no gaps between bars.<br><br>
-      <b>Bar Chart (Simple):</b> Bars separated by equal spaces; height ∝ frequency.<br><br>
-      <b>Multiple Bar Chart:</b> Grouped bars for comparison (e.g. male vs female per month).<br>
-      <div class="note">📌 Compound/Percentage bar chart stacks values within each bar to show composition.</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>3. Frequency Distribution</h3>
-    <p>Sturge's rule, class width, relative frequency</p>
-    <div class="body">
-      <b>Sturge's Rule</b> — determines number of classes (k):
-      <div class="formula">k = 1 + 3.322 × log₁₀(N)</div>
-      <b>Class Width (C):</b>
-      <div class="formula">C = Range / k &nbsp;=&nbsp; (Max – Min) / k</div>
-      <b>Relative Frequency:</b>
-      <div class="formula">Relative Frequency = f / N &nbsp;(or f/N × 100%)</div>
-      <b>Cumulative Frequency (CF):</b> running total of frequencies.<br><br>
-      <div class="note">📌 Range = Largest value − Smallest value</div>
-      <div class="note">📌 Always round class width UP to next whole number</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>4. Measures of Central Tendency</h3>
-    <p>Mean, Median, Mode — ungrouped & grouped</p>
-    <div class="body">
-      <b>Arithmetic Mean:</b>
-      <div class="formula">x̄ = Σfx / N &nbsp;(grouped) &nbsp;|&nbsp; x̄ = Σx / n &nbsp;(ungrouped)</div>
-      <b>Geometric Mean:</b>
-      <div class="formula">G = ⁿ√(x₁·x₂·...·xₙ)</div>
-      <b>Harmonic Mean:</b>
-      <div class="formula">H = n / Σ(1/xᵢ)</div>
-      In general: Harmonic Mean ≤ Geometric Mean ≤ Arithmetic Mean<br><br>
-      <b>Median (Grouped):</b>
-      <div class="formula">Median = L + [(N/2 – CF) / f] × C</div>
-      <b>Mode (Grouped):</b>
-      <div class="formula">Mode = L + [(Δ₁) / (Δ₁ + Δ₂)] × C</div>
-      where Δ₁ = modal freq – prev freq, Δ₂ = modal freq – next freq<br><br>
-      <div class="note">📌 For ungrouped data: Median = middle value when sorted; Mode = most frequent value</div>
-      <div class="note">📌 Bimodal = 2 modes; Trimodal = 3 modes</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>5. Quartiles, Deciles & Percentiles</h3>
-    <p>Q1, Q3, D1, D3, P1, P3 formulas</p>
-    <div class="body">
-      <b>Quartiles (grouped data):</b>
-      <div class="formula">Q₁ = L + [(N/4 – CF) / f] × C</div>
-      <div class="formula">Q₃ = L + [(3N/4 – CF) / f] × C</div>
-      <b>Deciles:</b>
-      <div class="formula">D₁ = L + [(N/10 – CF) / f] × C</div>
-      <div class="formula">D₃ = L + [(3N/10 – CF) / f] × C</div>
-      <b>Percentiles:</b>
-      <div class="formula">P₁ = L + [(N/100 – CF) / f] × C</div>
-      <div class="formula">P₃ = L + [(3N/100 – CF) / f] × C</div>
-      <div class="note">📌 L = lower class boundary, CF = cumulative frequency BEFORE the class, f = class frequency, C = class width</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>6. Measures of Dispersion</h3>
-    <p>Range, Variance, Standard Deviation, CV</p>
-    <div class="body">
-      <b>Range:</b> Max − Min<br><br>
-      <b>Variance (ungrouped):</b>
-      <div class="formula">σ² = Σ(x – x̄)² / n</div>
-      <b>Variance (grouped):</b>
-      <div class="formula">σ² = Σf(x – x̄)² / N</div>
-      <b>Standard Deviation:</b>
-      <div class="formula">σ = √(Variance)</div>
-      <b>Coefficient of Variation (CV):</b>
-      <div class="formula">CV = (σ / x̄) × 100%</div>
-      <div class="note">📌 CV is used to compare variability between two datasets with different means</div>
-      <div class="note">📌 Lower CV = more consistent/less variable data</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>7. Probability</h3>
-    <p>Classical probability, addition & multiplication rules</p>
-    <div class="body">
-      <b>Classical Probability:</b>
-      <div class="formula">P(E) = Number of favourable outcomes / Total outcomes</div>
-      <b>Properties:</b> 0 ≤ P(E) ≤ 1 &nbsp;|&nbsp; P(E) + P(E') = 1<br><br>
-      <b>Addition Rule:</b>
-      <div class="formula">P(A∪B) = P(A) + P(B) – P(A∩B)</div>
-      For mutually exclusive: P(A∪B) = P(A) + P(B)<br><br>
-      <b>Multiplication Rule:</b>
-      <div class="formula">P(A∩B) = P(A) × P(B|A)</div>
-      For independent events: P(A∩B) = P(A) × P(B)<br><br>
-      <b>Combinations:</b>
-      <div class="formula">ⁿCᵣ = n! / [r!(n–r)!]</div>
-      <div class="note">📌 With replacement → independent events. Without replacement → dependent events.</div>
-      <div class="note">📌 Two dice: sample space = 36 outcomes</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>8. Probability Theory (Advanced)</h3>
-    <p>Binomial distribution, Probability theorem</p>
-    <div class="body">
-      <b>Probability Theorem:</b> When a die is tossed, P(each face) = 1/6.<br>
-      When coin is tossed, P(Head) = P(Tail) = 1/2<br><br>
-      <b>Binomial Distribution:</b> For n trials, P(x successes) =
-      <div class="formula">P(X=x) = ⁿCₓ × pˣ × (1–p)ⁿ⁻ˣ</div>
-      <b>Mean of Binomial</b> = np &nbsp;|&nbsp; <b>Variance</b> = np(1–p)<br><br>
-      <div class="note">📌 A fair coin: P(Head) = P(Tail) = ½</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>9. Correlation</h3>
-    <p>Pearson's r, Spearman's rank correlation</p>
-    <div class="body">
-      <b>Pearson's Correlation Coefficient (r):</b>
-      <div class="formula">r = [nΣxy – (Σx)(Σy)] / √{[nΣx²–(Σx)²][nΣy²–(Σy)²]}</div>
-      <b>Spearman's Rank Correlation:</b>
-      <div class="formula">r = 1 – [6Σd²] / [n(n²–1)]</div>
-      where d = difference in ranks<br><br>
-      <b>Interpretation:</b><br>
-      • r = +1 → Perfect positive correlation<br>
-      • r = –1 → Perfect negative correlation<br>
-      • r = 0 → No correlation<br>
-      • |r| close to 1 → Strong correlation<br>
-      <div class="note">📌 Correlation does NOT imply causation</div>
-    </div>
-  </div>
-
-  <div class="topic-card" onclick="toggle(this)">
-    <h3>10. Regression</h3>
-    <p>Regression line of Y on X, Normal equations</p>
-    <div class="body">
-      <b>Regression line of Y on X:</b>
-      <div class="formula">Y = a + bX</div>
-      <b>Normal Equations (solve simultaneously):</b>
-      <div class="formula">ΣY = na + bΣX</div>
-      <div class="formula">ΣXY = aΣX + bΣX²</div>
-      Once a and b are found, substitute any X value to predict Y.<br><br>
-      <div class="note">📌 b = slope (rate of change), a = Y-intercept</div>
-      <div class="note">📌 n = number of data pairs</div>
-    </div>
-  </div>
-</div>
-
-<!-- ========== FLASHCARDS PAGE ========== -->
-<div id="flashcards" class="page">
-  <p class="section-title">Tap card to reveal answer</p>
-  <div class="fc-wrapper">
-    <div class="fc-progress" id="fc-prog">Card 1 of 20</div>
-    <div class="fc-card" id="fc-card" onclick="flipCard()">
-      <div class="fc-inner" id="fc-inner">
-        <div class="fc-front">
-          <div class="label">QUESTION</div>
-          <div class="q" id="fc-q"></div>
-        </div>
-        <div class="fc-back">
-          <div class="a" id="fc-a"></div>
-        </div>
-      </div>
-    </div>
-    <div class="fc-hint">👆 Tap card to flip</div>
-    <div class="fc-nav">
-      <button class="btn-prev" onclick="fcMove(-1)">← Prev</button>
-      <button class="btn-next" onclick="fcMove(1)">Next →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== QUIZ PAGE ========== -->
-<div id="quiz" class="page">
-  <div id="quiz-container"></div>
-  <div id="quiz-score" class="quiz-score" style="display:none"></div>
-</div>
-
-<!-- ========== PAST QUESTIONS PAGE ========== -->
-<div id="pastq" class="page">
-  <p class="section-title">STA 202 — 2024/2025 Past Questions</p>
-
-  <div class="pq-section">
-    <h2>SECTION A — Objective (MCQ)</h2>
-
-    <div class="pq-item">
-      <div class="qtext">1. How many major types of data collection exist in Statistics?<br>A) 1 &nbsp; B) 2 &nbsp; C) 3 &nbsp; D) 4</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Answer: B) 2</b> — Primary data collection and Secondary data collection.</div>
+  <main>
+    <div class="course-header">
+      <div class="eyebrow" id="hdrEyebrow"></div>
+      <h2 id="hdrTitle"></h2>
+      <p class="desc" id="hdrDesc"></p>
     </div>
 
-    <div class="pq-item">
-      <div class="qtext">2. Statistics can be divided into ___ categories.<br>A) 4 &nbsp; B) 3 &nbsp; C) 2 &nbsp; D) 1</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Answer: C) 2</b> — Descriptive Statistics and Inferential Statistics.</div>
+    <div class="tabbar">
+      <button class="tabbtn active" data-tab="notes">Notes</button>
+      <button class="tabbtn" data-tab="cards">Flashcards</button>
+      <button class="tabbtn" data-tab="quiz">Quiz</button>
     </div>
 
-    <div class="pq-item">
-      <div class="qtext">3. Statistics can be represented in ___ dimensions.<br>A) 6 &nbsp; B) 5 &nbsp; C) 4 &nbsp; D) 3</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Answer: D) 3</b></div>
-    </div>
+    <div class="panel active" id="panel-notes"></div>
+    <div class="panel" id="panel-cards"></div>
+    <div class="panel" id="panel-quiz"></div>
 
-    <div class="pq-item">
-      <div class="qtext">4. Which of the following is NOT an importance of studying Statistics?<br>A) Understanding implications of selected decisions<br>B) Understanding numerical information<br>C) Effective demonstrated responsibilities<br>D) Effective decision making</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Answer: C) Effective demonstrated responsibilities</b></div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">5. Which is NOT an official source of secondary data collection?<br>A) NAS &nbsp; B) NBS &nbsp; C) CBN &nbsp; D) WHO</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Answer: A) National Association of Scientists (NAS)</b> — NBS, CBN, and WHO are all official sources.</div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">7. ___ involves numeric attributes such as weight, shoe size, height, temperature.<br>A) Qualitative Variables &nbsp; B) Quantitative Variables &nbsp; C) Primary data sources &nbsp; D) Secondary data sources</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Answer: B) Quantitative Variables</b></div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">10. Qualitative variables are also called ___.<br>A) Numeric variables &nbsp; B) Descriptive variables &nbsp; C) Dimensional variables &nbsp; D) Statistical variables</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Answer: B) Descriptive variables</b></div>
-    </div>
-  </div>
-
-  <div class="pq-section">
-    <h2>SECTION B — Fill-in-the-blank (Key Answers)</h2>
-
-    <div class="pq-item">
-      <div class="qtext">1. ___ is the process of obtaining measurements or counts on variable of interest.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Data Collection</b></div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">3. ___ Statistics is a kind of guess work, using past statistical results to predict present or future situations.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Inferential Statistics</b></div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">4. ___ is information in raw form collected for the purpose of investigation.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Data</b></div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">5. ___ data are collected directly from the field of enquiries and have not undergone any form of processing.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Primary data</b></div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">8. Quantitative variables are also called ___.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Numeric variables</b></div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">10. The diagram involving rectangles whose area is proportional to frequency of a variable and width = class interval is the ___.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans"><b>Histogram</b></div>
-    </div>
-  </div>
-
-  <div class="pq-section">
-    <h2>SECTION C — Graphs & Charts</h2>
-
-    <div class="pq-item">
-      <div class="qtext">Q1. Students admitted: Science–190, Arts–172, Humanities–154, Engineering–136, Law–118, Medicine–108. Draw a pie chart. Calculate the angle for each sector.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        <b>Total = 878</b><br>
-        • Science: 190/878 × 360 = <b>77.9°</b> (21.6%)<br>
-        • Arts: 172/878 × 360 = <b>70.5°</b> (19.6%)<br>
-        • Humanities: 154/878 × 360 = <b>63.1°</b> (17.5%)<br>
-        • Engineering: 136/878 × 360 = <b>55.7°</b> (15.5%)<br>
-        • Law: 118/878 × 360 = <b>48.4°</b> (13.4%)<br>
-        • Medicine: 108/878 × 360 = <b>44.3°</b> (12.3%)<br>
-        <b>Sum ≈ 360°</b> ✓
-      </div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">Q3. Maternity recorded births (6 months): draw a Multiple Bar Chart for male vs female per month.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        Data: Month 1: M=20, F=30 | Month 2: M=30, F=50 | Month 3: M=55, F=65 | Month 4: M=60, F=40 | Month 5: M=40, F=50 | Month 6: M=70, F=45<br><br>
-        Draw grouped bars for each month with Male (solid) and Female (hatched) side by side. Label x-axis as Months, y-axis as Number of Births. Include a key/legend.
-      </div>
-    </div>
-  </div>
-
-  <div class="pq-section">
-    <h2>SECTION D — Grouped Frequency & Statistics</h2>
-
-    <div class="pq-item">
-      <div class="qtext">Using Sturge's rule, construct a grouped frequency table for the given 50-value dataset, then calculate: (a) Mean (b) Harmonic Mean (c) Q1 and Q3.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        <b>Step 1 — Sturge's Rule:</b> N=50, k = 1 + 3.322×log₁₀(50) = 1 + 3.322×1.699 ≈ 6.64 → <b>k = 7 classes</b><br>
-        <b>Range</b> = 50 – 1 = 49; <b>C</b> = 49/7 ≈ 7 (use 7)<br><br>
-        <b>Classes:</b> 1–7, 8–14, 15–21, 22–28, 29–35, 36–42, 43–50<br><br>
-        <b>Mean</b> = Σfx / N (use midpoints of each class)<br>
-        <b>Harmonic Mean</b> = N / Σ(f/x)<br>
-        <b>Q1</b> = L + [(N/4 – CF)/f] × C; Q3 = L + [(3N/4 – CF)/f] × C<br>
-        <div style="color:#ffcc80; margin-top:0.5rem;">📌 Build the full table then apply formulas to the correct class rows.</div>
-      </div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">(a) Calculate the Median (b) Calculate the Mode (c) Find D1 and D3 of the distribution.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        <b>Median</b> = L + [(N/2 – CF)/f] × C &nbsp; → locate the class containing the N/2 th value<br>
-        <b>Mode</b> = L + [Δ₁/(Δ₁+Δ₂)] × C &nbsp; → the modal class has the highest frequency<br>
-        <b>D1</b> = L + [(N/10 – CF)/f] × C<br>
-        <b>D3</b> = L + [(3N/10 – CF)/f] × C
-      </div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">(a) Calculate Standard Deviation (b) Variance (c) Find P1 and P3.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        <b>Variance</b> σ² = Σf(x–x̄)² / N<br>
-        <b>Standard Deviation</b> σ = √(σ²)<br>
-        <b>P1</b> = L + [(N/100 – CF)/f] × C<br>
-        <b>P3</b> = L + [(3N/100 – CF)/f] × C
-      </div>
-    </div>
-  </div>
-
-  <div class="pq-section">
-    <h2>SECTION E — Probability</h2>
-
-    <div class="pq-item">
-      <div class="qtext">Two dice tossed simultaneously. Find the probability the sum is: (a) > 8 (b) Prime (c) Odd (d) < 10 (e) > 7 and < 9.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        Total sample space = 36<br>
-        <b>(a) Sum > 8:</b> sums 9,10,11,12 → outcomes: 4+3+2+1 = 10 → <b>P = 10/36 = 5/18</b><br>
-        <b>(b) Prime sums</b> (2,3,5,7,11): count pairs → 1+2+4+6+2 = 15 → <b>P = 15/36 = 5/12</b><br>
-        <b>(c) Odd sums</b> (3,5,7,9,11): count pairs → 2+4+6+4+2 = 18 → <b>P = 18/36 = 1/2</b><br>
-        <b>(d) Sum < 10:</b> sums 2–9 → 36 – 10 = 26 outcomes → <b>P = 26/36 = 13/18</b><br>
-        <b>(e) Sum > 7 and < 9 (sum = 8):</b> (2,6),(3,5),(4,4),(5,3),(6,2) = 5 → <b>P = 5/36</b>
-      </div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">A bag: 3 Red, 6 Blue, 5 Green, 4 White balls. Two picked WITHOUT replacement. Find P(a) both same colour (b) one Red, one White (c) first Blue, second Green (d) first Green, second White (e) none White.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        Total = 18 balls<br>
-        <b>(a) Both same colour:</b> P = [C(3,2)+C(6,2)+C(5,2)+C(4,2)] / C(18,2)<br>
-        = [3+15+10+6]/153 = 34/153<br>
-        <b>(b) One Red, one White:</b> P = (3×4)/C(18,2) = 12/153 = 4/51<br>
-        <b>(c) First Blue, second Green:</b> P = (6/18)×(5/17) = 30/306 = 5/51<br>
-        <b>(d) First Green, second White:</b> P = (5/18)×(4/17) = 20/306 = 10/153<br>
-        <b>(e) None White:</b> P = C(14,2)/C(18,2) = 91/153 = 7/√ — simplify as needed
-      </div>
-    </div>
-
-    <div class="pq-item">
-      <div class="qtext">A fair coin tossed n times. P(8 heads) = P(10 heads). Find 3n.</div>
-      <button class="pq-ans-btn" onclick="toggleAns(this)">Show Answer</button>
-      <div class="pq-ans">
-        P(X=8) = P(X=10): &nbsp; ⁿC₈ × (½)ⁿ = ⁿC₁₀ × (½)ⁿ<br>
-        ∴ ⁿC₈ = ⁿC₁₀<br>
-        This means n = 8+10 = <b>18</b><br>
-        ∴ 3n = 3 × 18 = <b>54</b>
-      </div>
-    </div>
-  </div>
+    <footer>Built from lecture notes, past exam papers &amp; lab manuals — D-CHM 214, D-CHM 215, D-CHM/CHM 211, CHM 212, Separation &amp; Purification, Lab 1 Minerals. Progress is saved locally in this browser.</footer>
+  </main>
 </div>
 
 <script>
-// ===== NAVIGATION =====
-function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-  if(id === 'flashcards') renderFC();
-  if(id === 'quiz') renderQuiz();
+/* =========================================================
+   DATA
+   ========================================================= */
+const COURSES = [
+
+{
+  id:'mineral',
+  accent:'--gold',
+  code:'D-CHM 214',
+  title:'Mineral Processing & Extractive Metallurgy',
+  desc:'Ore classes, comminution, concentration, extraction and refining methods.',
+  notes:[
+    {h:'Fundamentals', items:[
+      'Metallurgy = study of physical/chemical behaviour of metals & alloys, and their extraction/refining.',
+      'Branches: extractive, physical, mechanical, chemical, powder, engineering metallurgy.',
+      'Extractive metallurgy divides into mineral processing (beneficiation), pyrometallurgy, hydrometallurgy, electrometallurgy.',
+      'Ore = mineral containing a high enough concentration of a desired element to be economically extractable.',
+      'Gangue = the unwanted material in an ore that must be separated from the valuable mineral.'
+    ]},
+    {h:'Run-of-mine material — 3 classes', items:[
+      '(i) Useful materials directly (granite, sand, limestone, coal, clay) — not classed as minerals.',
+      '(ii) Contains useful minerals of high purity, low unit value (apatite, fluorite, diamond, vermiculite, barite, chromite).',
+      '(iii) Contains value-bearing minerals (metalliferous), e.g. chalcopyrite (CuFeS₂) — value comes from the contained metal, not the mineral itself.'
+    ]},
+    {h:'Flowsheet stages', items:[
+      'Front-row operations (material severance): Crushing → Screening → Grinding → Classification.',
+      'Back-row operations (separation): Separation → Valuable concentrate + Waste/gangue tailings → Dewatering → Final concentrate.'
+    ]},
+    {h:'Comminution & hardness', items:[
+      'Comminution = size reduction (crushing + grinding) to liberate valuable mineral from gangue.',
+      'Mohs hardness scale (softest→hardest): Talc, Gypsum, Calcite, Fluorite, Apatite, Potassium feldspar, Quartz, Topaz, Corundum, Diamond.',
+      'Common object reference: fingernail ≈2, copper penny ≈3, knife/glass ≈5.5, steel file ≈6.5.'
+    ]},
+    {h:'Concentration of ore', items:[
+      'Washing in a stream of water — used when gangue density < ore density.',
+      'Froth flotation — used when ore density < gangue density; ore + pine oil, air blown through, froth carries the ore.',
+      'Magnetic separation — for magnetic ores (e.g. magnetite) using a magnetic roller.',
+      'Leaching — impurities insoluble, ore soluble in a solvent (e.g. bauxite in NaOH).',
+      'Roasting — heating ore strongly in air; converts sulphides to oxides (2PbS+3O₂→2PbO+2SO₂).',
+      'Calcination — heating in absence/limited air; removes volatile impurities (CaCO₃→CaO+CO₂).'
+    ]},
+    {h:'Extraction of metals', items:[
+      'Smelting — roasted/calcined ore + coke heated strongly; flux removes gangue as slag (CaO+SiO₂→CaSiO₃).',
+      'Reduction with aluminium (Goldschmidt/thermite) — for metals less electropositive than Al (Cr₂O₃+2Al→Al₂O₃+2Cr).',
+      'Reduction with hydrogen — for metals like tungsten (WO₃+3H₂→W+3H₂O).'
+    ]},
+    {h:'Refining', items:[
+      'Liquation — low-melting metals (Pb, Sn) melted on a sloping hearth, flow away from infusible impurities.',
+      'Distillation — volatile metals (Hg, Zn) distilled over, leaving impurities.',
+      'Electrolysis — metal to be refined = anode; pure metal deposits on cathode; e.g. copper refining: impure Cu anode, pure Cu cathode, CuSO₄ electrolyte.'
+    ]},
+    {h:'Aluminium & iron extraction', items:[
+      'Bauxite (Al₂O₃·2H₂O) + NaOH → sodium aluminate (NaAlO₂) + H₂O.',
+      'NaAlO₂ + 2H₂O → Al(OH)₃ + NaOH, then 2Al(OH)₃ → Al₂O₃ + 3H₂O (alumina).',
+      'Al₂O₃ electrolysed in molten cryolite (Na₃AlF₆) — cryolite lowers the melting point of alumina.',
+      'Iron ores: haematite (Fe₂O₃), magnetite (Fe₃O₄); reduced with coke in a blast furnace.'
+    ]},
+    {h:'Ore/compound reference', items:[
+      'Sodium — rock salt (NaCl), Chile saltpetre (NaNO₃).',
+      'Aluminium — bauxite (Al₂O₃·2H₂O), cryolite (Na₃AlF₆).',
+      'Iron — magnetite (Fe₃O₄), haematite (Fe₂O₃), iron pyrites (FeS₂).',
+      'Copper — copper pyrites/chalcopyrite (CuFeS₂), malachite (Cu(OH)₂·CuCO₃), cuprite (Cu₂O).',
+      'Zinc — zinc blende (ZnS), calamine (ZnCO₃).'
+    ]}
+  ],
+  cards:[
+    ['Metallurgy','Study of the physical and chemical behaviour of metallic elements and alloys, and the processes of extracting, refining and preparing them.'],
+    ['Ore vs gangue','Ore = mineral rich enough in a desired element to extract economically. Gangue = the worthless material mixed with it.'],
+    ['Run-of-mine (ROM)','Ore/mineral as delivered from the mine to the processing plant, before any treatment.'],
+    ['Comminution','Size reduction of ore (crushing + grinding) to liberate valuable minerals from gangue.'],
+    ['Mohs scale order','Talc < Gypsum < Calcite < Fluorite < Apatite < Feldspar < Quartz < Topaz < Corundum < Diamond.'],
+    ['Froth flotation — when used?','When the ore is LESS dense than the gangue; ore + pine oil froths and floats, gangue sinks.'],
+    ['Washing in water — when used?','When gangue is LESS dense than the ore; impurities float away, ore stays behind.'],
+    ['Leaching','Dissolving the ore in a suitable solvent while gangue remains undissolved/insoluble, e.g. bauxite in NaOH.'],
+    ['Roasting','Heating ore in a strong blast of air, converting sulphide ores to oxides.'],
+    ['Calcination','Heating ore with limited/no air, driving off volatile impurities (e.g. CO₂ from carbonates).'],
+    ['Flux + gangue','Flux reacts with gangue to form slag, which floats on molten metal and is removed. CaO + SiO₂ → CaSiO₃.'],
+    ['Liquation','Refining low-melting metals (Pb, Sn) on a sloping hearth so they flow away from solid impurities.'],
+    ['Electrolytic refining','Impure metal = anode, pure metal = cathode, a salt of the metal = electrolyte; pure metal deposits at cathode.'],
+    ['Bauxite formula','Al₂O₃·2H₂O — chief ore of aluminium.'],
+    ['Cryolite role','Na₃AlF₆ is mixed with alumina to lower its melting point during electrolysis.'],
+    ['Chalcopyrite','CuFeS₂ — copper pyrites, main ore of copper; value comes from contained copper, not the mineral itself.'],
+    ['Pyro/hydro/electro-metallurgy','Pyro = heat-based extraction; Hydro = solution/aqueous-chemical extraction; Electro = electrolysis-based extraction.']
+  ],
+  quiz:[
+    {q:'Which method of concentration is used when the ore is less dense than the gangue?',opts:['Washing in water','Froth flotation','Magnetic separation','Liquation'],a:1,e:'Froth flotation exploits low-density ore floating with pine-oil froth while denser gangue sinks.'},
+    {q:'What is the chemical formula of bauxite?',opts:['Fe₂O₃','Al₂O₃·2H₂O','CuFeS₂','ZnCO₃'],a:1,e:'Bauxite is hydrated aluminium oxide, Al₂O₃·2H₂O.'},
+    {q:'Cryolite is added during aluminium electrolysis mainly to:',opts:['Increase conductivity of the anode','Lower the melting point of alumina','Act as a reducing agent','Prevent oxidation of the cathode'],a:1,e:'Molten cryolite (Na₃AlF₆) dissolves alumina and lowers the operating temperature.'},
+    {q:'Which refining method is best for metals with low melting points such as tin and lead?',opts:['Electrolysis','Distillation','Liquation','Calcination'],a:2,e:'Liquation melts the low-melting metal off a sloping hearth away from solid impurities.'},
+    {q:'In electrolytic refining of copper, the cathode is made of:',opts:['Impure copper','Pure copper','Carbon','Zinc'],a:1,e:'Pure copper is deposited on and forms the cathode; impure copper is the anode.'},
+    {q:'Which is the hardest mineral on the Mohs scale?',opts:['Quartz','Topaz','Corundum','Diamond'],a:3,e:'Diamond = 10, the hardest reference mineral on the Mohs scale.'},
+    {q:'Roasting an ore mainly involves:',opts:['Heating in absence of air to remove volatile impurities','Heating strongly in a blast of air to convert sulphides to oxides','Dissolving ore in a solvent','Electrolysing molten ore'],a:1,e:'Roasting uses strong air blast, converting sulphide ores (e.g. PbS, ZnS) into oxides.'},
+    {q:'Chalcopyrite (CuFeS₂) is classed as a run-of-mine material containing:',opts:['Useful materials directly','Useful minerals of high purity','Value-bearing (metalliferous) minerals','No economic value'],a:2,e:'Its value comes from the contained copper metal, making it a metalliferous/value-bearing deposit.'}
+  ]
+},
+
+{
+  id:'analytical',
+  accent:'--teal',
+  code:'D-CHM 211',
+  title:'Analytical Chemistry II',
+  desc:'Significant figures, error analysis, molarity/molality, EDTA and acid–base titrations.',
+  notes:[
+    {h:'Accuracy, precision & error', items:[
+      'Accuracy = closeness of a measured value to the true/accepted value.',
+      'Precision = closeness of repeated measurements to each other (reproducibility).',
+      'Systematic (determinate) error = consistent, one-directional error from a known/fixable cause (e.g. calibration).',
+      'Random (indeterminate) error = unpredictable fluctuation from uncontrollable variables; affects precision.'
+    ]},
+    {h:'Significant figures & uncertainty', items:[
+      'In addition/subtraction, round the result to the least number of decimal places among the values.',
+      'In multiplication/division, round the result to the least number of significant figures among the values.',
+      'Propagated uncertainty in a sum/difference is found by combining absolute uncertainties; in a product/quotient, by combining relative (%) uncertainties.'
+    ]},
+    {h:'Concentration units', items:[
+      'Molarity (M) = moles of solute / litres of solution.',
+      '%(w/v) = grams of solute per 100 mL of solution.',
+      'ppm / ppb = mg/L or µg/L for dilute aqueous solutions (≈ mg or µg of solute per kg of solution, density ≈1).',
+      'Molality (m) = moles of solute / kg of solvent — temperature independent, unlike molarity.'
+    ]},
+    {h:'Titrimetric analysis', items:[
+      'Equivalence point = point where moles of titrant exactly react stoichiometrically with analyte (theoretical).',
+      'End point = point where the indicator visibly changes colour (practical, close to equivalence point).',
+      'EDTA titrations are used to determine metal ion concentration/hardness via complexometric titration.',
+      'Back titration with EDTA — excess standard EDTA is added, then titrated with a standard metal ion solution to find the unreacted excess.'
+    ]},
+    {h:'Indicators (metallochromic / EDTA)', items:[
+      'Metallochromic indicators change colour when they bind/release a specific metal ion (e.g. Eriochrome Black T).',
+      'Indicator blocking occurs when the indicator binds a metal ion so strongly it will not release it at the end point, giving no visible colour change; auxiliary complexing agents can prevent this.',
+      'Examples of metallochromic indicators: Eriochrome Black T, Murexide, Calmagite, Xylenol Orange.'
+    ]}
+  ],
+  cards:[
+    ['Accuracy','How close a measurement is to the true value.'],
+    ['Precision','How reproducible repeated measurements are, regardless of accuracy.'],
+    ['Systematic error','A consistent, directional error traceable to a specific cause (e.g. instrument calibration).'],
+    ['Random error','Unpredictable variation from uncontrollable sources; limits precision.'],
+    ['Molarity','Moles of solute per litre of solution (mol/L).'],
+    ['ppb','Parts per billion — µg of solute per litre (or kg) of solution, used for trace concentrations.'],
+    ['Equivalence point','The point in a titration where moles of titrant stoichiometrically equal moles of analyte (theoretical).'],
+    ['End point','The observed point where the indicator changes colour, ideally very close to the equivalence point.'],
+    ['EDTA','Ethylenediaminetetraacetic acid — a hexadentate ligand used to complex metal ions in complexometric titration.'],
+    ['Back titration','Adding a known excess of one reagent, then titrating the unreacted excess with a second standard reagent.'],
+    ['Indicator blocking','When an indicator binds a metal ion too strongly to release it at the end point, so no colour change is seen; fixed with an auxiliary complexing agent.'],
+    ['Sig. figs — addition rule','Round the final answer to the least number of decimal places among the numbers added/subtracted.'],
+    ['Sig. figs — multiplication rule','Round the final answer to the least number of significant figures among the numbers multiplied/divided.']
+  ],
+  quiz:[
+    {q:'A titration result that is highly reproducible but consistently off from the true value shows:',opts:['High accuracy, low precision','High precision, low accuracy','High accuracy and precision','Low accuracy and precision'],a:1,e:'Tight clustering = high precision; being off from the true value = low accuracy — classic systematic error signature.'},
+    {q:'Which type of error is caused by a poorly calibrated instrument?',opts:['Random error','Gross error','Systematic error','Sampling error'],a:2,e:'Calibration issues cause consistent, one-directional (systematic) error.'},
+    {q:'When adding 12.11 mL + 3.4 mL, the answer should be reported to:',opts:['4 sig figs','2 sig figs','1 decimal place','3 decimal places'],a:2,e:'Addition rule: match the least number of decimal places (3.4 has 1 decimal place).'},
+    {q:'The point at which an indicator visibly changes colour during a titration is the:',opts:['Equivalence point','Stoichiometric point','End point','Saturation point'],a:2,e:'The end point is the practically observed colour change; it approximates the true equivalence point.'},
+    {q:'A back titration is most useful when:',opts:['The analyte reacts too slowly or lacks a suitable indicator','The titrant is unstable in air','A blank titration is unnecessary','The reaction is exothermic'],a:0,e:'Back titration bypasses a difficult direct end point by measuring excess reagent instead.'},
+    {q:'EDTA is described as a ligand because it:',opts:['Donates electron pairs to form coordinate bonds with metal ions','Accepts electrons from the metal ion','Is a strong Brønsted acid','Precipitates metal ions'],a:0,e:'EDTA is hexadentate — it donates 6 electron pairs to chelate a metal ion.'},
+    {q:'"Indicator blocking" in EDTA titrations happens when:',opts:['The indicator does not dissolve','The indicator binds the metal too strongly to release it at the end point','Too little indicator is used','The solution is too dilute'],a:1,e:'A blocked indicator stays bound to the metal past the end point, masking the colour change.'},
+    {q:'ppb is most appropriate for expressing:',opts:['Concentrated stock solutions','Trace/very dilute concentrations','Solid mixture ratios','Gas pressures'],a:1,e:'Parts-per-billion is used for extremely dilute analytes such as trace contaminants in water.'}
+  ]
+},
+
+{
+  id:'food',
+  accent:'--sage',
+  code:'D-CHM 215',
+  title:'Indigenous Food & Beverage Production',
+  desc:'Food additives, fermentation, milling, soaking, and Nigerian food/beverage processing.',
+  notes:[
+    {h:'Food additives & sweeteners', items:[
+      'Preservatives: sodium benzoate, potassium sorbate, sulphur dioxide, nitrites/nitrates.',
+      'Colouring agents: natural (turmeric, beetroot, carotenoids) vs synthetic (tartrazine, sunset yellow).',
+      'Antioxidants prevent oxidation/rancidity: ascorbic acid, BHA, BHT.',
+      'Natural sweeteners: sucrose, glucose, fructose, honey, stevia. Artificial: aspartame, saccharin, sucralose, acesulfame-K.'
+    ]},
+    {h:'Fermentation', items:[
+      'Fermentation = microorganisms convert carbohydrates into alcohol, acids or gases under controlled conditions.',
+      'Yeasts (Saccharomyces cerevisiae) — alcohol fermentation → ethanol + CO₂ (beer, wine, bread).',
+      'Lactic acid bacteria (Lactobacillus, Streptococcus) — sugars → lactic acid (yoghurt, sour milk, fermented vegetables).',
+      'Acetic acid bacteria (Acetobacter aceti) — ethanol → acetic acid (vinegar).',
+      'Moulds (Aspergillus, Rhizopus) — soy sauce, cheese. Bacillus spp. — alkaline fermentation (dawadawa/iru).',
+      'Benefits: preservation, improved nutrition/digestibility, flavour development, detoxification, improved texture.'
+    ]},
+    {h:'Grinding, soaking & pasteurisation', items:[
+      'Dry milling → flour/powder (no water); Wet milling → slurry/starch/paste; Cryogenic milling → very low temp, prevents heat damage.',
+      'Soaking mechanisms: diffusion, osmosis, hydration, leaching.',
+      'Soaking types: cold (room temp.), hot (faster hydration), alkaline (lime water, e.g. maize processing), acid (vinegar/citric acid, flavour + preservation).',
+      'Pasteurisation (Louis Pasteur): mild heat kills pathogens & deactivates spoilage enzymes without full sterilisation.'
+    ]},
+    {h:'Cassava & garri', items:[
+      'Garri production: peeling → washing → grinding → bagging/dewatering → sieving → frying/roasting → cooling → packing.',
+      'Traditional fermentation of cassava reduces cyanide content to safe levels.',
+      'Regional cassava products: Lafun (SW Nigeria), Fufu/Akpu (SE Nigeria), Kpokpogari (mid-west), Abacha (sliced fermented cassava snack).'
+    ]},
+    {h:'Maize, dairy & alcoholic beverages', items:[
+      'Wet milling of maize → corn starch, corn syrup, high-fructose syrup, dextrose, corn oil.',
+      'Dry milling of maize → maize meal, flour, grits, oil.',
+      'Yoghurt: heat milk to 82°C → cool to 43–45°C → add Lactobacillus bulgaricus + Streptococcus thermophilus → ferment 6–10 h.',
+      'Alcoholic beverages: fermentation (yeast, sugars→ethanol, dies above ~15% alcohol) then distillation for spirits.'
+    ]},
+    {h:'Food safety & regulation', items:[
+      'Food poisoning types: bacterial (Salmonella, E. coli, S. aureus, C. botulinum, B. cereus), viral (Norovirus, Hepatitis A), parasitic (Giardia, Entamoeba, Toxoplasma), chemical (pesticides, heavy metals).',
+      'NAFDAC — registers/inspects food & drugs, regulates labelling, fights counterfeits.',
+      'SON — sets national product standards, certifies imports, ensures manufacturing compliance.'
+    ]}
+  ],
+  cards:[
+    ['Fermentation','Microbial/enzymatic conversion of carbohydrates into alcohol, acids or gases under controlled conditions.'],
+    ['Saccharomyces cerevisiae','Yeast responsible for alcoholic fermentation — converts sugar to ethanol + CO₂.'],
+    ['Lactic acid bacteria','Lactobacillus & Streptococcus — convert sugars to lactic acid; used in yoghurt and sour milk.'],
+    ['Acetobacter aceti','Acetic acid bacteria — converts ethanol to acetic acid; used to make vinegar.'],
+    ['Dry milling','Grinding food materials without water; produces flour/powdered products.'],
+    ['Wet milling','Soaking/grinding with water; produces slurry, starch or paste.'],
+    ['Alkaline soaking','Soaking in an alkaline solution such as lime water — used in maize processing.'],
+    ['Pasteurisation','Mild heat treatment (developed by Louis Pasteur) that kills pathogens and deactivates spoilage enzymes to extend shelf life.'],
+    ['Garri','A high-fibre, detoxified cassava product; made by peeling, washing, grinding, dewatering, sieving, frying, cooling, packing.'],
+    ['Why cassava is fermented','Fermentation reduces the naturally occurring cyanide content to safe levels.'],
+    ['Yoghurt culture temperature','Milk pasteurised at ~82°C, cooled to 43–45°C, then live culture is added and fermented 6–10 hours.'],
+    ['NAFDAC','National Agency for Food and Drug Administration and Control — registers, inspects and regulates food & drug products in Nigeria.'],
+    ['SON','Standards Organisation of Nigeria — sets and certifies national product standards.']
+  ],
+  quiz:[
+    {q:'Which microorganism is primarily responsible for alcoholic fermentation?',opts:['Lactobacillus','Saccharomyces cerevisiae','Acetobacter aceti','Rhizopus spp.'],a:1,e:'Saccharomyces cerevisiae (yeast) converts sugars into ethanol and CO₂.'},
+    {q:'Vinegar is produced through the action of:',opts:['Lactic acid bacteria','Acetic acid bacteria','Yeast','Bacillus spp.'],a:1,e:'Acetobacter aceti oxidises ethanol into acetic acid.'},
+    {q:'Wet milling of maize is mainly used to produce:',opts:['Maize meal and grits','Corn starch and corn syrup','Maize flour only','Roasted maize'],a:1,e:'Wet milling separates starch-rich fractions, yielding corn starch, syrup, dextrose and oil.'},
+    {q:'Alkaline soaking of maize (using lime water) is a step associated with:',opts:['Garri production','Nixtamalization-type maize processing','Vinegar brewing','Yoghurt making'],a:1,e:'Lime-water (alkaline) soaking softens maize and improves nutrient availability.'},
+    {q:'A key reason traditional cassava processing includes fermentation is to:',opts:['Increase starch content','Reduce cyanide (toxin) content','Add colour','Increase fat content'],a:1,e:'Fermentation, boiling and drying together detoxify cassava by lowering cyanogenic compounds.'},
+    {q:'Which organism combination is used in commercial yoghurt fermentation?',opts:['Saccharomyces cerevisiae + Rhizopus','Lactobacillus bulgaricus + Streptococcus thermophilus','Acetobacter aceti + Bacillus spp.','Aspergillus + Lactobacillus'],a:1,e:'These two bacterial species jointly ferment lactose into lactic acid, thickening the milk.'},
+    {q:'Botulism-causing food poisoning is caused by:',opts:['Norovirus','Clostridium botulinum','Giardia lamblia','Aspergillus niger'],a:1,e:'Clostridium botulinum produces a potent neurotoxin causing botulism.'},
+    {q:'In Nigeria, setting national product standards and certifying imports is the role of:',opts:['NAFDAC','SON','Federal Ministry of Health','Port Health Services'],a:1,e:'The Standards Organisation of Nigeria (SON) is responsible for national standards and import certification.'}
+  ]
+},
+
+{
+  id:'separation',
+  accent:'--plum',
+  code:'CHM 213',
+  title:'Separation & Purification Techniques',
+  desc:'Extraction, filtration, crystallisation, distillation, chromatography (TLC, Soxhlet, IC).',
+  notes:[
+    {h:'Extraction, filtration, sublimation', items:[
+      'Extraction — removes a material from a medium using two+ immiscible solvents; based on differential solubility (partition).',
+      'Organic phases lighter than water (d<1): ether, benzene, acetone. Denser (d>1): chloroform, tetrachloromethane.',
+      'Filtration — separates particles from a fluid using a medium that only lets the fluid pass; produces a filtrate + residue.',
+      'Sublimation — separates substances that pass directly solid→vapour on heating (e.g. iodine, ammonium chloride, CO₂, anhydrous FeCl₃/AlCl₃) from non-subliming solids.'
+    ]},
+    {h:'Centrifugation & precipitation', items:[
+      'Centrifugation separates particles by size, shape, density, viscosity and rotor speed — faster than gravity settling/decanting.',
+      'Factors affecting centrifugation: density of sample & solution, temperature/viscosity, displacement distance, rotation speed.',
+      'Precipitation — a dissolved component becomes an insoluble solid when concentration exceeds solubility (e.g. Ag⁺+Cl⁻→AgCl↓).',
+      'Supernatant/supernate = clear liquid remaining above a precipitate or centrifuged solid.'
+    ]},
+    {h:'Crystallisation family', items:[
+      'Crystallisation — separates a dissolved solid from solution by reducing solubility (cooling/evaporation).',
+      'Fractional crystallisation — separates solid-solid mixtures based on differing solubility, e.g. KNO₃/KClO₃ or NaCl/NaNO₃; least soluble substance crystallises first.',
+      'Recrystallisation — purifies a solid using a solvent where it is very soluble hot, poorly soluble cold; removes impurities via filtration + cooling.'
+    ]},
+    {h:'Distillation', items:[
+      'Simple distillation — separates two miscible liquids with sufficiently different boiling points (e.g. ethanol 78°C vs water 100°C).',
+      'Fractional distillation — separates several miscible liquids using a fractionating column (e.g. crude oil refining: refinery gas→petrol→naphtha→kerosene→diesel→lubricating oil→fuel oil→residue, in order of increasing boiling point).',
+      'Anti-bumping granules prevent explosive/violent boiling.'
+    ]},
+    {h:'Chromatography', items:[
+      'Chromatography separates mixture components between a stationary phase and a mobile phase, based on differing migration rates.',
+      'Retention factor Rf = distance travelled by compound ÷ distance travelled by solvent front (0–1).',
+      'Higher Rf = less polar (weaker affinity for stationary phase); lower Rf = more polar (sticks to stationary phase).',
+      'TLC stationary phases: silica gel (acidic) or alumina (basic); common visualising agents: UV light, iodine vapour, KMnO₄, CAM.',
+      'Soxhlet extraction — continuous solid–liquid extraction; solvent is refluxed and siphoned repeatedly through a solid sample (used for lipid/fat content determination).',
+      'Ion chromatography — separation based on differing affinity (Kf/selectivity coefficient) of analyte ions for a charged resin; eluent progressively displaces analytes off the column.'
+    ]},
+    {h:'Purity assessment', items:[
+      'Pure solids show a sharp melting point range (≤3° spread); impure solids melt over a wider, lower range.',
+      'Other purity checks: boiling point, refractive index, single spot on TLC, single peak on GC-MS.'
+    ]}
+  ],
+  cards:[
+    ['Extraction (definition)','A separation technique removing a component from a medium using two or more immiscible solvents, based on differential solubility.'],
+    ['Sublimation','Direct solid→vapour transition on heating; separates sublimable substances (iodine, NH₄Cl) from non-subliming solids.'],
+    ['Centrifugation','Mechanical separation of particles from a solution based on size, shape, density and rotor speed — faster than gravity settling.'],
+    ['Precipitation','Formation of an insoluble solid when a dissolved compound exceeds its solubility limit.'],
+    ['Fractional crystallisation','Separates solid mixtures by differing solubility; the least soluble component crystallises out first.'],
+    ['Recrystallisation','Purification method exploiting high solubility hot / low solubility cold in a chosen solvent.'],
+    ['Simple distillation','Separates two miscible liquids with clearly different boiling points.'],
+    ['Fractional distillation','Separates several miscible liquids using a fractionating column, ordered by boiling point (e.g. crude oil refining).'],
+    ['Retention factor (Rf)','Distance travelled by the compound ÷ distance travelled by the solvent front; ranges 0–1.'],
+    ['High Rf meaning','Compound is less polar / has weaker affinity for the stationary phase, so it migrates further.'],
+    ['Soxhlet extraction principle','Uses solvent reflux + siphoning to repeatedly extract a solid sample with fresh condensed solvent — efficient, low solvent use.'],
+    ['Ion chromatography basis','Analyte ions compete with eluent ions for a charged resin; differing affinity (Kf) separates them as the eluent displaces them.'],
+    ['Pure solid melting point','Sharp range, no more than about 3 degrees spread.']
+  ],
+  quiz:[
+    {q:'Which technique separates substances that pass directly from solid to vapour on heating?',opts:['Filtration','Sublimation','Precipitation','Centrifugation'],a:1,e:'Sublimation exploits direct solid→vapour transitions, e.g. iodine or ammonium chloride.'},
+    {q:'Fractional crystallisation is best suited for separating:',opts:['Two miscible liquids','Solid–solid mixtures of differing solubility','Gas mixtures','Suspensions only'],a:1,e:'It separates solid mixtures such as KNO₃/KClO₃ based on differing solubility as temperature changes.'},
+    {q:'In TLC, a compound with a HIGH Rf value is generally:',opts:['More polar, strongly retained','Less polar, weakly retained by the stationary phase','Insoluble in the mobile phase','Impossible to visualise'],a:1,e:'High Rf compounds travel far because they have low affinity for the (usually polar) stationary phase.'},
+    {q:'Fractional distillation of crude oil separates fractions mainly by:',opts:['Density only','Differences in boiling point','Colour','Molecular charge'],a:1,e:'Components with the lowest boiling point (e.g. refinery gas) vaporise and separate first, up to residue with the highest boiling point.'},
+    {q:'The principle behind Soxhlet extraction is:',opts:['Single-pass solvent extraction','Continuous solvent reflux and siphoning through the sample','Electrolytic separation','Magnetic separation'],a:1,e:'Fresh condensed solvent repeatedly bathes the sample and siphons back to the flask, concentrating the extract.'},
+    {q:'A supernatant is:',opts:['The solid formed during precipitation','The clear liquid remaining above a precipitate/pellet','The stationary phase in chromatography','The vapour formed during sublimation'],a:1,e:'Supernatant (or supernate) is the clear liquid layer left above a precipitate or centrifuged solid.'},
+    {q:'Which pair of organic solvents is LESS dense than water (d<1)?',opts:['Chloroform and tetrachloromethane','Ether and benzene','Water and ethanol','Mercury and lead'],a:1,e:'Ether, benzene and acetone are less dense than water; chloroform and CCl₄ are denser.'},
+    {q:'A sharp, narrow melting point range for a solid sample indicates:',opts:['High impurity','High purity','It is a liquid','It cannot be identified'],a:1,e:'Pure solids melt over a narrow (≤~3°) range; impurities widen and lower the range.'}
+  ]
+},
+
+{
+  id:'minerallab',
+  accent:'--rust',
+  code:'Lab 1',
+  title:'Minerals & Mineral Ores (Practical)',
+  desc:'Physical identification properties of minerals and the concept of a mineral ore.',
+  notes:[
+    {h:'Identifying minerals', items:[
+      'Geologists identify minerals in the field using quick physical tests rather than slow, expensive lab analysis.',
+      'Usually 4–5 combined observations/tests are needed for a confident identification.'
+    ]},
+    {h:'Physical properties tested', items:[
+      'Colour — can vary with trace impurities (e.g. chromium turns corundum red = ruby; iron+titanium turns it blue = sapphire).',
+      'Streak — colour of the powdered mineral on an unglazed porcelain plate; more reliable than surface colour.',
+      'Luster — metallic (appears like metal) vs nonmetallic (vitreous/glassy, milky, earthy/dull).',
+      'Hardness — resistance to scratching; test with fingernail (~2), glass plate (~5.5), or the Mohs scale.',
+      'Cleavage & fracture — cleavage = breaks along flat planes of weakness (e.g. mica sheets); fracture = breaks with no preferred plane (e.g. conchoidal fracture in quartz).',
+      'Density/specific gravity — mass per unit volume; e.g. gold 19.3 g/cm³, galena 7.5 g/cm³, silver 10.5 g/cm³, copper 8.9 g/cm³.',
+      'Magnetism — magnetite is strongly magnetic; ilmenite and hematite show weak attraction.',
+      'Reaction to acid — carbonate minerals effervesce (fizz, releasing CO₂) with dilute HCl, e.g. calcite reacts vigorously; dolomite only fizzes once powdered.'
+    ]},
+    {h:'Mineral ores', items:[
+      'Rocks are aggregates of minerals (typically 5–8 minerals per rock); of >5,000 known mineral species, only some are common.',
+      'A mineral ore is a mineral containing a high enough concentration of a desired element to be economically/feasibly extracted (e.g. bauxite for aluminium).',
+      'Not all minerals are ores — ore minerals form in special geologic situations and are comparatively rare.'
+    ]}
+  ],
+  cards:[
+    ['Streak vs colour','Streak (powder colour on porcelain) is more diagnostic/reliable than the surface colour of a mineral.'],
+    ['Metallic luster','A mineral appearance that reflects light like a polished metal, regardless of actual colour.'],
+    ['Mohs hardness reference objects','Fingernail ≈2, copper penny ≈3, glass plate/knife blade ≈5.5, steel file ≈6.5.'],
+    ['Cleavage','Tendency of a mineral to break along flat, repeatable planes of weakness (e.g. mica).'],
+    ['Fracture','Breaking pattern with no preferred plane; e.g. conchoidal (smooth, curved) fracture in quartz.'],
+    ['Density (specific gravity)','Mass per unit volume relative to water; metallic minerals like gold (19.3 g/cm³) have very high density.'],
+    ['Magnetite','A strongly magnetic iron-bearing mineral, unlike weakly attracted ilmenite/hematite.'],
+    ['Acid test','Carbonate minerals (containing CO₃²⁻) effervesce with dilute HCl, releasing CO₂ gas.'],
+    ['Mineral ore (definition)','A mineral containing a high enough concentration of a desired chemical element to make extraction economically feasible.'],
+    ['Are all minerals ores?','No — ore minerals form in special geologic conditions and are comparatively rare, unlike common rock-forming minerals.']
+  ],
+  quiz:[
+    {q:'Why is streak considered more reliable than surface colour for identification?',opts:['It never varies with impurities','Colour of the powder is more consistent than the crystal surface colour','It is easier to see','It requires no equipment'],a:1,e:'Surface colour can shift with trace impurities, but the fine powder streak is typically more consistent for a given mineral.'},
+    {q:'A mineral that scratches glass but is scratched by quartz has a Mohs hardness between:',opts:['1 and 2','2 and 5','6 and 7','9 and 10'],a:2,e:'Text example: potassium feldspar (6) is scratched by quartz (7) but scratches glass — hardness 6–7.'},
+    {q:'Conchoidal fracture (smooth curved breakage) is characteristic of:',opts:['Mica','Quartz','Galena','Calcite'],a:1,e:'Quartz commonly shows conchoidal fracture since it lacks cleavage planes.'},
+    {q:'Which mineral is strongly attracted to a magnet?',opts:['Hematite','Ilmenite','Magnetite','Calcite'],a:2,e:'Magnetite shows strong magnetism; hematite and ilmenite only show weak attraction.'},
+    {q:'Effervescence with dilute HCl indicates the presence of:',opts:['Silicate minerals','Carbonate minerals','Sulphide minerals','Oxide minerals'],a:1,e:'Carbonate minerals release CO₂ gas (fizzing) when they react with dilute acid.'},
+    {q:'A mineral ore is best defined as:',opts:['Any rock found at the surface','A mineral with a high enough concentration of a desired element to extract economically','Any mineral with metallic luster','A synthetic mineral'],a:1,e:'Ores must contain the target element in a high enough, extractable concentration to be economically worthwhile.'}
+  ]
+},
+
+{
+  id:'ionic',
+  accent:'--clay',
+  code:'CHM 212',
+  title:'Characteristics of Ionic Compounds',
+  desc:'Structure–property relationships in ionic solids: assignment study notes.',
+  notes:[
+    {h:'1. Melting & boiling points', items:[
+      'Ionic compounds form a giant 3-D lattice of alternating cations and anions held by strong, non-directional electrostatic (Coulombic) forces in every direction.',
+      'Breaking the lattice requires overcoming these forces throughout the crystal — this needs a large amount of energy, so melting and boiling points are generally high (e.g. NaCl melts at 801°C).',
+      'Lattice energy ∝ (charge on cation × charge on anion) / (interionic distance) — higher ionic charges and smaller ionic radii give stronger lattices and higher melting/boiling points (e.g. MgO, with 2+/2− ions, melts far higher than NaCl, with 1+/1− ions).'
+    ]},
+    {h:'2. Hardness', items:[
+      'Hardness reflects resistance to scratching/indentation — determined by how strongly the lattice resists local displacement of ions.',
+      'Because every ion is held by strong electrostatic attraction to several neighbours (fixed coordination number), most ionic crystals are hard.',
+      'Hardness generally increases with lattice energy — small, highly charged ions (e.g. MgO) give harder crystals than large, singly charged ions (e.g. KI).'
+    ]},
+    {h:'3. Brittleness', items:[
+      'Applying stress can shift one plane of ions relative to an adjacent plane by roughly one ion spacing.',
+      'This shift brings ions of the SAME charge into direct alignment across the slip plane.',
+      'The resulting strong like-charge repulsion splits the crystal apart suddenly along that plane — this is why ionic solids shatter rather than deform, unlike malleable metals (where electron-sea bonding tolerates layer slip).'
+    ]},
+    {h:'4. Cleavage', items:[
+      'Because the lattice has a regular, repeating geometric arrangement, ionic crystals break preferentially along specific crystallographic planes — this is cleavage.',
+      'The cleavage plane is the direction of weakest resistance to the like-charge-repulsion mechanism described above.',
+      'Example: rock salt (NaCl) cleaves along planes parallel to the cube faces of its lattice, giving cubic cleavage fragments.'
+    ]},
+    {h:'5. Solubility', items:[
+      'Ionic compounds tend to be soluble in polar solvents (especially water) and insoluble in non-polar solvents.',
+      'Polar water molecules surround and stabilise individual ions (ion–dipole/hydration interactions), releasing hydration energy that can outweigh the lattice energy holding the crystal together.',
+      'If lattice energy is very high relative to hydration energy (e.g. small, highly charged ions such as in CaCO₃, BaSO₄), the compound remains poorly soluble.',
+      'Non-polar solvents (e.g. hexane) cannot stabilise separated ions, so ionic solids are essentially insoluble in them.'
+    ]},
+    {h:'6. Electrical conductance', items:[
+      'Solid state — ions are locked in fixed lattice positions and cannot move to carry charge, so solid ionic compounds do NOT conduct electricity.',
+      'Molten (fused) state — the lattice breaks down and ions become mobile, so molten ionic compounds DO conduct (this is exploited in electrolysis, e.g. molten Al₂O₃/cryolite).',
+      'Aqueous solution — dissolved, hydrated ions are free to migrate towards oppositely charged electrodes, so aqueous ionic solutions conduct electricity.'
+    ]},
+    {h:'7. Stereochemistry (lattice geometry)', items:[
+      'Ions pack together to maximise attraction between oppositely charged neighbours and minimise repulsion between like-charged ions — this is governed largely by the radius ratio (r₊/r₋).',
+      'Radius ratio 0.225–0.414 → tetrahedral coordination, coordination number 4 (e.g. ZnS, zinc blende structure).',
+      'Radius ratio 0.414–0.732 → octahedral coordination, coordination number 6 (e.g. NaCl — each Na⁺ surrounded by 6 Cl⁻ and vice versa).',
+      'Radius ratio 0.732–1.0 → cubic coordination, coordination number 8 (e.g. CsCl — each Cs⁺ surrounded by 8 Cl⁻).',
+      'The overall lattice type (rock-salt, caesium chloride, zinc blende, fluorite, etc.) is therefore a direct structural consequence of relative ion sizes and charges.'
+    ]}
+  ],
+  cards:[
+    ['Why ionic solids have high melting points','Strong, non-directional electrostatic forces bind ions throughout a 3-D lattice; breaking this requires a large amount of energy.'],
+    ['Lattice energy trend','Increases with higher ionic charge and smaller interionic distance — drives higher melting/boiling points and hardness.'],
+    ['Why ionic solids are brittle','A small shift of one ion layer aligns like-charged ions, causing strong repulsion that splits the crystal along a plane.'],
+    ['Cleavage in ionic crystals','Preferential breakage along specific crystallographic planes due to the regular, repeating lattice arrangement (e.g. NaCl cubic cleavage).'],
+    ['Solubility rule for ionic solids','Generally soluble in polar solvents (hydration energy competes with lattice energy); insoluble in non-polar solvents.'],
+    ['Conductance — solid vs molten/aqueous','Solid: no conductance (ions fixed). Molten or dissolved: conducts (ions mobile).'],
+    ['Radius ratio rule','r₊/r₋ ratio predicts coordination geometry: 0.225–0.414 → tetrahedral (CN4); 0.414–0.732 → octahedral (CN6); 0.732–1.0 → cubic (CN8).'],
+    ['NaCl coordination number','6:6 — each Na⁺ is surrounded by 6 Cl⁻ ions and vice versa (octahedral coordination).'],
+    ['CsCl coordination number','8:8 — cubic coordination, because Cs⁺ is large relative to Cl⁻ (high radius ratio).'],
+    ['Hydration energy','Energy released when polar water molecules surround and stabilise separated ions — must exceed lattice energy for good solubility.']
+  ],
+  quiz:[
+    {q:'Ionic compounds typically have high melting points mainly because:',opts:['They contain covalent bonds','Strong electrostatic forces act throughout a 3-D lattice','They are always metals','Ions are very light'],a:1,e:'The whole lattice must be pulled apart against strong, non-directional Coulombic attraction.'},
+    {q:'Ionic crystals are brittle because applying stress:',opts:['Breaks covalent bonds one at a time','Aligns like-charged ions across a slip plane, causing repulsion and fracture','Melts the crystal locally','Increases lattice energy'],a:1,e:'A small shear brings same-charge ions face to face, and their mutual repulsion shatters the crystal.'},
+    {q:'Which best explains why ionic solids conduct electricity when molten but not as solids?',opts:['Molten ions gain extra charge','In the solid, ions are fixed in the lattice; when molten they become mobile charge carriers','Solids contain no ions at all','Melting removes all ions'],a:1,e:'Conduction requires mobile charge carriers — ions only become free to move once the lattice breaks down (molten or dissolved).'},
+    {q:'A radius ratio between 0.414 and 0.732 typically predicts which coordination number?',opts:['4','6','8','12'],a:1,e:'This range corresponds to octahedral coordination (CN6), as seen in NaCl.'},
+    {q:'Ionic compounds tend to dissolve well in water mainly because:',opts:['Water is non-polar','Polar water molecules hydrate and stabilise separated ions, offsetting lattice energy','Ionic bonds are weak','Water has no dipole'],a:1,e:'Ion–dipole hydration interactions release energy that can overcome the lattice energy holding the solid together.'},
+    {q:'Cleavage in an ionic crystal such as NaCl occurs because:',opts:['The lattice has a regular repeating geometric arrangement, giving preferred fracture planes','NaCl has no lattice structure','The crystal is amorphous','Cleavage is random in all ionic solids'],a:0,e:'Because the ions repeat in a fixed pattern, certain planes are consistently weaker and the crystal cleaves along them.'}
+  ]
 }
 
-// ===== TOPICS =====
-function toggle(el) { el.classList.toggle('open'); }
-
-// ===== PAST Q =====
-function toggleAns(btn) {
-  const item = btn.closest('.pq-item');
-  item.classList.toggle('open');
-  btn.textContent = item.classList.contains('open') ? 'Hide Answer' : 'Show Answer';
-}
-
-// ===== FLASHCARDS =====
-const cards = [
-  {q:"What is the formula for Sturge's Rule?", a:"k = 1 + 3.322 × log₁₀(N)\nwhere N = total number of observations"},
-  {q:"State the formula for Class Width (C).", a:"C = Range / k = (Max – Min) / k\nAlways round UP"},
-  {q:"What is Relative Frequency?", a:"Relative Frequency = f / N\nor f/N × 100% for percentage"},
-  {q:"Formula for Arithmetic Mean (grouped data)?", a:"x̄ = Σfx / N\nwhere x = class midpoint, f = frequency"},
-  {q:"Formula for Median of grouped data?", a:"Median = L + [(N/2 – CF) / f] × C"},
-  {q:"Formula for Mode of grouped data?", a:"Mode = L + [Δ₁ / (Δ₁ + Δ₂)] × C\nΔ₁ = modal f – prev f\nΔ₂ = modal f – next f"},
-  {q:"Formula for Q1 (first quartile)?", a:"Q₁ = L + [(N/4 – CF) / f] × C"},
-  {q:"Formula for Q3 (third quartile)?", a:"Q₃ = L + [(3N/4 – CF) / f] × C"},
-  {q:"Formula for Variance (grouped data)?", a:"σ² = Σf(x – x̄)² / N"},
-  {q:"Formula for Standard Deviation?", a:"σ = √[Σf(x – x̄)² / N]\nSD = √(Variance)"},
-  {q:"What is the Coefficient of Variation (CV)?", a:"CV = (σ / x̄) × 100%\nUsed to compare variability between datasets"},
-  {q:"What is the formula for Pearson's r?", a:"r = [nΣxy – (Σx)(Σy)] / √{[nΣx²–(Σx)²][nΣy²–(Σy)²]}"},
-  {q:"What is Spearman's Rank Correlation formula?", a:"r = 1 – 6Σd² / [n(n²–1)]\nd = difference in corresponding ranks"},
-  {q:"What are the Normal Equations for regression Y = a + bX?", a:"ΣY = na + bΣX\nΣXY = aΣX + bΣX²\nSolve simultaneously for a and b"},
-  {q:"State the classical probability formula.", a:"P(E) = No. of favourable outcomes / Total outcomes\n0 ≤ P(E) ≤ 1"},
-  {q:"P(A∪B) formula for non-mutually exclusive events?", a:"P(A∪B) = P(A) + P(B) – P(A∩B)"},
-  {q:"What is the total sample space when two dice are tossed?", a:"36 outcomes (6 × 6 = 36)"},
-  {q:"What is the relationship: Harmonic ≤ Geometric ≤ Arithmetic?", a:"H.M ≤ G.M ≤ A.M\nThis always holds for positive values"},
-  {q:"The angle of a sector in a pie chart?", a:"Angle = (Value / Total) × 360°"},
-  {q:"What is a Histogram?", a:"A 1-dimensional diagram of rectangles where:\n• Area ∝ frequency\n• Width = class interval\n• No gaps between bars"},
 ];
 
-let fcIdx = 0;
-function renderFC() {
-  document.getElementById('fc-q').textContent = cards[fcIdx].q;
-  document.getElementById('fc-a').textContent = cards[fcIdx].a;
-  document.getElementById('fc-prog').textContent = `Card ${fcIdx+1} of ${cards.length}`;
-  document.getElementById('fc-card').classList.remove('flipped');
+/* =========================================================
+   STATE + STORAGE
+   ========================================================= */
+const LS_KEY = 'chembench_progress_v1';
+function loadProgress(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; }
 }
-function flipCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
-function fcMove(dir) {
-  fcIdx = (fcIdx + dir + cards.length) % cards.length;
-  renderFC();
-}
+function saveProgress(p){ localStorage.setItem(LS_KEY, JSON.stringify(p)); }
+let progress = loadProgress();
 
-// ===== QUIZ =====
-const questions = [
-  {q:"Sturge's rule: k = ?", opts:["1 + 3.322 log N","1 + 2.302 log N","N/2 + 1","Range / N"], ans:0, exp:"k = 1 + 3.322 × log₁₀(N) — this gives the number of classes for grouped frequency tables."},
-  {q:"The formula for class width is:", opts:["Max × Min / k","(Max – Min) / k","Σf / N","N / k"], ans:1, exp:"Class Width C = Range / k = (Max – Min) / k, always rounded up."},
-  {q:"For grouped data, Median = ?", opts:["L + [(N/2–CF)/f]×C","Σfx/N","L + [(Δ₁)/(Δ₁+Δ₂)]×C","L + [(N/4–CF)/f]×C"], ans:0, exp:"The median formula uses N/2. Q1 uses N/4, Mode uses the delta formula."},
-  {q:"Coefficient of Variation (CV) = ?", opts:["σ/x̄","(σ/x̄)×100%","x̄/σ × 100%","Σf/N"], ans:1, exp:"CV = (Standard Deviation / Mean) × 100%, used to compare variability."},
-  {q:"When two dice are tossed simultaneously, the total sample space is:", opts:["12","18","36","48"], ans:2, exp:"Each die has 6 faces, so total = 6 × 6 = 36 equally likely outcomes."},
-  {q:"P(A∪B) for mutually exclusive events equals:", opts:["P(A)×P(B)","P(A)+P(B)–P(A∩B)","P(A)+P(B)","P(A)/P(B)"], ans:2, exp:"Mutually exclusive means P(A∩B)=0, so P(A∪B) = P(A)+P(B)."},
-  {q:"Spearman's rank correlation formula uses:", opts:["Σd² / n","1 – 6Σd²/[n(n²–1)]","nΣxy / Σx²","Σfx / N"], ans:1, exp:"r = 1 – 6Σd²/[n(n²–1)] where d = difference in ranks of paired data."},
-  {q:"For regression Y = a + bX, which is a Normal Equation?", opts:["ΣY = na + bΣX","ΣX = na + bΣY","ΣXY = na + bΣX²","ΣY = a + bΣXY"], ans:0, exp:"The two normal equations are: ΣY = na + bΣX and ΣXY = aΣX + bΣX²."},
-  {q:"Which inequality always holds for positive numbers?", opts:["AM ≤ GM ≤ HM","HM ≤ GM ≤ AM","GM ≤ HM ≤ AM","AM = GM = HM"], ans:1, exp:"Harmonic Mean ≤ Geometric Mean ≤ Arithmetic Mean — always true for positive values."},
-  {q:"Statistics can be divided into how many categories?", opts:["4","3","2","1"], ans:2, exp:"Descriptive Statistics and Inferential Statistics — 2 categories."},
-  {q:"The angle of a pie chart sector for a value V in total T is:", opts:["V/T × 180°","V/T × 100","V/T × 360°","T/V × 360°"], ans:2, exp:"Angle = (Value / Total) × 360°"},
-  {q:"Qualitative variables are also called:", opts:["Numeric","Descriptive","Dimensional","Statistical"], ans:1, exp:"Qualitative (non-numeric) variables are also called Descriptive variables."},
-  {q:"Primary data is:", opts:["Already processed data","Data from NBS","Data collected directly from the field","Data published in books"], ans:2, exp:"Primary data is collected directly from the field and has not undergone any form of processing."},
-  {q:"D₃ (third decile) formula for grouped data?", opts:["L+[(3N/4–CF)/f]×C","L+[(3N/10–CF)/f]×C","L+[(3N/100–CF)/f]×C","L+[(N/3–CF)/f]×C"], ans:1, exp:"Deciles divide distribution into 10 parts. D₃ = L + [(3N/10 – CF)/f] × C."},
-  {q:"Variance of grouped data equals:", opts:["Σf(x–x̄)/N","√[Σf(x–x̄)²/N]","Σf(x–x̄)²/N","Σfx/N"], ans:2, exp:"σ² = Σf(x–x̄)²/N. Standard deviation is the square root of variance."},
-];
+let state = { courseId: COURSES[0].id, tab:'notes', cardFlip:{}, quizIndex:0, quizScore:0, quizAnswered:false };
 
-let quizAnswered = [];
-function renderQuiz() {
-  const c = document.getElementById('quiz-container');
-  const s = document.getElementById('quiz-score');
-  c.style.display = 'block'; s.style.display = 'none';
-  quizAnswered = new Array(questions.length).fill(false);
-  c.innerHTML = questions.map((q,i) => `
-    <div class="quiz-q" id="qq${i}">
-      <div class="qnum">QUESTION ${i+1} OF ${questions.length}</div>
-      <div class="qtext">${q.q}</div>
-      <div class="quiz-opts">
-        ${q.opts.map((o,j)=>`<button onclick="checkAns(${i},${j})">${['A','B','C','D'][j]}) ${o}</button>`).join('')}
-      </div>
-      <div class="quiz-explanation" id="qexp${i}">${q.exp}</div>
-    </div>
-  `).join('') + `<button class="btn-restart" onclick="showScore()" style="width:100%;margin-top:1rem;">📊 See My Score</button>`;
+function getCourse(){ return COURSES.find(c=>c.id===state.courseId); }
+function courseProgress(id){
+  if(!progress[id]) progress[id] = { known:{}, bestScore:0, attempts:0 };
+  return progress[id];
 }
 
-function checkAns(qi, chosen) {
-  if(quizAnswered[qi]) return;
-  quizAnswered[qi] = chosen === questions[qi].ans ? 'correct' : 'wrong';
-  const btns = document.querySelectorAll(`#qq${qi} .quiz-opts button`);
-  btns.forEach((b,j) => {
-    b.disabled = true;
-    if(j === questions[qi].ans) b.classList.add('correct');
-    else if(j === chosen) b.classList.add('wrong');
+/* =========================================================
+   RENDER: drawer
+   ========================================================= */
+function renderDrawer(){
+  const list = document.getElementById('courseList');
+  list.innerHTML = COURSES.map(c=>{
+    const active = c.id===state.courseId ? 'active':'';
+    return `<div class="course-item ${active}" style="--accent:var(${c.accent})" data-id="${c.id}">
+      <span class="swatch"></span>
+      <span class="label">${c.title}<span class="code">${c.code}</span></span>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.course-item').forEach(el=>{
+    el.addEventListener('click',()=>{ state.courseId = el.dataset.id; state.quizIndex=0; state.quizScore=0; state.quizAnswered=false; renderAll(); window.scrollTo(0,0);});
   });
-  document.getElementById(`qexp${qi}`).style.display = 'block';
+
+  const totalCards = COURSES.reduce((s,c)=>s+c.cards.length,0);
+  let knownCards = 0;
+  COURSES.forEach(c=>{ const p=courseProgress(c.id); knownCards += Object.values(p.known).filter(Boolean).length; });
+  document.getElementById('progressNote').innerHTML =
+    `flashcards mastered: ${knownCards} / ${totalCards}<br>quiz best-scores saved locally`;
 }
 
-function showScore() {
-  const score = quizAnswered.filter(a => a === 'correct').length;
-  document.getElementById('quiz-container').style.display = 'none';
-  const s = document.getElementById('quiz-score');
-  s.style.display = 'block';
-  const pct = Math.round(score/questions.length*100);
-  const grade = pct >= 70 ? '🎉 Excellent!' : pct >= 50 ? '👍 Good effort!' : '📖 Keep studying!';
-  s.innerHTML = `
-    <div class="score-val">${score}/${questions.length}</div>
-    <p>${pct}% — ${grade}</p>
-    <button class="btn-restart" onclick="renderQuiz()">🔄 Retake Quiz</button>
-  `;
+/* =========================================================
+   RENDER: header + tabs
+   ========================================================= */
+function renderHeader(){
+  const c = getCourse();
+  document.querySelectorAll('.drawer').forEach(d=>d.style.setProperty('--accent', `var(${c.accent})`));
+  document.getElementById('hdrEyebrow').textContent = c.code;
+  document.getElementById('hdrEyebrow').style.color = `var(${c.accent})`;
+  document.getElementById('hdrTitle').textContent = c.title;
+  document.getElementById('hdrDesc').textContent = c.desc;
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.tab===state.tab));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+state.tab).classList.add('active');
 }
 
-// Init
-renderFC();
+/* =========================================================
+   RENDER: notes
+   ========================================================= */
+function renderNotes(){
+  const c = getCourse();
+  const el = document.getElementById('panel-notes');
+  el.style.setProperty('--accent', `var(${c.accent})`);
+  el.innerHTML = c.notes.map(block=>`
+    <div class="note-block" style="--accent:var(${c.accent})">
+      <h3>${block.h}</h3>
+      <ul>${block.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+/* =========================================================
+   RENDER: flashcards
+   ========================================================= */
+function renderCards(){
+  const c = getCourse();
+  const p = courseProgress(c.id);
+  const el = document.getElementById('panel-cards');
+  const knownCount = Object.values(p.known).filter(Boolean).length;
+  el.innerHTML = `
+    <div class="deck-meta">${c.cards.length} specimen cards — click to flip, mark known when confident. Mastered: <span id="knownCount">${knownCount}</span> / ${c.cards.length}</div>
+    <div class="deck" id="deckGrid"></div>
+    <div class="deck-controls">
+      <button class="btn" id="resetKnown">Reset mastered marks</button>
+    </div>`;
+  const grid = document.getElementById('deckGrid');
+  c.cards.forEach((pair,i)=>{
+    const known = !!p.known[i];
+    const card = document.createElement('div');
+    card.className = 'spec-card'+(known?' known':'');
+    card.style.setProperty('--accent', `var(${c.accent})`);
+    card.innerHTML = `
+      <div class="spec-inner">
+        <div class="spec-face">
+          <span class="spec-mark">${known?'&#10003;':''}</span>
+          <div class="spec-tag">No. ${String(i+1).padStart(2,'0')} — Term</div>
+          <div class="spec-body">${pair[0]}</div>
+          <div class="spec-hint">tap to reveal</div>
+        </div>
+        <div class="spec-face back">
+          <div class="spec-tag">Definition</div>
+          <div class="spec-body">${pair[1]}</div>
+          <div class="spec-hint">tap = ✓ known</div>
+        </div>
+      </div>`;
+    card.addEventListener('click', (e)=>{
+      if(!card.classList.contains('flipped')){
+        card.classList.add('flipped');
+      } else {
+        p.known[i] = !p.known[i];
+        card.classList.toggle('known', p.known[i]);
+        card.querySelector('.spec-mark').innerHTML = p.known[i] ? '&#10003;' : '';
+        saveProgress(progress);
+        document.getElementById('knownCount').textContent = Object.values(p.known).filter(Boolean).length;
+        setTimeout(()=>card.classList.remove('flipped'), 350);
+      }
+    });
+    grid.appendChild(card);
+  });
+  document.getElementById('resetKnown').addEventListener('click', ()=>{
+    p.known = {}; saveProgress(progress); renderCards(); renderDrawer();
+  });
+}
+
+/* =========================================================
+   RENDER: quiz
+   ========================================================= */
+function renderQuiz(){
+  const c = getCourse();
+  const el = document.getElementById('panel-quiz');
+  el.style.setProperty('--accent', `var(${c.accent})`);
+
+  if(state.quizIndex >= c.quiz.length){
+    const p = courseProgress(c.id);
+    const pct = Math.round(100*state.quizScore/c.quiz.length);
+    if(pct > p.bestScore) p.bestScore = pct;
+    p.attempts = (p.attempts||0)+1;
+    saveProgress(progress);
+    el.innerHTML = `
+      <div class="quiz-wrap"><div class="q-card q-result">
+        <div class="mono" style="color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;">Result</div>
+        <div class="score">${state.quizScore} / ${c.quiz.length}</div>
+        <p style="color:var(--muted);">${pct}% — best saved score for this course: ${p.bestScore}%</p>
+        <button class="btn primary" id="retryQuiz">Retry quiz</button>
+      </div></div>`;
+    document.getElementById('retryQuiz').addEventListener('click', ()=>{
+      state.quizIndex=0; state.quizScore=0; state.quizAnswered=false; renderQuiz();
+    });
+    renderDrawer();
+    return;
+  }
+
+  const item = c.quiz[state.quizIndex];
+  el.innerHTML = `
+    <div class="quiz-wrap">
+      <div class="q-progress">Question ${state.quizIndex+1} of ${c.quiz.length} &nbsp;·&nbsp; Score ${state.quizScore}</div>
+      <div class="q-card">
+        <div class="q-text">${item.q}</div>
+        <div id="optWrap"></div>
+        <div class="q-explain" id="explainWrap" style="display:none;"></div>
+        <div style="margin-top:16px;text-align:right;">
+          <button class="btn primary" id="nextBtn" style="display:none;">Next →</button>
+        </div>
+      </div>
+    </div>`;
+  const optWrap = document.getElementById('optWrap');
+  item.opts.forEach((opt,i)=>{
+    const b = document.createElement('button');
+    b.className='q-opt'; b.textContent=opt;
+    b.addEventListener('click', ()=>{
+      if(state.quizAnswered) return;
+      state.quizAnswered = true;
+      const correct = i===item.a;
+      if(correct) state.quizScore++;
+      [...optWrap.children].forEach((btn,j)=>{
+        btn.disabled = true;
+        if(j===item.a) btn.classList.add('correct');
+        else if(j===i) btn.classList.add('wrong');
+      });
+      document.getElementById('explainWrap').style.display='block';
+      document.getElementById('explainWrap').textContent = (correct?'Correct. ':'Not quite. ') + item.e;
+      document.getElementById('nextBtn').style.display='inline-block';
+    });
+    optWrap.appendChild(b);
+  });
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    state.quizIndex++; state.quizAnswered=false; renderQuiz();
+  });
+}
+
+/* =========================================================
+   TABS + INIT
+   ========================================================= */
+document.querySelectorAll('.tabbtn').forEach(b=>{
+  b.addEventListener('click', ()=>{ state.tab=b.dataset.tab; renderHeader(); if(state.tab==='notes')renderNotes(); if(state.tab==='cards')renderCards(); if(state.tab==='quiz')renderQuiz(); });
+});
+
+function renderAll(){
+  renderDrawer();
+  renderHeader();
+  renderNotes();
+  renderCards();
+  state.quizIndex=0; state.quizScore=0; state.quizAnswered=false;
+  renderQuiz();
+}
+renderAll();
 </script>
 </body>
 </html>
