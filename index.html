@@ -3,811 +3,1619 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DELSU Chem Bench — Exam Prep</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<title>CES 211 — Ledger of Enterprise</title>
 <style>
-:root{
-  --ink:#1B2027;
-  --panel:#242B33;
-  --panel-2:#2C3540;
-  --bone:#EDEAE0;
-  --muted:#9AA5AE;
-  --line:#3A4450;
-  --gold:#C89B3C;
-  --teal:#5C93A8;
-  --rust:#B06A46;
-  --sage:#8A9A78;
-  --plum:#9C7FA0;
-  --clay:#C97D5C;
-}
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
-  background:var(--ink);
-  color:var(--bone);
-  font-family:'Source Serif 4', serif;
-  min-height:100vh;
-}
-::selection{background:var(--gold);color:#1B2027;}
-h1,h2,h3{font-family:'Fraunces', serif;font-weight:600;margin:0 0 .4em;}
-.mono{font-family:'IBM Plex Mono', monospace;}
-a{color:inherit;}
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
-/* ---------- shell layout ---------- */
-.shell{display:flex;min-height:100vh;}
-.drawer{
-  width:270px;flex:0 0 270px;
-  background:var(--panel);
-  border-right:1px solid var(--line);
-  padding:28px 0 20px;
-  position:sticky;top:0;height:100vh;overflow-y:auto;
-}
-.drawer-head{padding:0 22px 20px;border-bottom:1px solid var(--line);margin-bottom:10px;}
-.drawer-head .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;}
-.drawer-head h1{font-size:22px;line-height:1.2;margin-top:6px;}
-.drawer-head .sub{font-size:12.5px;color:var(--muted);margin-top:6px;font-family:'IBM Plex Mono',monospace;}
+  :root{
+    --navy:#132844;
+    --navy-deep:#0b1a2e;
+    --gold:#c79a3d;
+    --gold-soft:#e3c583;
+    --paper:#f4efe4;
+    --paper-line:#dcd2b8;
+    --ink:#1c2a1f;
+    --ink-soft:#4b5560;
+    --green:#3c6b4a;
+    --red:#a4432c;
+    --card:#fffdf7;
+    --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px);
+    background-size: 100% 2.1em;
+    min-height:100vh;
+  }
+  ::selection{ background: var(--gold-soft); }
 
-.course-item{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 22px;cursor:pointer;
-  border-left:3px solid transparent;
-  transition:background .15s;
-}
-.course-item:hover{background:var(--panel-2);}
-.course-item.active{background:var(--panel-2);border-left-color:var(--accent);}
-.course-item .swatch{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:0 0 9px;}
-.course-item .label{font-size:14.5px;line-height:1.3;}
-.course-item .code{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:.06em;}
+  a{color:inherit;}
 
-.progress-note{margin:18px 22px 0;padding-top:14px;border-top:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);line-height:1.6;}
+  /* ---------- Layout shell ---------- */
+  .app{
+    display:flex;
+    min-height:100vh;
+  }
 
-/* ---------- main ---------- */
-main{flex:1;min-width:0;padding:36px 44px 80px;max-width:980px;}
-.course-header{margin-bottom:8px;}
-.course-header .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);}
-.course-header h2{font-size:32px;margin-top:6px;}
-.course-header .desc{color:var(--muted);font-size:15px;max-width:60ch;margin-top:4px;}
+  /* ---------- Sidebar (ledger spine) ---------- */
+  .sidebar{
+    width:270px;
+    flex-shrink:0;
+    background:var(--navy-deep);
+    color:#e9e2cf;
+    padding:0;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+    border-right:6px solid var(--gold);
+  }
+  .brand{
+    padding:26px 22px 18px;
+    border-bottom:1px solid rgba(233,226,207,0.15);
+  }
+  .brand .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    margin:0 0 6px;
+  }
+  .brand h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:26px;
+    line-height:1.1;
+    margin:0 0 6px;
+  }
+  .brand p{
+    font-size:12.5px;
+    color:#b9b0a9;
+    margin:0;
+    line-height:1.4;
+  }
 
-.tabbar{display:flex;gap:6px;margin:24px 0 26px;border-bottom:1px solid var(--line);}
-.tabbtn{
-  font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;
-  background:none;border:none;color:var(--muted);padding:10px 4px;margin-right:22px;cursor:pointer;
-  border-bottom:2px solid transparent;
-}
-.tabbtn.active{color:var(--bone);border-bottom-color:var(--accent);}
+  .mode-tabs{
+    display:flex;
+    gap:0;
+    border-bottom:1px solid rgba(233,226,207,0.15);
+  }
+  .mode-tab{
+    flex:1;
+    background:none;
+    border:none;
+    color:#b9b0a9;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:13px 4px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+  }
+  .mode-tab.active{
+    color:var(--gold-soft);
+    border-bottom-color:var(--gold);
+    background:rgba(199,154,61,0.08);
+  }
 
-.panel{display:none;}
-.panel.active{display:block;}
+  .chapter-list{
+    list-style:none;
+    margin:0;
+    padding:10px 0 24px;
+  }
+  .chapter-list li{ margin:0; }
+  .chapter-btn{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:#cfc7b6;
+    padding:9px 22px;
+    font-family:'Source Serif 4', serif;
+    font-size:14px;
+    cursor:pointer;
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+    border-left:3px solid transparent;
+  }
+  .chapter-btn .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--gold-soft);
+    opacity:.75;
+    flex-shrink:0;
+  }
+  .chapter-btn:hover{ background:rgba(233,226,207,0.06); color:#fff; }
+  .chapter-btn.active{
+    background:rgba(199,154,61,0.12);
+    border-left-color:var(--gold);
+    color:#fff;
+  }
 
-/* notes */
-.note-block{margin-bottom:26px;}
-.note-block h3{font-size:19px;color:var(--accent);}
-.note-block ul{margin:8px 0 0;padding-left:20px;}
-.note-block li{margin-bottom:6px;line-height:1.55;font-size:15px;}
-.note-block p{line-height:1.6;font-size:15px;}
-table.datatab{border-collapse:collapse;width:100%;margin-top:10px;font-size:14px;}
-table.datatab th,table.datatab td{border:1px solid var(--line);padding:7px 10px;text-align:left;}
-table.datatab th{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;color:var(--accent);letter-spacing:.05em;}
+  .sidebar-foot{
+    padding:14px 22px 20px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:#8b8478;
+    border-top:1px solid rgba(233,226,207,0.15);
+  }
+  .sidebar-foot button{
+    background:none;
+    border:1px solid rgba(233,226,207,0.3);
+    color:#cfc7b6;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    padding:6px 9px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    margin-top:8px;
+  }
+  .sidebar-foot button:hover{ border-color:var(--gold); color:#fff; }
 
-/* specimen cards (flashcards) */
-.deck-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:16px;}
-.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;}
-.spec-card{
-  perspective:1200px;height:180px;cursor:pointer;
-}
-.spec-inner{
-  position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,.2,.2,1);
-  transform-style:preserve-3d;
-}
-.spec-card.flipped .spec-inner{transform:rotateY(180deg);}
-.spec-face{
-  position:absolute;inset:0;backface-visibility:hidden;
-  background:var(--panel-2);border:1px solid var(--line);border-radius:2px;
-  padding:16px 16px 14px;display:flex;flex-direction:column;
-}
-.spec-face::before{
-  content:'';position:absolute;top:10px;left:10px;width:8px;height:8px;border-radius:50%;
-  background:var(--ink);border:1px solid var(--line);
-}
-.spec-tag{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-left:20px;}
-.spec-body{flex:1;display:flex;align-items:center;font-size:14.5px;line-height:1.45;margin-top:8px;}
-.spec-face.back{transform:rotateY(180deg);background:var(--ink);}
-.spec-hint{margin-top:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);text-align:right;}
-.spec-card.known .spec-face:not(.back){border-color:var(--accent);}
-.spec-mark{position:absolute;top:8px;right:10px;font-size:11px;}
+  /* ---------- Main ---------- */
+  .main{
+    flex:1;
+    min-width:0;
+    padding:34px 44px 80px;
+  }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .topbar h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:30px;
+    margin:0;
+    color:var(--navy);
+  }
+  .topbar .sub{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .ledger-stat{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--navy);
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    padding:8px 14px;
+    border-radius:var(--radius);
+  }
+  .ledger-stat b{ color:var(--gold); }
 
-.deck-controls{margin-top:16px;display:flex;gap:10px;}
-.btn{
-  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;
-  background:var(--panel-2);border:1px solid var(--line);color:var(--bone);padding:9px 14px;cursor:pointer;border-radius:2px;
-}
-.btn:hover{border-color:var(--accent);}
-.btn.primary{background:var(--accent);color:#1B2027;border-color:var(--accent);font-weight:600;}
+  /* ---------- NOTES VIEW ---------- */
+  .notes-block{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:28px 32px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.03);
+  }
+  .notes-block h3{
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    color:var(--navy);
+    border-bottom:2px solid var(--gold-soft);
+    padding-bottom:8px;
+    margin:28px 0 12px;
+  }
+  .notes-block h3:first-child{ margin-top:0; }
+  .notes-block ul{ padding-left:20px; margin:0 0 6px; }
+  .notes-block li{ margin-bottom:9px; line-height:1.55; font-size:15px; }
+  .notes-block table{
+    width:100%;
+    border-collapse:collapse;
+    margin:14px 0 24px;
+    font-size:14px;
+  }
+  .notes-block th, .notes-block td{
+    text-align:left;
+    padding:8px 10px;
+    border:1px solid var(--paper-line);
+  }
+  .notes-block th{
+    background:var(--navy);
+    color:#f4efe4;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+  .quickfacts{
+    background:#fbf3de;
+    border:1px dashed var(--gold);
+    border-radius:var(--radius);
+    padding:16px 20px;
+    margin-top:20px;
+  }
+  .quickfacts .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:block;
+    margin-bottom:8px;
+  }
+  .quickfacts ul{ margin:0; padding-left:18px; }
+  .quickfacts li{ font-size:13.5px; margin-bottom:6px; }
 
-/* quiz */
-.quiz-wrap{max-width:640px;}
-.q-progress{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:14px;}
-.q-card{background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:24px;}
-.q-text{font-size:17px;line-height:1.5;margin-bottom:18px;}
-.q-opt{
-  display:block;width:100%;text-align:left;background:var(--ink);border:1px solid var(--line);color:var(--bone);
-  padding:11px 14px;margin-bottom:9px;border-radius:2px;cursor:pointer;font-size:14.5px;font-family:'Source Serif 4',serif;
-}
-.q-opt:hover{border-color:var(--accent);}
-.q-opt.correct{border-color:var(--sage);background:#26302a;}
-.q-opt.wrong{border-color:var(--clay);background:#332321;}
-.q-opt[disabled]{cursor:default;}
-.q-explain{margin-top:12px;font-size:13.5px;color:var(--muted);line-height:1.5;font-style:italic;}
-.q-result{text-align:center;padding:40px 20px;}
-.q-result .score{font-family:'Fraunces',serif;font-size:48px;color:var(--accent);}
+  .chapter-nav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:22px;
+    gap:12px;
+  }
+  .chapter-nav button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    background:var(--navy);
+    color:#f4efe4;
+    border:none;
+    padding:10px 16px;
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  .chapter-nav button:disabled{ opacity:.3; cursor:default; }
+  .chapter-nav button:hover:not(:disabled){ background:var(--gold); color:var(--navy-deep); }
 
-footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;}
+  /* ---------- FLASHCARDS VIEW ---------- */
+  .fc-controls{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  }
+  .fc-controls select{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:8px 10px;
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    background:var(--card);
+    color:var(--ink);
+  }
+  .fc-progress{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .flash-stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+  }
+  .flashcard{
+    width:100%;
+    max-width:560px;
+    height:280px;
+    perspective:1400px;
+    cursor:pointer;
+  }
+  .flashcard-inner{
+    position:relative;
+    width:100%; height:100%;
+    transition:transform .5s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+  }
+  .flashcard.flipped .flashcard-inner{ transform:rotateY(180deg); }
+  .flash-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:6px;
+    padding:34px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    box-shadow:0 6px 20px rgba(19,40,68,0.15);
+  }
+  .flash-front{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+  }
+  .flash-front .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  .flash-front .term{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:26px;
+    color:var(--navy);
+    line-height:1.25;
+  }
+  .flash-front .hint{
+    margin-top:auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .flash-back{
+    background:var(--navy);
+    color:#f4efe4;
+    transform:rotateY(180deg);
+    font-size:16px;
+    line-height:1.55;
+  }
+  .flash-back .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--gold-soft);
+    margin-bottom:14px;
+  }
+  .fc-buttons{ display:flex; gap:12px; }
+  .fc-buttons button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:10px 18px;
+    border-radius:var(--radius);
+    border:1px solid var(--paper-line);
+    background:var(--card);
+    cursor:pointer;
+  }
+  .fc-buttons button.primary{
+    background:var(--navy); color:#f4efe4; border-color:var(--navy);
+  }
+  .fc-buttons button:hover{ border-color:var(--gold); }
 
-@media(max-width:820px){
-  .shell{flex-direction:column;}
-  .drawer{width:100%;height:auto;position:relative;flex:none;}
-  main{padding:26px 20px 60px;}
-}
+  /* ---------- QUIZ VIEW ---------- */
+  .quiz-setup{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:28px 32px;
+    max-width:560px;
+  }
+  .quiz-setup h3{ font-family:'Fraunces',serif; margin-top:0; color:var(--navy); }
+  .quiz-setup label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin:16px 0 6px;
+  }
+  .quiz-setup select, .quiz-setup input[type=number]{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    font-family:'Source Serif 4', serif;
+    font-size:14px;
+    background:#fff;
+  }
+  .start-btn{
+    margin-top:22px;
+    width:100%;
+    background:var(--gold);
+    color:var(--navy-deep);
+    border:none;
+    padding:13px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    border-radius:var(--radius);
+    cursor:pointer;
+    font-weight:600;
+  }
+  .start-btn:hover{ background:var(--gold-soft); }
+
+  .quiz-progress-bar{
+    height:5px;
+    background:var(--paper-line);
+    border-radius:3px;
+    overflow:hidden;
+    margin-bottom:22px;
+    max-width:640px;
+  }
+  .quiz-progress-fill{
+    height:100%;
+    background:var(--gold);
+    transition:width .3s ease;
+  }
+  .quiz-q{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:30px 32px;
+    max-width:640px;
+  }
+  .quiz-q .qcount{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--gold);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .quiz-q .qtext{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    color:var(--navy);
+    line-height:1.4;
+    margin-bottom:22px;
+  }
+  .quiz-options{ display:flex; flex-direction:column; gap:10px; }
+  .quiz-option{
+    text-align:left;
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:13px 16px;
+    font-family:'Source Serif 4', serif;
+    font-size:15px;
+    cursor:pointer;
+    display:flex;
+    gap:10px;
+  }
+  .quiz-option:hover{ border-color:var(--gold); background:#fffaf0; }
+  .quiz-option .letter{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink-soft);
+    flex-shrink:0;
+  }
+  .quiz-option.correct{ border-color:var(--green); background:#e9f3ec; }
+  .quiz-option.correct .letter{ color:var(--green); }
+  .quiz-option.incorrect{ border-color:var(--red); background:#f7e9e4; }
+  .quiz-option.incorrect .letter{ color:var(--red); }
+  .quiz-option.disabled{ cursor:default; }
+  .quiz-explain{
+    margin-top:18px;
+    padding:14px 16px;
+    background:#f4efe4;
+    border-left:3px solid var(--gold);
+    font-size:14px;
+    line-height:1.5;
+    border-radius:0 var(--radius) var(--radius) 0;
+    display:none;
+  }
+  .quiz-explain.show{ display:block; }
+  .quiz-next{
+    margin-top:20px;
+    background:var(--navy);
+    color:#f4efe4;
+    border:none;
+    padding:11px 22px;
+    border-radius:var(--radius);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    cursor:pointer;
+    display:none;
+  }
+  .quiz-next.show{ display:inline-block; }
+  .quiz-next:hover{ background:var(--gold); color:var(--navy-deep); }
+
+  .quiz-result{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:var(--radius);
+    padding:38px 40px;
+    max-width:560px;
+    text-align:center;
+  }
+  .quiz-result .score{
+    font-family:'Fraunces', serif;
+    font-size:56px;
+    font-weight:700;
+    color:var(--navy);
+    margin:6px 0;
+  }
+  .quiz-result .verdict{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:18px;
+  }
+  .quiz-result-actions{ display:flex; gap:12px; justify-content:center; margin-top:20px; }
+  .quiz-result-actions button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:11px 18px;
+    border-radius:var(--radius);
+    border:1px solid var(--paper-line);
+    background:#fff;
+    cursor:pointer;
+  }
+  .quiz-result-actions button.primary{ background:var(--navy); color:#f4efe4; border-color:var(--navy); }
+
+  .hidden{ display:none !important; }
+
+  @media (max-width:820px){
+    .app{ flex-direction:column; }
+    .sidebar{ width:100%; height:auto; position:relative; }
+    .chapter-list{ display:flex; overflow-x:auto; padding:8px 10px; gap:4px; }
+    .chapter-btn{ white-space:nowrap; border-left:none; border-bottom:3px solid transparent; padding:8px 12px;}
+    .chapter-btn.active{ border-left:none; border-bottom-color:var(--gold); }
+    .main{ padding:22px 18px 60px; }
+    .notes-block{ padding:20px 18px; }
+  }
 </style>
 </head>
 <body>
-<div class="shell">
-  <nav class="drawer" id="drawer">
-    <div class="drawer-head">
-      <div class="eyebrow">Delta State University · Abraka</div>
-      <h1>Chem&nbsp;Bench</h1>
-      <div class="sub">specimen index / exam prep</div>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="brand">
+      <p class="eyebrow">Engineers Ensemble &middot; Academic Series</p>
+      <h1>CES 211</h1>
+      <p>Entrepreneurship, Value Addition &amp; Enterprise Creation — DELSU Oleh Campus revision ledger, built from "The Sage Kid" notes.</p>
     </div>
-    <div id="courseList"></div>
-    <div class="progress-note" id="progressNote"></div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="notes">Notes</button>
+      <button class="mode-tab" data-mode="flash">Cards</button>
+      <button class="mode-tab" data-mode="quiz">Quiz</button>
+    </div>
+    <ul class="chapter-list" id="chapterList"></ul>
+    <div class="sidebar-foot">
+      Progress is saved on this device.
+      <br>
+      <button id="resetProgress">Reset quiz scores</button>
+    </div>
   </nav>
 
-  <main>
-    <div class="course-header">
-      <div class="eyebrow" id="hdrEyebrow"></div>
-      <h2 id="hdrTitle"></h2>
-      <p class="desc" id="hdrDesc"></p>
-    </div>
+  <!-- MAIN -->
+  <main class="main">
 
-    <div class="tabbar">
-      <button class="tabbtn active" data-tab="notes">Notes</button>
-      <button class="tabbtn" data-tab="cards">Flashcards</button>
-      <button class="tabbtn" data-tab="quiz">Quiz</button>
-    </div>
+    <!-- NOTES VIEW -->
+    <section id="view-notes">
+      <div class="topbar">
+        <div>
+          <div class="sub" id="notesChapterEyebrow">Chapter 01</div>
+          <h2 id="notesChapterTitle">Loading&hellip;</h2>
+        </div>
+      </div>
+      <div class="notes-block" id="notesContent"></div>
+      <div class="chapter-nav">
+        <button id="prevChapter">&larr; Previous chapter</button>
+        <button id="nextChapter">Next chapter &rarr;</button>
+      </div>
+    </section>
 
-    <div class="panel active" id="panel-notes"></div>
-    <div class="panel" id="panel-cards"></div>
-    <div class="panel" id="panel-quiz"></div>
+    <!-- FLASHCARDS VIEW -->
+    <section id="view-flash" class="hidden">
+      <div class="topbar">
+        <div>
+          <div class="sub">Recall drill</div>
+          <h2>Flashcards</h2>
+        </div>
+        <div class="ledger-stat">Known this session: <b id="fcKnownCount">0</b></div>
+      </div>
+      <div class="fc-controls">
+        <select id="fcChapterFilter"></select>
+        <button id="fcShuffle" class="fc-buttons-btn" style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 12px;border-radius:3px;border:1px solid var(--paper-line);background:var(--card);cursor:pointer;">Shuffle deck</button>
+        <span class="fc-progress" id="fcProgress">Card 1 of 1</span>
+      </div>
+      <div class="flash-stage">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-inner">
+            <div class="flash-face flash-front">
+              <span class="tag" id="fcFrontTag">Chapter</span>
+              <div class="term" id="fcFrontTerm">Term</div>
+              <span class="hint">Tap to reveal definition</span>
+            </div>
+            <div class="flash-face flash-back">
+              <span class="tag">Definition</span>
+              <div id="fcBackText"></div>
+            </div>
+          </div>
+        </div>
+        <div class="fc-buttons">
+          <button id="fcPrev">&larr; Back</button>
+          <button id="fcDontKnow">Still learning</button>
+          <button id="fcKnow" class="primary">Know it &rarr;</button>
+        </div>
+      </div>
+    </section>
 
-    <footer>Built from lecture notes, past exam papers &amp; lab manuals — D-CHM 214, D-CHM 215, D-CHM/CHM 211, CHM 212, Separation &amp; Purification, Lab 1 Minerals. Progress is saved locally in this browser.</footer>
+    <!-- QUIZ VIEW -->
+    <section id="view-quiz" class="hidden">
+      <div class="topbar">
+        <div>
+          <div class="sub">Mock test</div>
+          <h2>Quiz</h2>
+        </div>
+        <div class="ledger-stat">Best score: <b id="bestScoreStat">—</b></div>
+      </div>
+
+      <div id="quizSetup" class="quiz-setup">
+        <h3>Set up your run</h3>
+        <label>Chapter coverage</label>
+        <select id="quizChapterSelect"></select>
+        <label>Number of questions</label>
+        <input type="number" id="quizCount" min="5" max="50" value="15">
+        <button class="start-btn" id="quizStart">Start quiz</button>
+      </div>
+
+      <div id="quizPlay" class="hidden">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div></div>
+        <div class="quiz-q">
+          <div class="qcount" id="quizQCount">Question 1 of 15</div>
+          <div class="qtext" id="quizQText"></div>
+          <div class="quiz-options" id="quizOptions"></div>
+          <div class="quiz-explain" id="quizExplain"></div>
+          <button class="quiz-next" id="quizNext">Next question &rarr;</button>
+        </div>
+      </div>
+
+      <div id="quizDone" class="hidden quiz-result">
+        <div class="sub" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);">You scored</div>
+        <div class="score" id="quizFinalScore">0/0</div>
+        <div class="verdict" id="quizVerdict">Keep revising</div>
+        <div class="quiz-result-actions">
+          <button id="quizRetry">Retry same set</button>
+          <button class="primary" id="quizNewRun">New quiz</button>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
 
 <script>
-/* =========================================================
-   DATA
-   ========================================================= */
-const COURSES = [
-
+/* ======================= DATA ======================= */
+const CHAPTERS = [
 {
-  id:'mineral',
-  accent:'--gold',
-  code:'D-CHM 214',
-  title:'Mineral Processing & Extractive Metallurgy',
-  desc:'Ore classes, comminution, concentration, extraction and refining methods.',
-  notes:[
-    {h:'Fundamentals', items:[
-      'Metallurgy = study of physical/chemical behaviour of metals & alloys, and their extraction/refining.',
-      'Branches: extractive, physical, mechanical, chemical, powder, engineering metallurgy.',
-      'Extractive metallurgy divides into mineral processing (beneficiation), pyrometallurgy, hydrometallurgy, electrometallurgy.',
-      'Ore = mineral containing a high enough concentration of a desired element to be economically extractable.',
-      'Gangue = the unwanted material in an ore that must be separated from the valuable mineral.'
+  id:1, title:"Meaning, Nature, Objectives & Traits of Entrepreneurship",
+  sections:[
+    {h:"1.1 Defining Entrepreneurship", points:[
+      "Entrepreneurship is the science of creativity and innovation — applying scientific rigor to spotting and building business opportunities.",
+      "It is the act of organizing, utilizing and managing a business by adopting new techniques, with profit as the primary motive.",
+      "It is the ability of a person or group to create or discover an opportunity and use it for society's benefit — a social function as much as an economic one.",
+      "Schumpeter (1934) defined entrepreneurship as a 'new combination' of resources — a new product, method of production, market, raw material source, or industry reorganization.",
+      "Entrepreneurship is the major growth driver of any economy, cutting across agriculture, manufacturing, services and technology.",
+      "The entrepreneurship environment is always changing — technology, policy, taste and competition shift constantly.",
+      "Entrepreneurship impacts society's welfare through the goods, services, taxes and employment businesses generate."
     ]},
-    {h:'Run-of-mine material — 3 classes', items:[
-      '(i) Useful materials directly (granite, sand, limestone, coal, clay) — not classed as minerals.',
-      '(ii) Contains useful minerals of high purity, low unit value (apatite, fluorite, diamond, vermiculite, barite, chromite).',
-      '(iii) Contains value-bearing minerals (metalliferous), e.g. chalcopyrite (CuFeS₂) — value comes from the contained metal, not the mineral itself.'
+    {h:"1.2 Characteristics & Objectives", points:[
+      "Characteristics: risk bearing, managerial skill, value added/created, result-oriented activities, innovation.",
+      "Objectives: produce goods/services for consumers, reduce poverty, create employment, enhance GDP and per capita income."
     ]},
-    {h:'Flowsheet stages', items:[
-      'Front-row operations (material severance): Crushing → Screening → Grinding → Classification.',
-      'Back-row operations (separation): Separation → Valuable concentrate + Waste/gangue tailings → Dewatering → Final concentrate.'
-    ]},
-    {h:'Comminution & hardness', items:[
-      'Comminution = size reduction (crushing + grinding) to liberate valuable mineral from gangue.',
-      'Mohs hardness scale (softest→hardest): Talc, Gypsum, Calcite, Fluorite, Apatite, Potassium feldspar, Quartz, Topaz, Corundum, Diamond.',
-      'Common object reference: fingernail ≈2, copper penny ≈3, knife/glass ≈5.5, steel file ≈6.5.'
-    ]},
-    {h:'Concentration of ore', items:[
-      'Washing in a stream of water — used when gangue density < ore density.',
-      'Froth flotation — used when ore density < gangue density; ore + pine oil, air blown through, froth carries the ore.',
-      'Magnetic separation — for magnetic ores (e.g. magnetite) using a magnetic roller.',
-      'Leaching — impurities insoluble, ore soluble in a solvent (e.g. bauxite in NaOH).',
-      'Roasting — heating ore strongly in air; converts sulphides to oxides (2PbS+3O₂→2PbO+2SO₂).',
-      'Calcination — heating in absence/limited air; removes volatile impurities (CaCO₃→CaO+CO₂).'
-    ]},
-    {h:'Extraction of metals', items:[
-      'Smelting — roasted/calcined ore + coke heated strongly; flux removes gangue as slag (CaO+SiO₂→CaSiO₃).',
-      'Reduction with aluminium (Goldschmidt/thermite) — for metals less electropositive than Al (Cr₂O₃+2Al→Al₂O₃+2Cr).',
-      'Reduction with hydrogen — for metals like tungsten (WO₃+3H₂→W+3H₂O).'
-    ]},
-    {h:'Refining', items:[
-      'Liquation — low-melting metals (Pb, Sn) melted on a sloping hearth, flow away from infusible impurities.',
-      'Distillation — volatile metals (Hg, Zn) distilled over, leaving impurities.',
-      'Electrolysis — metal to be refined = anode; pure metal deposits on cathode; e.g. copper refining: impure Cu anode, pure Cu cathode, CuSO₄ electrolyte.'
-    ]},
-    {h:'Aluminium & iron extraction', items:[
-      'Bauxite (Al₂O₃·2H₂O) + NaOH → sodium aluminate (NaAlO₂) + H₂O.',
-      'NaAlO₂ + 2H₂O → Al(OH)₃ + NaOH, then 2Al(OH)₃ → Al₂O₃ + 3H₂O (alumina).',
-      'Al₂O₃ electrolysed in molten cryolite (Na₃AlF₆) — cryolite lowers the melting point of alumina.',
-      'Iron ores: haematite (Fe₂O₃), magnetite (Fe₃O₄); reduced with coke in a blast furnace.'
-    ]},
-    {h:'Ore/compound reference', items:[
-      'Sodium — rock salt (NaCl), Chile saltpetre (NaNO₃).',
-      'Aluminium — bauxite (Al₂O₃·2H₂O), cryolite (Na₃AlF₆).',
-      'Iron — magnetite (Fe₃O₄), haematite (Fe₂O₃), iron pyrites (FeS₂).',
-      'Copper — copper pyrites/chalcopyrite (CuFeS₂), malachite (Cu(OH)₂·CuCO₃), cuprite (Cu₂O).',
-      'Zinc — zinc blende (ZnS), calamine (ZnCO₃).'
+    {h:"1.3 The Entrepreneur", points:[
+      "An entrepreneur designs a business idea and transforms it into goods/services using available resources, aiming for profit.",
+      "An entrepreneur is an innovator, idea generator, resource organizer, and business manager.",
+      "Traits: visionary, optimism, passion, mentorship, confidence, teamwork."
     ]}
   ],
-  cards:[
-    ['Metallurgy','Study of the physical and chemical behaviour of metallic elements and alloys, and the processes of extracting, refining and preparing them.'],
-    ['Ore vs gangue','Ore = mineral rich enough in a desired element to extract economically. Gangue = the worthless material mixed with it.'],
-    ['Run-of-mine (ROM)','Ore/mineral as delivered from the mine to the processing plant, before any treatment.'],
-    ['Comminution','Size reduction of ore (crushing + grinding) to liberate valuable minerals from gangue.'],
-    ['Mohs scale order','Talc < Gypsum < Calcite < Fluorite < Apatite < Feldspar < Quartz < Topaz < Corundum < Diamond.'],
-    ['Froth flotation — when used?','When the ore is LESS dense than the gangue; ore + pine oil froths and floats, gangue sinks.'],
-    ['Washing in water — when used?','When gangue is LESS dense than the ore; impurities float away, ore stays behind.'],
-    ['Leaching','Dissolving the ore in a suitable solvent while gangue remains undissolved/insoluble, e.g. bauxite in NaOH.'],
-    ['Roasting','Heating ore in a strong blast of air, converting sulphide ores to oxides.'],
-    ['Calcination','Heating ore with limited/no air, driving off volatile impurities (e.g. CO₂ from carbonates).'],
-    ['Flux + gangue','Flux reacts with gangue to form slag, which floats on molten metal and is removed. CaO + SiO₂ → CaSiO₃.'],
-    ['Liquation','Refining low-melting metals (Pb, Sn) on a sloping hearth so they flow away from solid impurities.'],
-    ['Electrolytic refining','Impure metal = anode, pure metal = cathode, a salt of the metal = electrolyte; pure metal deposits at cathode.'],
-    ['Bauxite formula','Al₂O₃·2H₂O — chief ore of aluminium.'],
-    ['Cryolite role','Na₃AlF₆ is mixed with alumina to lower its melting point during electrolysis.'],
-    ['Chalcopyrite','CuFeS₂ — copper pyrites, main ore of copper; value comes from contained copper, not the mineral itself.'],
-    ['Pyro/hydro/electro-metallurgy','Pyro = heat-based extraction; Hydro = solution/aqueous-chemical extraction; Electro = electrolysis-based extraction.']
-  ],
-  quiz:[
-    {q:'Which method of concentration is used when the ore is less dense than the gangue?',opts:['Washing in water','Froth flotation','Magnetic separation','Liquation'],a:1,e:'Froth flotation exploits low-density ore floating with pine-oil froth while denser gangue sinks.'},
-    {q:'What is the chemical formula of bauxite?',opts:['Fe₂O₃','Al₂O₃·2H₂O','CuFeS₂','ZnCO₃'],a:1,e:'Bauxite is hydrated aluminium oxide, Al₂O₃·2H₂O.'},
-    {q:'Cryolite is added during aluminium electrolysis mainly to:',opts:['Increase conductivity of the anode','Lower the melting point of alumina','Act as a reducing agent','Prevent oxidation of the cathode'],a:1,e:'Molten cryolite (Na₃AlF₆) dissolves alumina and lowers the operating temperature.'},
-    {q:'Which refining method is best for metals with low melting points such as tin and lead?',opts:['Electrolysis','Distillation','Liquation','Calcination'],a:2,e:'Liquation melts the low-melting metal off a sloping hearth away from solid impurities.'},
-    {q:'In electrolytic refining of copper, the cathode is made of:',opts:['Impure copper','Pure copper','Carbon','Zinc'],a:1,e:'Pure copper is deposited on and forms the cathode; impure copper is the anode.'},
-    {q:'Which is the hardest mineral on the Mohs scale?',opts:['Quartz','Topaz','Corundum','Diamond'],a:3,e:'Diamond = 10, the hardest reference mineral on the Mohs scale.'},
-    {q:'Roasting an ore mainly involves:',opts:['Heating in absence of air to remove volatile impurities','Heating strongly in a blast of air to convert sulphides to oxides','Dissolving ore in a solvent','Electrolysing molten ore'],a:1,e:'Roasting uses strong air blast, converting sulphide ores (e.g. PbS, ZnS) into oxides.'},
-    {q:'Chalcopyrite (CuFeS₂) is classed as a run-of-mine material containing:',opts:['Useful materials directly','Useful minerals of high purity','Value-bearing (metalliferous) minerals','No economic value'],a:2,e:'Its value comes from the contained copper metal, making it a metalliferous/value-bearing deposit.'}
+  quickfacts:[
+    "Schumpeter (1934) — 'new combination' of resources.",
+    "5 characteristics: risk bearing, managerial skill, value added/created, result-oriented activities, innovation.",
+    "4 objectives: produce goods/services, reduce poverty, create employment, enhance GDP & per capita income.",
+    "Entrepreneur roles: innovator, idea generator, resource organizer, business manager.",
+    "Entrepreneur traits: visionary, optimism, passion, mentorship, confidence, teamwork."
   ]
 },
-
 {
-  id:'analytical',
-  accent:'--teal',
-  code:'D-CHM 211',
-  title:'Analytical Chemistry II',
-  desc:'Significant figures, error analysis, molarity/molality, EDTA and acid–base titrations.',
-  notes:[
-    {h:'Accuracy, precision & error', items:[
-      'Accuracy = closeness of a measured value to the true/accepted value.',
-      'Precision = closeness of repeated measurements to each other (reproducibility).',
-      'Systematic (determinate) error = consistent, one-directional error from a known/fixable cause (e.g. calibration).',
-      'Random (indeterminate) error = unpredictable fluctuation from uncontrollable variables; affects precision.'
+  id:2, title:"Theories of Entrepreneurship",
+  sections:[
+    {h:"2.1 Economic Theories", points:[
+      "Economic Theory: entrepreneurs' motivation grows with economic incentives (profit, tax relief, market opportunity).",
+      "Classical School: free trade, specialization and competition drive entrepreneurship.",
+      "Neo-Classical School: economic issues relate to pure exchange and optimal ratio in a closed economy.",
+      "Austrian market process model: linked to Schumpeter (1934); markets are constantly out of balance and entrepreneurs correct these imbalances."
     ]},
-    {h:'Significant figures & uncertainty', items:[
-      'In addition/subtraction, round the result to the least number of decimal places among the values.',
-      'In multiplication/division, round the result to the least number of significant figures among the values.',
-      'Propagated uncertainty in a sum/difference is found by combining absolute uncertainties; in a product/quotient, by combining relative (%) uncertainties.'
+    {h:"2.2 Psychological Theory", points:[
+      "Entrepreneurial experience grows where a society has individuals with the necessary psychological traits.",
+      "Key traits: having a vision, facing opposition, high need to achieve.",
+      "3 main psychological traits: personality traits, locus of control, need for achievement.",
+      "Personality traits are inborn qualities that make someone naturally an entrepreneur.",
+      "Locus of control: internal (outcome depends on your own actions) vs external (outcome depends on outside events)."
     ]},
-    {h:'Concentration units', items:[
-      'Molarity (M) = moles of solute / litres of solution.',
-      '%(w/v) = grams of solute per 100 mL of solution.',
-      'ppm / ppb = mg/L or µg/L for dilute aqueous solutions (≈ mg or µg of solute per kg of solution, density ≈1).',
-      'Molality (m) = moles of solute / kg of solvent — temperature independent, unlike molarity.'
+    {h:"2.3 Sociological & Anthropological Theories", points:[
+      "Sociological Theory focuses on society — social structures and group relationships shaping entrepreneurs.",
+      "Anthropology studies a community's customs, values and social organization.",
+      "Anthropological Theory: to succeed, the community itself must be examined."
     ]},
-    {h:'Titrimetric analysis', items:[
-      'Equivalence point = point where moles of titrant exactly react stoichiometrically with analyte (theoretical).',
-      'End point = point where the indicator visibly changes colour (practical, close to equivalence point).',
-      'EDTA titrations are used to determine metal ion concentration/hardness via complexometric titration.',
-      'Back titration with EDTA — excess standard EDTA is added, then titrated with a standard metal ion solution to find the unreacted excess.'
+    {h:"2.4 Opportunity-Based & Resource-Based Theories", points:[
+      "Opportunity-Based Theory (Drucker, 1985): entrepreneurs don't cause change, they exploit opportunities change creates.",
+      "Stevenson (1990): entrepreneurial management is pursuing opportunity without regard to resources currently controlled.",
+      "Resource-Based Theory: emphasizes financial, social and human resources.",
+      "Human capital hypothesis: education and experience."
     ]},
-    {h:'Indicators (metallochromic / EDTA)', items:[
-      'Metallochromic indicators change colour when they bind/release a specific metal ion (e.g. Eriochrome Black T).',
-      'Indicator blocking occurs when the indicator binds a metal ion so strongly it will not release it at the end point, giving no visible colour change; auxiliary complexing agents can prevent this.',
-      'Examples of metallochromic indicators: Eriochrome Black T, Murexide, Calmagite, Xylenol Orange.'
+    {h:"2.5 State Withdrawal Theory", points:[
+      "Loss of prestige/social standing can create entrepreneurial aggressiveness, as success invokes societal respect."
     ]}
   ],
-  cards:[
-    ['Accuracy','How close a measurement is to the true value.'],
-    ['Precision','How reproducible repeated measurements are, regardless of accuracy.'],
-    ['Systematic error','A consistent, directional error traceable to a specific cause (e.g. instrument calibration).'],
-    ['Random error','Unpredictable variation from uncontrollable sources; limits precision.'],
-    ['Molarity','Moles of solute per litre of solution (mol/L).'],
-    ['ppb','Parts per billion — µg of solute per litre (or kg) of solution, used for trace concentrations.'],
-    ['Equivalence point','The point in a titration where moles of titrant stoichiometrically equal moles of analyte (theoretical).'],
-    ['End point','The observed point where the indicator changes colour, ideally very close to the equivalence point.'],
-    ['EDTA','Ethylenediaminetetraacetic acid — a hexadentate ligand used to complex metal ions in complexometric titration.'],
-    ['Back titration','Adding a known excess of one reagent, then titrating the unreacted excess with a second standard reagent.'],
-    ['Indicator blocking','When an indicator binds a metal ion too strongly to release it at the end point, so no colour change is seen; fixed with an auxiliary complexing agent.'],
-    ['Sig. figs — addition rule','Round the final answer to the least number of decimal places among the numbers added/subtracted.'],
-    ['Sig. figs — multiplication rule','Round the final answer to the least number of significant figures among the numbers multiplied/divided.']
-  ],
-  quiz:[
-    {q:'A titration result that is highly reproducible but consistently off from the true value shows:',opts:['High accuracy, low precision','High precision, low accuracy','High accuracy and precision','Low accuracy and precision'],a:1,e:'Tight clustering = high precision; being off from the true value = low accuracy — classic systematic error signature.'},
-    {q:'Which type of error is caused by a poorly calibrated instrument?',opts:['Random error','Gross error','Systematic error','Sampling error'],a:2,e:'Calibration issues cause consistent, one-directional (systematic) error.'},
-    {q:'When adding 12.11 mL + 3.4 mL, the answer should be reported to:',opts:['4 sig figs','2 sig figs','1 decimal place','3 decimal places'],a:2,e:'Addition rule: match the least number of decimal places (3.4 has 1 decimal place).'},
-    {q:'The point at which an indicator visibly changes colour during a titration is the:',opts:['Equivalence point','Stoichiometric point','End point','Saturation point'],a:2,e:'The end point is the practically observed colour change; it approximates the true equivalence point.'},
-    {q:'A back titration is most useful when:',opts:['The analyte reacts too slowly or lacks a suitable indicator','The titrant is unstable in air','A blank titration is unnecessary','The reaction is exothermic'],a:0,e:'Back titration bypasses a difficult direct end point by measuring excess reagent instead.'},
-    {q:'EDTA is described as a ligand because it:',opts:['Donates electron pairs to form coordinate bonds with metal ions','Accepts electrons from the metal ion','Is a strong Brønsted acid','Precipitates metal ions'],a:0,e:'EDTA is hexadentate — it donates 6 electron pairs to chelate a metal ion.'},
-    {q:'"Indicator blocking" in EDTA titrations happens when:',opts:['The indicator does not dissolve','The indicator binds the metal too strongly to release it at the end point','Too little indicator is used','The solution is too dilute'],a:1,e:'A blocked indicator stays bound to the metal past the end point, masking the colour change.'},
-    {q:'ppb is most appropriate for expressing:',opts:['Concentrated stock solutions','Trace/very dilute concentrations','Solid mixture ratios','Gas pressures'],a:1,e:'Parts-per-billion is used for extremely dilute analytes such as trace contaminants in water.'}
+  quickfacts:[
+    "Classical School — free trade, specialization, competition.",
+    "Neo-Classical School — pure exchange & optimal ratio in a closed economy.",
+    "3 psychological traits: personality traits, locus of control, need for achievement.",
+    "Internal vs External locus of control — own actions vs outside events.",
+    "Drucker (1985) — Opportunity-Based Theory.",
+    "Stevenson (1990) — pursuit of opportunity regardless of resources controlled.",
+    "Human capital hypothesis: education and experience.",
+    "State Withdrawal Theory — loss of prestige fuels entrepreneurial aggressiveness."
   ]
 },
-
 {
-  id:'food',
-  accent:'--sage',
-  code:'D-CHM 215',
-  title:'Indigenous Food & Beverage Production',
-  desc:'Food additives, fermentation, milling, soaking, and Nigerian food/beverage processing.',
-  notes:[
-    {h:'Food additives & sweeteners', items:[
-      'Preservatives: sodium benzoate, potassium sorbate, sulphur dioxide, nitrites/nitrates.',
-      'Colouring agents: natural (turmeric, beetroot, carotenoids) vs synthetic (tartrazine, sunset yellow).',
-      'Antioxidants prevent oxidation/rancidity: ascorbic acid, BHA, BHT.',
-      'Natural sweeteners: sucrose, glucose, fructose, honey, stevia. Artificial: aspartame, saccharin, sucralose, acesulfame-K.'
+  id:3, title:"The Business Environment",
+  sections:[
+    {h:"3.1 Meaning", points:[
+      "Business environment = the sum of factors affecting and influencing business operations.",
+      "There is a mutual relationship between business and environment — businesses must consider it in decisions.",
+      "3 Nigerian business environments: internal, external, international."
     ]},
-    {h:'Fermentation', items:[
-      'Fermentation = microorganisms convert carbohydrates into alcohol, acids or gases under controlled conditions.',
-      'Yeasts (Saccharomyces cerevisiae) — alcohol fermentation → ethanol + CO₂ (beer, wine, bread).',
-      'Lactic acid bacteria (Lactobacillus, Streptococcus) — sugars → lactic acid (yoghurt, sour milk, fermented vegetables).',
-      'Acetic acid bacteria (Acetobacter aceti) — ethanol → acetic acid (vinegar).',
-      'Moulds (Aspergillus, Rhizopus) — soy sauce, cheese. Bacillus spp. — alkaline fermentation (dawadawa/iru).',
-      'Benefits: preservation, improved nutrition/digestibility, flavour development, detoxification, improved texture.'
+    {h:"3.2 Internal Environment & the 4Ps", points:[
+      "Internal environment = processes the organization can adapt, manipulate, influence or control.",
+      "Organizational objectives: profit maximization, sales maximization, returns on shareholders, customer satisfaction, staff motivation, corporate social responsibility.",
+      "The 4Ps: Product, Price, Promotion, Place.",
     ]},
-    {h:'Grinding, soaking & pasteurisation', items:[
-      'Dry milling → flour/powder (no water); Wet milling → slurry/starch/paste; Cryogenic milling → very low temp, prevents heat damage.',
-      'Soaking mechanisms: diffusion, osmosis, hydration, leaching.',
-      'Soaking types: cold (room temp.), hot (faster hydration), alkaline (lime water, e.g. maize processing), acid (vinegar/citric acid, flavour + preservation).',
-      'Pasteurisation (Louis Pasteur): mild heat kills pathogens & deactivates spoilage enzymes without full sterilisation.'
+    {h:"4Ps Table", table:{
+      headers:["Element","Definition"],
+      rows:[
+        ["Product","Can be tangible goods or services."],
+        ["Price","The monetary value at which a product/service is offered."],
+        ["Promotion","Advertisement is the major promotional tool."],
+        ["Place","Synonymous with distribution of the product."]
+      ]
+    }},
+    {h:"Price Elasticity of Demand", points:[
+      "Perfectly Inelastic: a price change brings no change in quantity demanded.",
+      "Elastic: a price change brings a bigger change in quantity demanded.",
+      "Unitary: a price change leads to an equal change in quantity demanded."
     ]},
-    {h:'Cassava & garri', items:[
-      'Garri production: peeling → washing → grinding → bagging/dewatering → sieving → frying/roasting → cooling → packing.',
-      'Traditional fermentation of cassava reduces cyanide content to safe levels.',
-      'Regional cassava products: Lafun (SW Nigeria), Fufu/Akpu (SE Nigeria), Kpokpogari (mid-west), Abacha (sliced fermented cassava snack).'
+    {h:"3.3 External Environment", points:[
+      "External environment = factors beyond the firm's control.",
+      "Political stability determines business growth or downfall; encourages capital inflow/accumulation.",
+      "Political factors: taxation, politics, trade regulations, security of life/property, corruption.",
+      "Economic environment = the sum of economic policies (e.g. market forces of demand & supply in a capitalist system).",
+      "Cultural factors: values, norms, customs, ethics, goals, accepted behaviour patterns.",
+      "Physical environment: level of generic facilities supporting conversion of ideas into goods/services.",
+      "Ecological environment: safeguarding against excessive pollution and degradation.",
+      "Environmental factors: waste disposal, energy consumption, pollution monitoring.",
+      "Legal environment: the set of laws regulating business practices."
     ]},
-    {h:'Maize, dairy & alcoholic beverages', items:[
-      'Wet milling of maize → corn starch, corn syrup, high-fructose syrup, dextrose, corn oil.',
-      'Dry milling of maize → maize meal, flour, grits, oil.',
-      'Yoghurt: heat milk to 82°C → cool to 43–45°C → add Lactobacillus bulgaricus + Streptococcus thermophilus → ferment 6–10 h.',
-      'Alcoholic beverages: fermentation (yeast, sugars→ethanol, dies above ~15% alcohol) then distillation for spirits.'
-    ]},
-    {h:'Food safety & regulation', items:[
-      'Food poisoning types: bacterial (Salmonella, E. coli, S. aureus, C. botulinum, B. cereus), viral (Norovirus, Hepatitis A), parasitic (Giardia, Entamoeba, Toxoplasma), chemical (pesticides, heavy metals).',
-      'NAFDAC — registers/inspects food & drugs, regulates labelling, fights counterfeits.',
-      'SON — sets national product standards, certifies imports, ensures manufacturing compliance.'
+    {h:"Key Acronyms", table:{
+      headers:["Acronym","Meaning"],
+      rows:[
+        ["EIA","Environmental Impact Assessment"],
+        ["NIPC","Nigerian Investment Promotion Commission"],
+        ["CAC","Corporate Affairs Commission"]
+      ]
+    }},
+    {h:"3.4 International Environment", points:[
+      "International environment = conditions/factors outside national boundaries.",
+      "Businesses rely on it for raw materials, technology, and possibly investors.",
+      "Business associations in Nigeria: NACCIMA, NASME, MAN, etc."
     ]}
   ],
-  cards:[
-    ['Fermentation','Microbial/enzymatic conversion of carbohydrates into alcohol, acids or gases under controlled conditions.'],
-    ['Saccharomyces cerevisiae','Yeast responsible for alcoholic fermentation — converts sugar to ethanol + CO₂.'],
-    ['Lactic acid bacteria','Lactobacillus & Streptococcus — convert sugars to lactic acid; used in yoghurt and sour milk.'],
-    ['Acetobacter aceti','Acetic acid bacteria — converts ethanol to acetic acid; used to make vinegar.'],
-    ['Dry milling','Grinding food materials without water; produces flour/powdered products.'],
-    ['Wet milling','Soaking/grinding with water; produces slurry, starch or paste.'],
-    ['Alkaline soaking','Soaking in an alkaline solution such as lime water — used in maize processing.'],
-    ['Pasteurisation','Mild heat treatment (developed by Louis Pasteur) that kills pathogens and deactivates spoilage enzymes to extend shelf life.'],
-    ['Garri','A high-fibre, detoxified cassava product; made by peeling, washing, grinding, dewatering, sieving, frying, cooling, packing.'],
-    ['Why cassava is fermented','Fermentation reduces the naturally occurring cyanide content to safe levels.'],
-    ['Yoghurt culture temperature','Milk pasteurised at ~82°C, cooled to 43–45°C, then live culture is added and fermented 6–10 hours.'],
-    ['NAFDAC','National Agency for Food and Drug Administration and Control — registers, inspects and regulates food & drug products in Nigeria.'],
-    ['SON','Standards Organisation of Nigeria — sets and certifies national product standards.']
-  ],
-  quiz:[
-    {q:'Which microorganism is primarily responsible for alcoholic fermentation?',opts:['Lactobacillus','Saccharomyces cerevisiae','Acetobacter aceti','Rhizopus spp.'],a:1,e:'Saccharomyces cerevisiae (yeast) converts sugars into ethanol and CO₂.'},
-    {q:'Vinegar is produced through the action of:',opts:['Lactic acid bacteria','Acetic acid bacteria','Yeast','Bacillus spp.'],a:1,e:'Acetobacter aceti oxidises ethanol into acetic acid.'},
-    {q:'Wet milling of maize is mainly used to produce:',opts:['Maize meal and grits','Corn starch and corn syrup','Maize flour only','Roasted maize'],a:1,e:'Wet milling separates starch-rich fractions, yielding corn starch, syrup, dextrose and oil.'},
-    {q:'Alkaline soaking of maize (using lime water) is a step associated with:',opts:['Garri production','Nixtamalization-type maize processing','Vinegar brewing','Yoghurt making'],a:1,e:'Lime-water (alkaline) soaking softens maize and improves nutrient availability.'},
-    {q:'A key reason traditional cassava processing includes fermentation is to:',opts:['Increase starch content','Reduce cyanide (toxin) content','Add colour','Increase fat content'],a:1,e:'Fermentation, boiling and drying together detoxify cassava by lowering cyanogenic compounds.'},
-    {q:'Which organism combination is used in commercial yoghurt fermentation?',opts:['Saccharomyces cerevisiae + Rhizopus','Lactobacillus bulgaricus + Streptococcus thermophilus','Acetobacter aceti + Bacillus spp.','Aspergillus + Lactobacillus'],a:1,e:'These two bacterial species jointly ferment lactose into lactic acid, thickening the milk.'},
-    {q:'Botulism-causing food poisoning is caused by:',opts:['Norovirus','Clostridium botulinum','Giardia lamblia','Aspergillus niger'],a:1,e:'Clostridium botulinum produces a potent neurotoxin causing botulism.'},
-    {q:'In Nigeria, setting national product standards and certifying imports is the role of:',opts:['NAFDAC','SON','Federal Ministry of Health','Port Health Services'],a:1,e:'The Standards Organisation of Nigeria (SON) is responsible for national standards and import certification.'}
+  quickfacts:[
+    "3 Nigerian business environments: Internal, External, International.",
+    "4Ps: Product, Price, Promotion, Place.",
+    "Perfectly Inelastic — no change in quantity demanded despite price change.",
+    "Political stability determines business growth or downfall.",
+    "EIA = Environmental Impact Assessment; NIPC = Nigerian Investment Promotion Commission; CAC = Corporate Affairs Commission.",
+    "Business associations: NACCIMA, NASME, MAN."
   ]
 },
-
 {
-  id:'separation',
-  accent:'--plum',
-  code:'CHM 213',
-  title:'Separation & Purification Techniques',
-  desc:'Extraction, filtration, crystallisation, distillation, chromatography (TLC, Soxhlet, IC).',
-  notes:[
-    {h:'Extraction, filtration, sublimation', items:[
-      'Extraction — removes a material from a medium using two+ immiscible solvents; based on differential solubility (partition).',
-      'Organic phases lighter than water (d<1): ether, benzene, acetone. Denser (d>1): chloroform, tetrachloromethane.',
-      'Filtration — separates particles from a fluid using a medium that only lets the fluid pass; produces a filtrate + residue.',
-      'Sublimation — separates substances that pass directly solid→vapour on heating (e.g. iodine, ammonium chloride, CO₂, anhydrous FeCl₃/AlCl₃) from non-subliming solids.'
+  id:4, title:"Forms of Business Ownership",
+  sections:[
+    {h:"4.1 Overview", points:[
+      "Business = any human activity concerning production and distribution of goods and services.",
+      "The production process is incomplete until the product reaches the final consumer.",
+      "Business value is measured by the quality of its goods and services.",
+      "5 types of ownership: sole proprietorship, partnership, limited liability company, cooperative society, public enterprise."
     ]},
-    {h:'Centrifugation & precipitation', items:[
-      'Centrifugation separates particles by size, shape, density, viscosity and rotor speed — faster than gravity settling/decanting.',
-      'Factors affecting centrifugation: density of sample & solution, temperature/viscosity, displacement distance, rotation speed.',
-      'Precipitation — a dissolved component becomes an insoluble solid when concentration exceeds solubility (e.g. Ag⁺+Cl⁻→AgCl↓).',
-      'Supernatant/supernate = clear liquid remaining above a precipitate or centrifuged solid.'
+    {h:"4.2 Sole Proprietorship", points:[
+      "Also called a 'one-man business' — owned and operated by one person (or with family help).",
+      "Owner bears risk alone, shares profit alone, provides capital alone (unlimited liability).",
+      "Sources of funds: personal savings, monetary gifts, borrowing, loan, profit, credit, hire purchase.",
+      "Does not pay corporate tax — profits are taxed as personal income.",
+      "Death of the owner may end the business (no continuity)."
     ]},
-    {h:'Crystallisation family', items:[
-      'Crystallisation — separates a dissolved solid from solution by reducing solubility (cooling/evaporation).',
-      'Fractional crystallisation — separates solid-solid mixtures based on differing solubility, e.g. KNO₃/KClO₃ or NaCl/NaNO₃; least soluble substance crystallises first.',
-      'Recrystallisation — purifies a solid using a solvent where it is very soluble hot, poorly soluble cold; removes impurities via filtration + cooling.'
+    {h:"4.3 Partnership", points:[
+      "An association of 2–20 persons who co-own a business to share profit and losses.",
+      "Governed by the Partnership Act 1890 — a relation between persons carrying on business in common with a view to profit.",
+      "Regulated by a Deed (Article) of Partnership, which should be in writing.",
+      "Registered under the Registration of Business Act of Nigeria.",
+      "Professions like medical, accountancy, law can exceed 20 partners.",
+      "Majority vote of partnership carries the day.",
+      "2 types: general (ordinary) partnership and limited liability partnership.",
+      "Classifications of partners: dormant/sleeping, secret, silent, normal/quasi.",
+      "Funding: loans, funds from new members, credit, ploughed-back profit, partner contributions.",
+      "Dissolution can be triggered by death, retirement, or bankruptcy of a partner."
     ]},
-    {h:'Distillation', items:[
-      'Simple distillation — separates two miscible liquids with sufficiently different boiling points (e.g. ethanol 78°C vs water 100°C).',
-      'Fractional distillation — separates several miscible liquids using a fractionating column (e.g. crude oil refining: refinery gas→petrol→naphtha→kerosene→diesel→lubricating oil→fuel oil→residue, in order of increasing boiling point).',
-      'Anti-bumping granules prevent explosive/violent boiling.'
+    {h:"4.4 Limited Liability Company", points:[
+      "Also called a joint stock company or registered company.",
+      "A legal entity operated on behalf of owners for profit.",
+      "Regulating laws: Company Ordinance 1912/1917, Company Act 1922, Company Decree 1968 (amended 1972, 1977).",
+      "May be public or private; unlimited, limited by shares, or limited by guarantee.",
+      "A legal personality that can sue and be sued; governed by Memorandum and Articles of Association.",
+      "2 basic types: private company and public company."
     ]},
-    {h:'Chromatography', items:[
-      'Chromatography separates mixture components between a stationary phase and a mobile phase, based on differing migration rates.',
-      'Retention factor Rf = distance travelled by compound ÷ distance travelled by solvent front (0–1).',
-      'Higher Rf = less polar (weaker affinity for stationary phase); lower Rf = more polar (sticks to stationary phase).',
-      'TLC stationary phases: silica gel (acidic) or alumina (basic); common visualising agents: UV light, iodine vapour, KMnO₄, CAM.',
-      'Soxhlet extraction — continuous solid–liquid extraction; solvent is refluxed and siphoned repeatedly through a solid sample (used for lipid/fat content determination).',
-      'Ion chromatography — separation based on differing affinity (Kf/selectivity coefficient) of analyte ions for a charged resin; eluent progressively displaces analytes off the column.'
+    {h:"Private vs Public Company", table:{
+      headers:["Feature","Private Company","Public Company"],
+      rows:[
+        ["Membership","Min 2, max 50 persons","Min 7 shareholders"],
+        ["Structure","Similar to partnership, limited liability","Joint stock company, sells shares/debentures to public"],
+        ["Share Transfer","Not transferable without shareholder approval","Freely transferable"]
+      ]
+    }},
+    {h:"Key Company Documents", points:[
+      "Memorandum of Association — company's relationship with the public (name, objectives, authority).",
+      "Articles of Association — internal regulations (meetings, directors, disputes).",
+      "Prospectus — invites the public to subscribe to shares.",
+      "Certificate of Incorporation — legal proof the company is approved to operate.",
+      "Share Certificate — proof of how many shares a shareholder holds."
     ]},
-    {h:'Purity assessment', items:[
-      'Pure solids show a sharp melting point range (≤3° spread); impure solids melt over a wider, lower range.',
-      'Other purity checks: boiling point, refractive index, single spot on TLC, single peak on GC-MS.'
+    {h:"4.5 Cooperative Society & Public Enterprises", points:[
+      "Cooperative society: promotes members' economic welfare, not profit — buys goods in bulk at reduced prices.",
+      "Cooperative movement started in Rochdale, England, in 1844.",
+      "Public enterprises: business organizations owned/operated by government in the public interest.",
+      "2 types: public/statutory corporations and quasi-government departments.",
+      "A statutory corporation can sue and be sued; quasi-government departments perform government business under ministries."
     ]}
   ],
-  cards:[
-    ['Extraction (definition)','A separation technique removing a component from a medium using two or more immiscible solvents, based on differential solubility.'],
-    ['Sublimation','Direct solid→vapour transition on heating; separates sublimable substances (iodine, NH₄Cl) from non-subliming solids.'],
-    ['Centrifugation','Mechanical separation of particles from a solution based on size, shape, density and rotor speed — faster than gravity settling.'],
-    ['Precipitation','Formation of an insoluble solid when a dissolved compound exceeds its solubility limit.'],
-    ['Fractional crystallisation','Separates solid mixtures by differing solubility; the least soluble component crystallises out first.'],
-    ['Recrystallisation','Purification method exploiting high solubility hot / low solubility cold in a chosen solvent.'],
-    ['Simple distillation','Separates two miscible liquids with clearly different boiling points.'],
-    ['Fractional distillation','Separates several miscible liquids using a fractionating column, ordered by boiling point (e.g. crude oil refining).'],
-    ['Retention factor (Rf)','Distance travelled by the compound ÷ distance travelled by the solvent front; ranges 0–1.'],
-    ['High Rf meaning','Compound is less polar / has weaker affinity for the stationary phase, so it migrates further.'],
-    ['Soxhlet extraction principle','Uses solvent reflux + siphoning to repeatedly extract a solid sample with fresh condensed solvent — efficient, low solvent use.'],
-    ['Ion chromatography basis','Analyte ions compete with eluent ions for a charged resin; differing affinity (Kf) separates them as the eluent displaces them.'],
-    ['Pure solid melting point','Sharp range, no more than about 3 degrees spread.']
-  ],
-  quiz:[
-    {q:'Which technique separates substances that pass directly from solid to vapour on heating?',opts:['Filtration','Sublimation','Precipitation','Centrifugation'],a:1,e:'Sublimation exploits direct solid→vapour transitions, e.g. iodine or ammonium chloride.'},
-    {q:'Fractional crystallisation is best suited for separating:',opts:['Two miscible liquids','Solid–solid mixtures of differing solubility','Gas mixtures','Suspensions only'],a:1,e:'It separates solid mixtures such as KNO₃/KClO₃ based on differing solubility as temperature changes.'},
-    {q:'In TLC, a compound with a HIGH Rf value is generally:',opts:['More polar, strongly retained','Less polar, weakly retained by the stationary phase','Insoluble in the mobile phase','Impossible to visualise'],a:1,e:'High Rf compounds travel far because they have low affinity for the (usually polar) stationary phase.'},
-    {q:'Fractional distillation of crude oil separates fractions mainly by:',opts:['Density only','Differences in boiling point','Colour','Molecular charge'],a:1,e:'Components with the lowest boiling point (e.g. refinery gas) vaporise and separate first, up to residue with the highest boiling point.'},
-    {q:'The principle behind Soxhlet extraction is:',opts:['Single-pass solvent extraction','Continuous solvent reflux and siphoning through the sample','Electrolytic separation','Magnetic separation'],a:1,e:'Fresh condensed solvent repeatedly bathes the sample and siphons back to the flask, concentrating the extract.'},
-    {q:'A supernatant is:',opts:['The solid formed during precipitation','The clear liquid remaining above a precipitate/pellet','The stationary phase in chromatography','The vapour formed during sublimation'],a:1,e:'Supernatant (or supernate) is the clear liquid layer left above a precipitate or centrifuged solid.'},
-    {q:'Which pair of organic solvents is LESS dense than water (d<1)?',opts:['Chloroform and tetrachloromethane','Ether and benzene','Water and ethanol','Mercury and lead'],a:1,e:'Ether, benzene and acetone are less dense than water; chloroform and CCl₄ are denser.'},
-    {q:'A sharp, narrow melting point range for a solid sample indicates:',opts:['High impurity','High purity','It is a liquid','It cannot be identified'],a:1,e:'Pure solids melt over a narrow (≤~3°) range; impurities widen and lower the range.'}
+  quickfacts:[
+    "Sole proprietorship — one-man business, unlimited liability, no corporate tax.",
+    "Partnership Act 1890 — regulates partnerships (2–20 members; more for professions).",
+    "Deed/Article of Partnership — legal document regulating a partnership.",
+    "Limited liability company — governed by Memorandum & Articles of Association.",
+    "Private company: 2–50 members. Public company: min 7 shareholders, freely transferable shares.",
+    "Prospectus — invites the public to subscribe to shares.",
+    "Cooperative movement began in Rochdale, England, 1844.",
+    "Public enterprises: public/statutory corporations and quasi-government departments."
   ]
 },
-
 {
-  id:'minerallab',
-  accent:'--rust',
-  code:'Lab 1',
-  title:'Minerals & Mineral Ores (Practical)',
-  desc:'Physical identification properties of minerals and the concept of a mineral ore.',
-  notes:[
-    {h:'Identifying minerals', items:[
-      'Geologists identify minerals in the field using quick physical tests rather than slow, expensive lab analysis.',
-      'Usually 4–5 combined observations/tests are needed for a confident identification.'
+  id:5, title:"Sources of Business Finance",
+  sections:[
+    {h:"5.1 Meaning & Classification", points:[
+      "Finance is the 'engine wheel' of any business.",
+      "2 sources: internal and external.",
+      "Internal sources: personal savings, trade credit, retained earnings, sale of fixed assets, provision for taxation, provision for depreciation.",
+      "External sources: thrift society, venture capital, angel investing, factoring, overdraft.",
+      "2 types of lease: finance lease and operating lease."
     ]},
-    {h:'Physical properties tested', items:[
-      'Colour — can vary with trace impurities (e.g. chromium turns corundum red = ruby; iron+titanium turns it blue = sapphire).',
-      'Streak — colour of the powdered mineral on an unglazed porcelain plate; more reliable than surface colour.',
-      'Luster — metallic (appears like metal) vs nonmetallic (vitreous/glassy, milky, earthy/dull).',
-      'Hardness — resistance to scratching; test with fingernail (~2), glass plate (~5.5), or the Mohs scale.',
-      'Cleavage & fracture — cleavage = breaks along flat planes of weakness (e.g. mica sheets); fracture = breaks with no preferred plane (e.g. conchoidal fracture in quartz).',
-      'Density/specific gravity — mass per unit volume; e.g. gold 19.3 g/cm³, galena 7.5 g/cm³, silver 10.5 g/cm³, copper 8.9 g/cm³.',
-      'Magnetism — magnetite is strongly magnetic; ilmenite and hematite show weak attraction.',
-      'Reaction to acid — carbonate minerals effervesce (fizz, releasing CO₂) with dilute HCl, e.g. calcite reacts vigorously; dolomite only fizzes once powdered.'
+    {h:"5.2 Funding Institutions in Nigeria", points:[
+      "2 major institutions: development banks and government agencies.",
+      "Development Bank of Nigeria — provides financial support to micro, small and medium enterprises."
     ]},
-    {h:'Mineral ores', items:[
-      'Rocks are aggregates of minerals (typically 5–8 minerals per rock); of >5,000 known mineral species, only some are common.',
-      'A mineral ore is a mineral containing a high enough concentration of a desired element to be economically/feasibly extracted (e.g. bauxite for aluminium).',
-      'Not all minerals are ores — ore minerals form in special geologic situations and are comparatively rare.'
-    ]}
+    {h:"Nigerian Funding Institutions", table:{
+      headers:["Category","Examples"],
+      rows:[
+        ["Development Banks","Bank of Industry, Infrastructure Bank, Federal Mortgage Bank, Bank of Agriculture, Nigeria Export-Import Bank (NEXIM)"],
+        ["Government Agencies","SMEDAN, NDE, NERFUND, SSICS, NPEP, SMEIES, ACGSF, RUFIN"]
+      ]
+    }}
   ],
-  cards:[
-    ['Streak vs colour','Streak (powder colour on porcelain) is more diagnostic/reliable than the surface colour of a mineral.'],
-    ['Metallic luster','A mineral appearance that reflects light like a polished metal, regardless of actual colour.'],
-    ['Mohs hardness reference objects','Fingernail ≈2, copper penny ≈3, glass plate/knife blade ≈5.5, steel file ≈6.5.'],
-    ['Cleavage','Tendency of a mineral to break along flat, repeatable planes of weakness (e.g. mica).'],
-    ['Fracture','Breaking pattern with no preferred plane; e.g. conchoidal (smooth, curved) fracture in quartz.'],
-    ['Density (specific gravity)','Mass per unit volume relative to water; metallic minerals like gold (19.3 g/cm³) have very high density.'],
-    ['Magnetite','A strongly magnetic iron-bearing mineral, unlike weakly attracted ilmenite/hematite.'],
-    ['Acid test','Carbonate minerals (containing CO₃²⁻) effervesce with dilute HCl, releasing CO₂ gas.'],
-    ['Mineral ore (definition)','A mineral containing a high enough concentration of a desired chemical element to make extraction economically feasible.'],
-    ['Are all minerals ores?','No — ore minerals form in special geologic conditions and are comparatively rare, unlike common rock-forming minerals.']
-  ],
-  quiz:[
-    {q:'Why is streak considered more reliable than surface colour for identification?',opts:['It never varies with impurities','Colour of the powder is more consistent than the crystal surface colour','It is easier to see','It requires no equipment'],a:1,e:'Surface colour can shift with trace impurities, but the fine powder streak is typically more consistent for a given mineral.'},
-    {q:'A mineral that scratches glass but is scratched by quartz has a Mohs hardness between:',opts:['1 and 2','2 and 5','6 and 7','9 and 10'],a:2,e:'Text example: potassium feldspar (6) is scratched by quartz (7) but scratches glass — hardness 6–7.'},
-    {q:'Conchoidal fracture (smooth curved breakage) is characteristic of:',opts:['Mica','Quartz','Galena','Calcite'],a:1,e:'Quartz commonly shows conchoidal fracture since it lacks cleavage planes.'},
-    {q:'Which mineral is strongly attracted to a magnet?',opts:['Hematite','Ilmenite','Magnetite','Calcite'],a:2,e:'Magnetite shows strong magnetism; hematite and ilmenite only show weak attraction.'},
-    {q:'Effervescence with dilute HCl indicates the presence of:',opts:['Silicate minerals','Carbonate minerals','Sulphide minerals','Oxide minerals'],a:1,e:'Carbonate minerals release CO₂ gas (fizzing) when they react with dilute acid.'},
-    {q:'A mineral ore is best defined as:',opts:['Any rock found at the surface','A mineral with a high enough concentration of a desired element to extract economically','Any mineral with metallic luster','A synthetic mineral'],a:1,e:'Ores must contain the target element in a high enough, extractable concentration to be economically worthwhile.'}
+  quickfacts:[
+    "Finance — the 'engine wheel' of any business.",
+    "Internal sources: savings, trade credit, retained earnings, sale of fixed assets, tax/depreciation provisions.",
+    "External sources: thrift society, venture capital, angel investing, factoring, overdraft.",
+    "2 lease types: finance lease and operating lease.",
+    "Development banks: Bank of Industry, Infrastructure Bank, Federal Mortgage Bank, Bank of Agriculture, NEXIM.",
+    "Government agencies: SMEDAN, NDE, NERFUND, SSICS, NPEP, SMEIES, ACGSF, RUFIN."
   ]
 },
-
 {
-  id:'ionic',
-  accent:'--clay',
-  code:'CHM 212',
-  title:'Characteristics of Ionic Compounds',
-  desc:'Structure–property relationships in ionic solids: assignment study notes.',
-  notes:[
-    {h:'1. Melting & boiling points', items:[
-      'Ionic compounds form a giant 3-D lattice of alternating cations and anions held by strong, non-directional electrostatic (Coulombic) forces in every direction.',
-      'Breaking the lattice requires overcoming these forces throughout the crystal — this needs a large amount of energy, so melting and boiling points are generally high (e.g. NaCl melts at 801°C).',
-      'Lattice energy ∝ (charge on cation × charge on anion) / (interionic distance) — higher ionic charges and smaller ionic radii give stronger lattices and higher melting/boiling points (e.g. MgO, with 2+/2− ions, melts far higher than NaCl, with 1+/1− ions).'
+  id:6, title:"Creativity, Innovation & Business Planning",
+  sections:[
+    {h:"6.1 Creativity & Innovation", points:[
+      "Creativity = generating the new idea; innovation = the practical work of turning it into something usable.",
+      "Creative people are energetic, smart, playful yet disciplined.",
+      "Creative methods: revolution, synthesis, evolution, reapplication, changing direction.",
+      "Business innovation strategies: internal vs external capability; product vs process; market pull vs technology push; exploration vs exploitation."
     ]},
-    {h:'2. Hardness', items:[
-      'Hardness reflects resistance to scratching/indentation — determined by how strongly the lattice resists local displacement of ions.',
-      'Because every ion is held by strong electrostatic attraction to several neighbours (fixed coordination number), most ionic crystals are hard.',
-      'Hardness generally increases with lattice energy — small, highly charged ions (e.g. MgO) give harder crystals than large, singly charged ions (e.g. KI).'
+    {h:"6.2 Business Development & Opportunity", points:[
+      "Entrepreneurs need passion for what they do and where they can have the biggest impact.",
+      "Business development process: validating your market, financial plan, action plan, clarity/motivation/purpose, growth, network of successful entrepreneurs.",
+      "Opportunity search = scanning the external environment to identify an opportunity.",
+      "Validation = checking/proving the validity or accuracy of an idea, usually by testing willingness to pay."
     ]},
-    {h:'3. Brittleness', items:[
-      'Applying stress can shift one plane of ions relative to an adjacent plane by roughly one ion spacing.',
-      'This shift brings ions of the SAME charge into direct alignment across the slip plane.',
-      'The resulting strong like-charge repulsion splits the crystal apart suddenly along that plane — this is why ionic solids shatter rather than deform, unlike malleable metals (where electron-sea bonding tolerates layer slip).'
+    {h:"Business & Technological Support Institutions", table:{
+      headers:["Acronym","Meaning"],
+      rows:[
+        ["AMEN","Association of Micro Entrepreneurs of Nigeria"],
+        ["NASSI","Nigerian Association of Small Scale Industrialists"],
+        ["MAN","Manufacturers Association of Nigeria"],
+        ["NASME","Nigerian Association of Small and Medium Enterprises"],
+        ["NACCIMA","Nigerian Association of Chambers of Commerce, Industry, Mines and Agriculture"],
+        ["SMEDAN","Small and Medium Development Agency of Nigeria"],
+        ["VEDAN","Vocational Entrepreneurship Development Association Nigeria"],
+        ["TIC","Technology Incubation Centers"],
+        ["FIIRO","Federal Institute of Industrial Research, Oshodi"],
+        ["NOTAP","National Office for Technology Acquisition and Promotion"],
+        ["RMRDC","Raw Material Research and Development Council"]
+      ]
+    }},
+    {h:"6.3 The Business Plan", points:[
+      "A business plan identifies, describes and analyzes a business opportunity (or an ongoing business).",
+      "Components: executive summary, business description, market analysis, organization and management, sales strategies, funding requirements, financial projections."
     ]},
-    {h:'4. Cleavage', items:[
-      'Because the lattice has a regular, repeating geometric arrangement, ionic crystals break preferentially along specific crystallographic planes — this is cleavage.',
-      'The cleavage plane is the direction of weakest resistance to the like-charge-repulsion mechanism described above.',
-      'Example: rock salt (NaCl) cleaves along planes parallel to the cube faces of its lattice, giving cubic cleavage fragments.'
-    ]},
-    {h:'5. Solubility', items:[
-      'Ionic compounds tend to be soluble in polar solvents (especially water) and insoluble in non-polar solvents.',
-      'Polar water molecules surround and stabilise individual ions (ion–dipole/hydration interactions), releasing hydration energy that can outweigh the lattice energy holding the crystal together.',
-      'If lattice energy is very high relative to hydration energy (e.g. small, highly charged ions such as in CaCO₃, BaSO₄), the compound remains poorly soluble.',
-      'Non-polar solvents (e.g. hexane) cannot stabilise separated ions, so ionic solids are essentially insoluble in them.'
-    ]},
-    {h:'6. Electrical conductance', items:[
-      'Solid state — ions are locked in fixed lattice positions and cannot move to carry charge, so solid ionic compounds do NOT conduct electricity.',
-      'Molten (fused) state — the lattice breaks down and ions become mobile, so molten ionic compounds DO conduct (this is exploited in electrolysis, e.g. molten Al₂O₃/cryolite).',
-      'Aqueous solution — dissolved, hydrated ions are free to migrate towards oppositely charged electrodes, so aqueous ionic solutions conduct electricity.'
-    ]},
-    {h:'7. Stereochemistry (lattice geometry)', items:[
-      'Ions pack together to maximise attraction between oppositely charged neighbours and minimise repulsion between like-charged ions — this is governed largely by the radius ratio (r₊/r₋).',
-      'Radius ratio 0.225–0.414 → tetrahedral coordination, coordination number 4 (e.g. ZnS, zinc blende structure).',
-      'Radius ratio 0.414–0.732 → octahedral coordination, coordination number 6 (e.g. NaCl — each Na⁺ surrounded by 6 Cl⁻ and vice versa).',
-      'Radius ratio 0.732–1.0 → cubic coordination, coordination number 8 (e.g. CsCl — each Cs⁺ surrounded by 8 Cl⁻).',
-      'The overall lattice type (rock-salt, caesium chloride, zinc blende, fluorite, etc.) is therefore a direct structural consequence of relative ion sizes and charges.'
+    {h:"Business Plan Components", table:{
+      headers:["Component","Definition"],
+      rows:[
+        ["Executive Summary","A brief overview of the whole business plan."],
+        ["Business Description","Describes the nature of the business and sales/marketing strategy."],
+        ["Market Analysis","Assessing factors and conditions in a market/industry."],
+        ["Sales Forecasting","Projects sales for at least three years."],
+        ["Income Statement","Projects income and expenses."],
+        ["Balance Sheet","Shows assets, liabilities and equity."],
+        ["Sales Strategies","How to sell products/services and increase profit."],
+        ["Financial Projections","The closing section of a business plan."]
+      ]
+    }},
+    {h:"More", points:[
+      "Business growth = the stage where a business expands and seeks options to generate more profit.",
+      "A feasibility study discovers if a business/project is feasible (technical, financial, market factors)."
     ]}
   ],
-  cards:[
-    ['Why ionic solids have high melting points','Strong, non-directional electrostatic forces bind ions throughout a 3-D lattice; breaking this requires a large amount of energy.'],
-    ['Lattice energy trend','Increases with higher ionic charge and smaller interionic distance — drives higher melting/boiling points and hardness.'],
-    ['Why ionic solids are brittle','A small shift of one ion layer aligns like-charged ions, causing strong repulsion that splits the crystal along a plane.'],
-    ['Cleavage in ionic crystals','Preferential breakage along specific crystallographic planes due to the regular, repeating lattice arrangement (e.g. NaCl cubic cleavage).'],
-    ['Solubility rule for ionic solids','Generally soluble in polar solvents (hydration energy competes with lattice energy); insoluble in non-polar solvents.'],
-    ['Conductance — solid vs molten/aqueous','Solid: no conductance (ions fixed). Molten or dissolved: conducts (ions mobile).'],
-    ['Radius ratio rule','r₊/r₋ ratio predicts coordination geometry: 0.225–0.414 → tetrahedral (CN4); 0.414–0.732 → octahedral (CN6); 0.732–1.0 → cubic (CN8).'],
-    ['NaCl coordination number','6:6 — each Na⁺ is surrounded by 6 Cl⁻ ions and vice versa (octahedral coordination).'],
-    ['CsCl coordination number','8:8 — cubic coordination, because Cs⁺ is large relative to Cl⁻ (high radius ratio).'],
-    ['Hydration energy','Energy released when polar water molecules surround and stabilise separated ions — must exceed lattice energy for good solubility.']
+  quickfacts:[
+    "Creative methods: revolution, synthesis, evolution, reapplication, changing direction.",
+    "Business plan components: executive summary, business description, market analysis, organization/management, sales strategies, funding requirements, financial projections.",
+    "Executive summary — brief overview of the whole plan.",
+    "SMEDAN — Small and Medium Development Agency of Nigeria.",
+    "FIIRO — Federal Institute of Industrial Research, Oshodi. NOTAP — National Office for Technology Acquisition and Promotion.",
+    "Feasibility study — determines if a business/project is workable."
+  ]
+},
+{
+  id:7, title:"Human Resource Management",
+  sections:[
+    {h:"7.1 Core HRM Concepts", points:[
+      "HRM = planning, organizing, directing and controlling resources and accomplishing objectives.",
+      "Human resource planning = determining manpower requirements and the means to meet them — a 'double-edged weapon'.",
+      "Job analysis = obtaining pertinent information about a job.",
+      "Job design = deciding the contents/duties of a job and how it's carried out.",
+      "Job description = a written record of duties, responsibilities and requirements of a job.",
+      "Job specification = translates the job description into human qualifications required."
+    ]},
+    {h:"7.2 Recruitment & Selection", points:[
+      "Recruitment = the search for a prospective employee to suit the job specification; attracting people to apply.",
+      "2 sources of recruitment: internal and external.",
+      "Internal recruitment: from within the company (faster, cheaper). External: from outside (fresh skills/perspectives).",
+      "Selection process begins with the job specification.",
+      "Application form obtains info on social, demographic, academic and work-related background.",
+      "An interview is an oral examination of candidates for employment."
+    ]}
   ],
-  quiz:[
-    {q:'Ionic compounds typically have high melting points mainly because:',opts:['They contain covalent bonds','Strong electrostatic forces act throughout a 3-D lattice','They are always metals','Ions are very light'],a:1,e:'The whole lattice must be pulled apart against strong, non-directional Coulombic attraction.'},
-    {q:'Ionic crystals are brittle because applying stress:',opts:['Breaks covalent bonds one at a time','Aligns like-charged ions across a slip plane, causing repulsion and fracture','Melts the crystal locally','Increases lattice energy'],a:1,e:'A small shear brings same-charge ions face to face, and their mutual repulsion shatters the crystal.'},
-    {q:'Which best explains why ionic solids conduct electricity when molten but not as solids?',opts:['Molten ions gain extra charge','In the solid, ions are fixed in the lattice; when molten they become mobile charge carriers','Solids contain no ions at all','Melting removes all ions'],a:1,e:'Conduction requires mobile charge carriers — ions only become free to move once the lattice breaks down (molten or dissolved).'},
-    {q:'A radius ratio between 0.414 and 0.732 typically predicts which coordination number?',opts:['4','6','8','12'],a:1,e:'This range corresponds to octahedral coordination (CN6), as seen in NaCl.'},
-    {q:'Ionic compounds tend to dissolve well in water mainly because:',opts:['Water is non-polar','Polar water molecules hydrate and stabilise separated ions, offsetting lattice energy','Ionic bonds are weak','Water has no dipole'],a:1,e:'Ion–dipole hydration interactions release energy that can overcome the lattice energy holding the solid together.'},
-    {q:'Cleavage in an ionic crystal such as NaCl occurs because:',opts:['The lattice has a regular repeating geometric arrangement, giving preferred fracture planes','NaCl has no lattice structure','The crystal is amorphous','Cleavage is random in all ionic solids'],a:0,e:'Because the ions repeat in a fixed pattern, certain planes are consistently weaker and the crystal cleaves along them.'}
+  quickfacts:[
+    "HRM — planning, organizing, directing, controlling resources & accomplishing objectives.",
+    "Job analysis vs job design vs job description vs job specification — distinct stages of defining a job.",
+    "Recruitment sources: internal and external.",
+    "Selection process begins with the job specification.",
+    "Interview — oral examination of candidates for employment."
+  ]
+},
+{
+  id:8, title:"Marketing Concepts & Types of Entrepreneurs",
+  sections:[
+    {h:"8.1 Core Marketing Concepts", points:[
+      "Marketing occurs when people decide to satisfy needs and wants through exchange.",
+      "Transaction is marketing's unit of measurement.",
+      "Monetary transaction: goods/services traded for money.",
+      "Barter transaction: goods/services traded for other goods/services.",
+      "A product is anything offered to a market to satisfy a need or want.",
+      "Product/marketing managers act as the voice of the customer to the company."
+    ]},
+    {h:"8.2 Qualities of a Successful Entrepreneur", points:[
+      "Drive, thinking ability, aptitude for human relations, communication skills, technical ability.",
+      "A key cause of entrepreneurial business failure: lack of basic accounting knowledge."
+    ]},
+    {h:"8.3 Types of Entrepreneurs", table:{
+      headers:["Type","Description"],
+      rows:[
+        ["Innovative","More interested in introducing new ideas into the market."],
+        ["Imitating","'Copycats' — replicate existing business ideas."],
+        ["Fabian","Very careful and cautious in adopting change."],
+        ["Drone","Do not like changes at all."]
+      ]
+    }}
+  ],
+  quickfacts:[
+    "Transaction — marketing's unit of measurement.",
+    "Monetary transaction (goods for money) vs Barter transaction (goods for goods).",
+    "Successful entrepreneur traits: drive, thinking ability, human relations aptitude, communication skills, technical ability.",
+    "4 types of entrepreneurs: Innovative, Imitating, Fabian, Drone.",
+    "Major cause of business failure: lack of basic accounting knowledge."
+  ]
+},
+{
+  id:9, title:"Bookkeeping & Accounting for Entrepreneurs",
+  sections:[
+    {h:"9.1 Core Concepts", points:[
+      "Bookkeeping = the art of recording financial transactions.",
+      "An accounting system manages income, expenses and other financial activities.",
+      "CAMA = Companies and Allied Matters Act — Nigeria's principal company legislation.",
+      "3 records required by law: balance sheet, statement of profit and loss, cash flow statement."
+    ]},
+    {h:"9.2 Key Financial Records", table:{
+      headers:["Record","Purpose"],
+      rows:[
+        ["Accounts Payable","Records of all creditors of the business."],
+        ["Accounts Receivable","Records of amounts owed to the business (debtors)."],
+        ["Inventory Records","Records the proper stock of the business."],
+        ["Payroll","Contains total salaries of employees."],
+        ["Cash Book","Records every cash inflow and outflow."],
+        ["Fixed Assets Register","Records every asset acquired before/during operations."],
+        ["Bank Reconciliation Statement","Finds the difference between bank and cash balances."],
+        ["Petty Cash Book","Records the petty cash account."]
+      ]
+    }}
+  ],
+  quickfacts:[
+    "Bookkeeping — the art of recording financial transactions.",
+    "CAMA — Companies and Allied Matters Act.",
+    "3 records required by law: balance sheet, statement of profit & loss, cash flow statement.",
+    "Accounts payable (creditors) vs accounts receivable (debtors).",
+    "Bank reconciliation statement — finds the difference between bank and cash balances."
+  ]
+},
+{
+  id:10, title:"Business Ethics & Social Responsibility",
+  sections:[
+    {h:"10.1 The Meaning of Ethics", table:{
+      headers:["Language","Origin / Root Word"],
+      rows:[["French","Etiquette"],["Latin","Ethica or Ethicus"],["Greek","Ethos"]]
+    }},
+    {h:"More on Ethics", points:[
+      "Ethics relates to moral behaviour — what's right or wrong conduct within a society/profession.",
+      "Ethics = a set of principles of conduct that governs a person or group.",
+      "Business ethics = the morality of behaviour in terms of right/wrong in general business practice.",
+      "Tools of ethics = the apparatus of ethical behaviour in an organization (codes of conduct, training, whistleblowing)."
+    ]},
+    {h:"10.2 Core Ethical Values", points:[
+      "Values = moral/guiding principles based on pleasant human attributes.",
+      "Fairness = equality/justice in dealing with people, especially customers.",
+      "Secrecy = issues/information/documents requiring confidentiality.",
+      "Loyalty = allegiance to constituted authority."
+    ]},
+    {h:"10.3 Strategies of Social Responsibility", points:[
+      "4 strategies: reaction, defensive, accommodation, proactive."
+    ]}
+  ],
+  quickfacts:[
+    "Ethics — French: etiquette; Latin: ethica/ethicus; Greek: ethos.",
+    "Business ethics — morality of right/wrong in business practice.",
+    "Core ethical concepts: values, fairness, secrecy, loyalty.",
+    "4 strategies of social responsibility: reaction, defensive, accommodation, proactive."
+  ]
+},
+{
+  id:11, title:"Business Law, Contracts & Intellectual Property",
+  sections:[
+    {h:"11.1 Law & Contract", points:[
+      "Law = a set of rules and regulations with penalties provided for their breach.",
+      "A contract is a legally binding agreement recognizing and governing the rights/duties of the parties.",
+      "3 types of contract: contract of record, simple contract, special contract.",
+      "Elements of a contract: offer and acceptance, consideration, intention to create legal relations, legality of object, legal capacity, reality of consent."
+    ]},
+    {h:"11.2 Agency & Negotiable Instruments", points:[
+      "Law of agency = the legal relationship between a principal and an agent, where the principal authorizes the agent to affect legal relations with a third party.",
+      "A bill of exchange is an unconditional order in writing, signed by the addressee, to pay on demand."
+    ]},
+    {h:"11.3 Intellectual Property", points:[
+      "Intellectual property = creations of the mind: inventions, literary/artistic works, symbols, names, images, designs.",
+      "2 categories: industrial property and copyright.",
+      "Infringement = reproduction/distribution/performance/display of copyrighted work without permission.",
+      "A trademark = any word, phrase or symbol used to distinguish a manufacturer's goods."
+    ]},
+    {h:"Intellectual Property Categories", table:{
+      headers:["Category","Covers"],
+      rows:[
+        ["Industrial Property","Inventions, trademarks, industrial designs, geographic indications of source."],
+        ["Copyright","Literary and artistic works — drawings, paintings, photographs, sculptures, architectural designs."]
+      ]
+    }}
+  ],
+  quickfacts:[
+    "3 types of contract: contract of record, simple contract, special contract.",
+    "Elements of contract: offer & acceptance, consideration, intention to create legal relations, legality of object, legal capacity, reality of consent.",
+    "Law of agency — principal/agent relationship affecting dealings with third parties.",
+    "2 categories of intellectual property: industrial property and copyright.",
+    "Infringement — unauthorized reproduction/use of copyrighted work."
+  ]
+},
+{
+  id:12, title:"Family Business, Social Entrepreneurship & Growth",
+  sections:[
+    {h:"12.1 Family Business", points:[
+      "A family business is mainly owned by members of a single family, run by family or non-family managers.",
+      "The family typically holds controlling interest and dictates what happens in the enterprise.",
+      "A family-influenced start-up: family ownership, vision and/or leadership shape strategic intent and decisions.",
+      "Family private cash can enforce discipline and accountability.",
+      "Advantage: high concern for continuity, quality and value.",
+      "Key challenge: assuming past success guarantees future success.",
+      "Nigeria operates within an extended family system, shaping how family enterprises are financed/managed."
+    ]},
+    {h:"12.2 Social Entrepreneurship & Women in Entrepreneurship", points:[
+      "Social entrepreneurship = applying innovative, enterprising approaches to solve social problems (illiteracy, homelessness, deprivation).",
+      "It fights social injustice/inequality, reduces poverty, enhances employment, eliminates marginalization.",
+      "Value creation links to innovation, financial credibility, welfare, human rights, education.",
+      "Women entrepreneurship = women who initiate, organize and operate a business enterprise, seeking economic independence.",
+      "Barriers: socio-cultural factors, limited access to finance, restricted access to ideas/technology.",
+      "Support strategies: equal property/inheritance rights, mentoring/coaching, access to public support services."
+    ]},
+    {h:"12.3 Business Growth, Mergers & Transition", points:[
+      "Internal growth = ploughing back profits. External growth = mergers, importing/exporting, acquisitions.",
+      "Innovation is widely regarded as the greatest source of sustained business growth.",
+      "Paths to growth: exporting, innovation, franchising.",
+      "Transition from start-up to growth requires structures matching the enterprise's emerging stages.",
+      "Miller & Friesen's life-cycle model: Birth, Growth, Maturity, Revival, Decline.",
+      "A business plan is a blueprint, continually modified as conditions change.",
+      "Firms merge/acquire to gain brand names, licences, patents, competent staff, economies of scale, or to eliminate a competitor."
+    ]}
+  ],
+  quickfacts:[
+    "Family business — mainly owned by one family; family holds controlling interest.",
+    "Key family-business risk: assuming past success guarantees future success.",
+    "Social entrepreneurship — solving social problems (poverty, illiteracy, marginalization).",
+    "Women entrepreneurship — women who initiate, organize and operate businesses independently.",
+    "Internal growth (plough back profit) vs External growth (mergers, importing/exporting).",
+    "Miller & Friesen life-cycle: Birth, Growth, Maturity, Revival, Decline.",
+    "Innovation — the greatest source of sustained business growth."
   ]
 }
-
 ];
 
-/* =========================================================
-   STATE + STORAGE
-   ========================================================= */
-const LS_KEY = 'chembench_progress_v1';
-function loadProgress(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; }
-}
-function saveProgress(p){ localStorage.setItem(LS_KEY, JSON.stringify(p)); }
-let progress = loadProgress();
+/* ======================= FLASHCARDS ======================= */
+const FLASHCARDS = [
+ {ch:1, term:"Schumpeter (1934)", def:"Defined entrepreneurship as a 'new combination' of resources — a new product, method, market, raw material source, or industry reorganization."},
+ {ch:1, term:"5 characteristics of entrepreneurship", def:"Risk bearing, managerial skill, value added and value created, result-oriented activities, innovation."},
+ {ch:1, term:"4 objectives of entrepreneurship", def:"Produce goods/services, reduce poverty, create employment, enhance GDP & per capita income."},
+ {ch:1, term:"Entrepreneur (definition)", def:"A person who designs a business idea and transforms it into goods/services using available resources, aiming for profit."},
+ {ch:1, term:"Entrepreneur traits", def:"Visionary, optimism, passion, mentorship, confidence, teamwork."},
+ {ch:2, term:"Classical School", def:"Free trade, specialization and competition are the major drivers of entrepreneurship."},
+ {ch:2, term:"Neo-Classical School", def:"Economic issues affecting entrepreneurship relate to pure exchange and optimal ratio in a closed economy."},
+ {ch:2, term:"3 psychological traits", def:"Personality traits, locus of control, need for achievement."},
+ {ch:2, term:"Internal locus of control", def:"The belief that the outcome of your actions is contingent on what you do."},
+ {ch:2, term:"External locus of control", def:"The belief that outcomes are caused by events outside your personal control."},
+ {ch:2, term:"Drucker (1985)", def:"Origin of the Opportunity-Based Theory — entrepreneurs don't cause change, they exploit the opportunities change creates."},
+ {ch:2, term:"Stevenson (1990)", def:"Concluded the hub of entrepreneurial management is the pursuit of opportunity without regard to resources currently controlled."},
+ {ch:2, term:"Human capital hypothesis", def:"Two underlying factors: education and experience."},
+ {ch:2, term:"State Withdrawal Theory", def:"Loss of prestige can create entrepreneurial aggressiveness, since a successful entrepreneur invokes societal respect."},
+ {ch:3, term:"Business environment", def:"The summation of factors that affect and influence the operation of business activities."},
+ {ch:3, term:"3 Nigerian business environments", def:"Internal, external, and international business environment."},
+ {ch:3, term:"The 4Ps", def:"Product, Price, Promotion, Place — the internal environment factors an organization can manipulate."},
+ {ch:3, term:"Perfectly Inelastic demand", def:"A change in price does not bring about any change in quantity demanded."},
+ {ch:3, term:"Elastic demand", def:"A change in price brings about a bigger/greater change in quantity demanded."},
+ {ch:3, term:"Unitary demand", def:"A change in price leads to an equal amount of change in quantity demanded."},
+ {ch:3, term:"EIA", def:"Environmental Impact Assessment."},
+ {ch:3, term:"NIPC", def:"Nigerian Investment Promotion Commission."},
+ {ch:3, term:"CAC", def:"Corporate Affairs Commission."},
+ {ch:4, term:"Sole proprietorship", def:"A 'one-man business' — owned and operated by one person, who bears risk, shares profit, and provides capital alone (unlimited liability, no corporate tax)."},
+ {ch:4, term:"Partnership Act 1890", def:"Defines partnership as the relation between persons carrying on a business in common with a view of making profit (2–20 members, more for professions)."},
+ {ch:4, term:"Deed (Article) of Partnership", def:"The legal document regulating a partnership; should be presented in written form."},
+ {ch:4, term:"Classifications of partners", def:"Dormant/sleeping partner, secret partner, silent partner, normal/quasi partner."},
+ {ch:4, term:"Limited liability company", def:"Also called a joint stock or registered company — a legal entity that can sue and be sued, governed by its Memorandum and Articles of Association."},
+ {ch:4, term:"Memorandum of Association", def:"A document containing primary information about the company's relationship with the public (name, objectives, authority)."},
+ {ch:4, term:"Articles of Association", def:"A document containing information about the internal regulations of the company."},
+ {ch:4, term:"Prospectus", def:"A document for inviting the general public to subscribe to the company's shares."},
+ {ch:4, term:"Certificate of Incorporation", def:"Legally shows a company has been approved to operate as an entity."},
+ {ch:4, term:"Cooperative society", def:"A group promoting members' economic welfare (not profit); buys goods in bulk to sell to members at reduced prices. Started in Rochdale, England, 1844."},
+ {ch:4, term:"Public enterprise", def:"A business organization owned and operated by government in the public interest — public/statutory corporations or quasi-government departments."},
+ {ch:5, term:"Internal sources of finance", def:"Personal savings, trade credit, retained earnings, sale of fixed assets, provision for taxation, provision for depreciation."},
+ {ch:5, term:"External sources of finance", def:"Thrift society, venture capital, angel investing, factoring, overdraft."},
+ {ch:5, term:"Finance lease vs Operating lease", def:"A finance lease transfers most risks/benefits of ownership to the lessee; an operating lease is closer to a short-term rental."},
+ {ch:5, term:"Development Bank of Nigeria", def:"A financial organization providing support to micro, small and medium scale enterprises, usually via participating commercial/microfinance banks."},
+ {ch:5, term:"SMEDAN", def:"Small and Medium Development Agency of Nigeria."},
+ {ch:6, term:"Creative methods", def:"Revolution, synthesis, evolution, reapplication, changing direction."},
+ {ch:6, term:"Opportunity search", def:"Scanning the external environment of a business to identify an opportunity."},
+ {ch:6, term:"Validation", def:"Checking or proving the validity/accuracy of a business idea, typically by testing customers' willingness to pay."},
+ {ch:6, term:"FIIRO", def:"Federal Institute of Industrial Research, Oshodi."},
+ {ch:6, term:"NOTAP", def:"National Office for Technology Acquisition and Promotion."},
+ {ch:6, term:"Business plan (definition)", def:"A document in which a business opportunity — or a business already underway — is identified, described and analyzed."},
+ {ch:6, term:"Business plan components", def:"Executive summary, business description, market analysis, organization and management, sales strategies, funding requirements, financial projections."},
+ {ch:6, term:"Feasibility study", def:"Designed to discover if a business or project is feasible, examining technical, financial and market factors."},
+ {ch:7, term:"Human Resource Management (HRM)", def:"The planning, organizing, directing and controlling of resources, and the accomplishment of objectives."},
+ {ch:7, term:"Human resource planning", def:"The process of determining manpower requirements and the means for meeting those plans — called a 'double-edged weapon'."},
+ {ch:7, term:"Job analysis", def:"A procedure by which pertinent information is obtained about a job."},
+ {ch:7, term:"Job description", def:"A written record of the duties, responsibilities and requirements of a particular job."},
+ {ch:7, term:"Job specification", def:"Translates the job description into the human qualifications required for successful job performance."},
+ {ch:7, term:"Recruitment", def:"The search for a prospective employee to suit the job requirements as represented by the job specification; attracting people to apply for a job."},
+ {ch:8, term:"Transaction", def:"Marketing's unit of measurement."},
+ {ch:8, term:"Monetary transaction", def:"Trading goods and services in return for money."},
+ {ch:8, term:"Barter transaction", def:"Trading goods and services for other goods and services."},
+ {ch:8, term:"Qualities of a successful entrepreneur", def:"Drive, thinking ability, aptitude for human relations, communication skills, technical ability."},
+ {ch:8, term:"Innovative entrepreneur", def:"More interested in introducing new ideas into the market."},
+ {ch:8, term:"Imitating entrepreneur", def:"A 'copycat' who replicates existing business ideas."},
+ {ch:8, term:"Fabian entrepreneur", def:"Very careful and cautious in adopting change."},
+ {ch:8, term:"Drone entrepreneur", def:"Does not like changes at all."},
+ {ch:9, term:"Bookkeeping", def:"The art of recording financial transactions."},
+ {ch:9, term:"CAMA", def:"Companies and Allied Matters Act — the principal legislation governing companies in Nigeria."},
+ {ch:9, term:"3 records required by law", def:"Balance sheet, statement of profit and loss, and cash flow statement."},
+ {ch:9, term:"Accounts payable", def:"Records of all creditors of the business."},
+ {ch:9, term:"Accounts receivable", def:"Records of amounts owed to the business (debtors) — opposite of accounts payable."},
+ {ch:9, term:"Bank reconciliation statement", def:"Prepared to find out the difference between the bank balance and the cash balance."},
+ {ch:10, term:"Ethics (Greek root)", def:"Ethos."},
+ {ch:10, term:"Business ethics", def:"The morality of behaviour in terms of what is right and wrong in general business practice."},
+ {ch:10, term:"Fairness (as an ethical value)", def:"Equality or justice in dealing with people, especially customers."},
+ {ch:10, term:"Loyalty (as an ethical value)", def:"Allegiance to constituted authority."},
+ {ch:10, term:"4 strategies of social responsibility", def:"Reaction, defensive, accommodation, proactive."},
+ {ch:11, term:"Contract", def:"A legally binding agreement which recognizes and governs the rights and duties of the parties to the agreement."},
+ {ch:11, term:"3 types of contract", def:"Contract of record, simple contract, special contract."},
+ {ch:11, term:"Elements of a contract", def:"Offer and acceptance, consideration, intention to create legal relations, legality of object, legal capacity, reality of consent."},
+ {ch:11, term:"Law of agency", def:"The legal relationship between a principal and an agent, where the principal authorizes the agent to affect his legal relationship with a third party."},
+ {ch:11, term:"Bill of exchange", def:"An unconditional order in writing, signed by the person to whom it is addressed, to pay on demand."},
+ {ch:11, term:"2 categories of intellectual property", def:"Industrial property and copyright."},
+ {ch:11, term:"Infringement", def:"The reproduction, distribution, performance or display of copyrighted work without the permission of the copyright owner."},
+ {ch:11, term:"Trademark", def:"Any word, phrase or symbol used by a manufacturer to distinguish their goods from the goods of others."},
+ {ch:12, term:"Family business", def:"A venture mainly owned by members of a single family, who typically hold the controlling interest."},
+ {ch:12, term:"Key family-business risk", def:"Assuming that past success will guarantee future success."},
+ {ch:12, term:"Social entrepreneurship", def:"Applying innovative, enterprising approaches to solve pressing social problems such as illiteracy, homelessness and deprivation."},
+ {ch:12, term:"Women entrepreneurship", def:"Women who initiate, organize and operate a business enterprise, accepting challenging roles to become economically independent."},
+ {ch:12, term:"Internal growth", def:"Where owners plough back profits into the business."},
+ {ch:12, term:"External growth", def:"Growth achieved through mergers, importing/exporting, and acquisitions."},
+ {ch:12, term:"Miller & Friesen's life-cycle model", def:"Five stages: Birth, Growth, Maturity, Revival, Decline."},
+ {ch:12, term:"Greatest source of sustained business growth", def:"Innovation."}
+];
 
-let state = { courseId: COURSES[0].id, tab:'notes', cardFlip:{}, quizIndex:0, quizScore:0, quizAnswered:false };
+/* ======================= QUIZ QUESTIONS ======================= */
+const QUIZ = [
+ {ch:1,q:"Who defined entrepreneurship as a 'new combination' of resources?",o:["Drucker","Schumpeter (1934)","Stevenson (1990)","Csikszentmihalyi"],a:1,e:"Schumpeter (1934) coined the 'new combination' definition, covering new products, methods, markets, raw material sources, or industry reorganization."},
+ {ch:1,q:"Which of these is NOT listed as a characteristic of entrepreneurship?",o:["Risk bearing","Managerial skill","Advertising monopoly","Innovation"],a:2,e:"The 5 characteristics are risk bearing, managerial skill, value added/created, result-oriented activities, and innovation."},
+ {ch:1,q:"Which is NOT one of the four objectives of entrepreneurship?",o:["Reduce poverty level","Create employment opportunities","Enhance GDP and per capita income","Maximize government tax revenue only"],a:3,e:"The objectives are producing goods/services, reducing poverty, creating employment, and enhancing GDP & per capita income."},
+ {ch:1,q:"An entrepreneur is best described as all of the following EXCEPT:",o:["An innovator","An idea generator","A resource organizer","A passive shareholder"],a:3,e:"An entrepreneur is an innovator, idea generator, resource organizer, and manager of the business — not a passive shareholder."},
+ {ch:2,q:"Which school theorized that free trade, specialization and competition drive entrepreneurship?",o:["Neo-Classical School","Classical School","Austrian School","Sociological School"],a:1,e:"The Classical School theorized that free trade, specialization and competition are the major drivers of entrepreneurship."},
+ {ch:2,q:"The Neo-Classical School relates economic issues affecting entrepreneurship to:",o:["Pure exchange and optimal ratio in a closed economy","Community customs and values","Loss of social prestige","Locus of control"],a:0,e:"The Neo-Classical School opined that economic issues could be related to pure exchange and optimal ratio in a closed economy."},
+ {ch:2,q:"Which are the 3 main psychological traits in the Psychological Theory of Entrepreneurship?",o:["Vision, teamwork, mentorship","Personality traits, locus of control, need for achievement","Passion, confidence, optimism","Risk bearing, managerial skill, innovation"],a:1,e:"The 3 main psychological traits are personality traits, locus of control, and need for achievement."},
+ {ch:2,q:"A person who believes business outcomes are mostly due to their own actions has:",o:["External locus of control","Internal locus of control","A drone personality","An anthropological mindset"],a:1,e:"Internal locus of control means the outcome of one's actions is seen as contingent on what one does."},
+ {ch:2,q:"The Opportunity-Based Theory of entrepreneurship is traced to:",o:["Schumpeter","Drucker (1985)","Stevenson (1990)","Miller & Friesen"],a:1,e:"Drucker (1985) is the source of the Opportunity-Based Theory — entrepreneurs exploit opportunities created by change."},
+ {ch:2,q:"Stevenson (1990) concluded that the hub of entrepreneurial management is:",o:["Avoiding all risk","The pursuit of opportunity without regard to resources currently controlled","Strict adherence to tradition","Following government policy only"],a:1,e:"Stevenson (1990) said entrepreneurial management centers on pursuing opportunity regardless of resources currently controlled."},
+ {ch:2,q:"The two factors underlying the human capital hypothesis are:",o:["Education and experience","Capital and labour","Risk and reward","Culture and law"],a:0,e:"The human capital hypothesis rests on education and experience."},
+ {ch:2,q:"The State Withdrawal Theory suggests that entrepreneurial aggressiveness can be fueled by:",o:["Government subsidies","Loss of social prestige","High interest rates","New technology"],a:1,e:"Loss of prestige can create entrepreneurial aggressiveness, since a successful entrepreneur invokes respect from society."},
+ {ch:3,q:"Business environment refers to:",o:["Only government regulations","The summation of factors that affect and influence business operations","Only competitor behaviour","Only the physical office location"],a:1,e:"Business environment is the sum of all factors — internal, external and international — that affect business operations."},
+ {ch:3,q:"Which of these makes up the 4Ps of the marketing mix?",o:["Product, Price, Promotion, Place","Product, Profit, Promotion, People","Price, Profit, Place, Plan","Product, Price, People, Process"],a:0,e:"The 4Ps are Product, Price, Promotion, and Place."},
+ {ch:3,q:"When a change in price causes NO change in quantity demanded, demand is:",o:["Elastic","Unitary","Perfectly inelastic","Perfectly elastic"],a:2,e:"Perfectly inelastic demand means a price change brings about no change in quantity demanded."},
+ {ch:3,q:"What does EIA stand for?",o:["Economic Investment Agency","Environmental Impact Assessment","Enterprise Investment Act","External Industry Analysis"],a:1,e:"EIA stands for Environmental Impact Assessment."},
+ {ch:3,q:"NIPC stands for:",o:["Nigerian Investment Promotion Commission","National Industrial Policy Council","Nigerian Institute of Public Companies","National Investment and Planning Corporation"],a:0,e:"NIPC is the Nigerian Investment Promotion Commission."},
+ {ch:3,q:"Which of these is a Nigerian business association?",o:["NACCIMA","NASA","FIFA","WHO"],a:0,e:"NACCIMA (Nigerian Association of Chambers of Commerce, Industry, Mines and Agriculture) is a Nigerian business association, alongside NASME and MAN."},
+ {ch:4,q:"A 'one-man business' where the owner bears risk, profit and capital alone is a:",o:["Partnership","Cooperative society","Sole proprietorship","Public enterprise"],a:2,e:"A sole proprietorship is owned and operated by one person who bears risk, profit and capital alone, with unlimited liability."},
+ {ch:4,q:"The Partnership Act that defines and regulates partnerships was passed in:",o:["1912","1890","1968","1985"],a:1,e:"The Partnership Act 1890 defines a partnership as persons carrying on business in common with a view to profit."},
+ {ch:4,q:"The legal document regulating a partnership, which should be in written form, is called the:",o:["Prospectus","Deed (Article) of Partnership","Memorandum of Association","Certificate of Incorporation"],a:1,e:"The Deed (or Article) of Partnership is the legal document regulating a partnership."},
+ {ch:4,q:"How many members maximum can an ordinary Nigerian partnership have (excluding professions)?",o:["10","15","20","50"],a:2,e:"A partnership can have 2 to 20 members, except in professions like law, medicine or accountancy where it may exceed 20."},
+ {ch:4,q:"Which document invites the general public to subscribe to a company's shares?",o:["Articles of Association","Prospectus","Share Certificate","Memorandum of Association"],a:1,e:"A prospectus is the document used to invite the public to subscribe to a company's shares."},
+ {ch:4,q:"A private company must have a minimum of how many members?",o:["1","2","7","50"],a:1,e:"A private company requires a minimum of 2 members and a maximum of 50."},
+ {ch:4,q:"A public company requires a minimum of how many shareholders?",o:["2","5","7","10"],a:2,e:"A public company must have not less than 7 shareholders."},
+ {ch:4,q:"The cooperative movement began in:",o:["Lagos, Nigeria, 1960","Rochdale, England, 1844","New York, USA, 1900","Accra, Ghana, 1957"],a:1,e:"The cooperative movement started in Rochdale, England, in 1844."},
+ {ch:4,q:"A cooperative society mainly aims to:",o:["Maximize shareholder profit","Promote members' economic welfare","Attract foreign investors","Dominate the stock market"],a:1,e:"A cooperative society does not aim at making profit, but at maximizing members' welfare."},
+ {ch:5,q:"Which of these is an INTERNAL source of business finance?",o:["Venture capital","Retained earnings","Angel investing","Overdraft"],a:1,e:"Retained earnings is an internal source; venture capital, angel investing and overdraft are external sources."},
+ {ch:5,q:"Which of these is an EXTERNAL source of business finance?",o:["Personal savings","Trade credit","Factoring","Sale of fixed assets"],a:2,e:"Factoring is an external source of finance, along with thrift society, venture capital, angel investing, and overdraft."},
+ {ch:5,q:"The two types of lease mentioned are:",o:["Short lease and long lease","Finance lease and operating lease","Public lease and private lease","Fixed lease and flexible lease"],a:1,e:"The two types of lease are finance leases and operating leases."},
+ {ch:5,q:"Which bank provides export-related financial support in Nigeria?",o:["Bank of Agriculture","Nigeria Export-Import Bank (NEXIM)","Federal Mortgage Bank","Bank of Industry"],a:1,e:"NEXIM (Nigeria Export-Import Bank) is one of Nigeria's development banks, focused on export-related finance."},
+ {ch:6,q:"Which of these is one of the five creative methods listed?",o:["Reapplication","Delegation","Elimination","Regulation"],a:0,e:"The 5 creative methods are revolution, synthesis, evolution, reapplication, and changing direction."},
+ {ch:6,q:"Scanning the external environment to identify a business opportunity is called:",o:["Validation","Feasibility study","Opportunity search","Financial projection"],a:2,e:"Opportunity search involves scanning the external environment to identify an opportunity."},
+ {ch:6,q:"FIIRO stands for:",o:["Federal Institute of Industrial Research, Oshodi","Federal Institute for Innovation and Research Operations","Federal Industry and Investment Regulatory Office","Federal Institute of Industrial Relations"],a:0,e:"FIIRO is the Federal Institute of Industrial Research, Oshodi."},
+ {ch:6,q:"Which business plan component gives a brief overview of the whole plan?",o:["Market analysis","Executive summary","Balance sheet","Sales strategies"],a:1,e:"The executive summary is a brief overview of the entire business plan."},
+ {ch:6,q:"A study designed to discover if a business or project is workable is called a:",o:["Feasibility study","Prospectus","Job analysis","Bank reconciliation"],a:0,e:"A feasibility study examines technical, financial and market factors to determine if a project is feasible."},
+ {ch:7,q:"HRM stands for the planning, organizing, directing and controlling of resources and:",o:["Maximizing shareholder wealth only","The accomplishment of objectives","Reducing all staff costs","Avoiding recruitment"],a:1,e:"HRM is the planning, organizing, directing and controlling of resources and the accomplishment of objectives."},
+ {ch:7,q:"A written record of the duties, responsibilities and requirements of a job is called a:",o:["Job specification","Job analysis","Job description","Job design"],a:2,e:"A job description is a written record of the duties, responsibilities and requirements of a particular job."},
+ {ch:7,q:"Which document translates the job description into required human qualifications?",o:["Job design","Job specification","Application form","Prospectus"],a:1,e:"Job specification translates the job description into the human qualifications required for successful job performance."},
+ {ch:7,q:"The selection process for hiring begins with the:",o:["Interview","Job specification","Application form","Job description"],a:1,e:"The selection process begins with the job specification, which defines the qualities being screened for."},
+ {ch:8,q:"What is marketing's unit of measurement?",o:["Profit","Transaction","Revenue","Market share"],a:1,e:"Transaction is marketing's unit of measurement — the concept leads to the concept of marketing."},
+ {ch:8,q:"Trading goods for other goods, without money involved, is called a:",o:["Monetary transaction","Barter transaction","Credit transaction","Cash transaction"],a:1,e:"A barter transaction involves trading goods and services for other goods and services."},
+ {ch:8,q:"A major cause of entrepreneurial business failure is:",o:["Too much innovation","Lack of basic accounting knowledge","Excess customer loyalty","Overly cautious marketing"],a:1,e:"A key reason entrepreneurial businesses fail is a lack of basic accounting knowledge."},
+ {ch:8,q:"An entrepreneur who is a 'copycat', replicating existing business ideas, is called:",o:["Innovative","Imitating","Fabian","Drone"],a:1,e:"Imitating entrepreneurs are referred to as 'copycats' who replicate existing business ideas."},
+ {ch:8,q:"An entrepreneur who does not like change at all is called a:",o:["Drone entrepreneur","Innovative entrepreneur","Fabian entrepreneur","Social entrepreneur"],a:0,e:"Drone entrepreneurs are entrepreneurs who do not like changes at all."},
+ {ch:9,q:"Bookkeeping is best defined as:",o:["The art of recording financial transactions","The process of hiring accountants","A type of business loan","A marketing strategy"],a:0,e:"Bookkeeping is the art of recording financial transactions."},
+ {ch:9,q:"CAMA stands for:",o:["Companies and Allied Matters Act","Corporate Accounting and Management Act","Company Asset Management Authority","Certified Accounting and Marketing Association"],a:0,e:"CAMA is the Companies and Allied Matters Act, Nigeria's principal company legislation."},
+ {ch:9,q:"Which of these is NOT one of the 3 records an entrepreneur must keep by law?",o:["Balance sheet","Statement of profit and loss","Cash flow statement","Marketing plan"],a:3,e:"The 3 records required by law are the balance sheet, statement of profit and loss, and cash flow statement — not a marketing plan."},
+ {ch:9,q:"Records of amounts owed TO the business by customers are called:",o:["Accounts payable","Accounts receivable","Petty cash book","Payroll"],a:1,e:"Accounts receivable records amounts owed to the business (debtors) — the opposite of accounts payable (creditors)."},
+ {ch:9,q:"A statement prepared to find the difference between bank and cash balances is called:",o:["Payroll","Fixed assets register","Bank reconciliation statement","Inventory record"],a:2,e:"The bank reconciliation statement is prepared to find out the difference between the bank and cash balance."},
+ {ch:10,q:"The word 'ethics' comes from the Greek root:",o:["Etiquette","Ethos","Ethica","Moralis"],a:1,e:"Ethics derives from the Greek 'ethos'; 'etiquette' is the French root, and 'ethica/ethicus' is the Latin root."},
+ {ch:10,q:"The morality of behaviour in terms of right/wrong in general business practice is called:",o:["Business law","Business ethics","Business plan","Business environment"],a:1,e:"Business ethics refers to the morality of behaviour in terms of what is right and wrong in general business practice."},
+ {ch:10,q:"Allegiance to constituted authority is an example of which ethical value?",o:["Fairness","Secrecy","Loyalty","Validation"],a:2,e:"Loyalty emphasizes allegiance to constituted authority."},
+ {ch:10,q:"Which of these is NOT one of the four strategies of social responsibility?",o:["Reaction","Defensive","Accommodation","Termination"],a:3,e:"The 4 strategies of social responsibility are reaction, defensive, accommodation, and proactive."},
+ {ch:11,q:"A legally binding agreement that governs the rights and duties of parties is called a:",o:["Contract","Prospectus","Deed of partnership","Trademark"],a:0,e:"A contract is a legally binding agreement which recognizes and governs the rights and duties of the parties."},
+ {ch:11,q:"Which of these is NOT one of the 3 types of contract listed?",o:["Contract of record","Simple contract","Special contract","Verbal contract"],a:3,e:"The 3 types listed are contract of record, simple contract, and special contract."},
+ {ch:11,q:"Which is an element of a valid contract?",o:["Offer and acceptance","Advertisement","Job specification","Feasibility study"],a:0,e:"Offer and acceptance is one of the elements of a contract, along with consideration, intention to create legal relations, legality of object, legal capacity, and reality of consent."},
+ {ch:11,q:"The legal relationship where a principal authorizes an agent to affect legal relations with a third party is called:",o:["Law of agency","Law of contract","Intellectual property law","Partnership law"],a:0,e:"Law of agency is the legal relationship between principal and agent, authorizing the agent to affect the principal's legal relations with a third party."},
+ {ch:11,q:"Intellectual property is divided into two categories:",o:["Trademark and patent","Industrial property and copyright","Contract law and agency law","Public and private property"],a:1,e:"The two categories of intellectual property are industrial property and copyright."},
+ {ch:11,q:"Using copyrighted work without the owner's permission is called:",o:["Validation","Infringement","Franchising","Feasibility"],a:1,e:"Infringement is the reproduction, distribution, performance or display of copyrighted work without permission."},
+ {ch:12,q:"In a family business, control typically rests with:",o:["The government","The family holding controlling interest","External shareholders only","A cooperative society"],a:1,e:"In a family business, the family typically holds the controlling interest and dictates what happens in the enterprise."},
+ {ch:12,q:"A key challenge/risk of family-owned businesses is:",o:["Too much external funding","Assuming past success guarantees future success","Excessive government regulation","Lack of family involvement"],a:1,e:"A key challenge of family-owned businesses is assuming that past success will guarantee future success."},
+ {ch:12,q:"Social entrepreneurship is primarily measured by:",o:["Purely financial profit","Social impact","Number of shareholders","Government subsidies received"],a:1,e:"Unlike conventional entrepreneurship, social entrepreneurship's main measure of success is social impact rather than purely financial profit."},
+ {ch:12,q:"Growth achieved by ploughing back profits into the business is called:",o:["External growth","Internal growth","Franchising","Merger growth"],a:1,e:"Internal growth describes a situation where owners plough back profits into the business."},
+ {ch:12,q:"Growth achieved through mergers, importing/exporting, and acquisitions is called:",o:["Internal growth","Organic growth","External growth","Passive growth"],a:2,e:"External growth is achieved through strategies such as mergers, importing/exporting, and acquisitions."},
+ {ch:12,q:"Miller and Friesen's life-cycle model identifies which five stages?",o:["Birth, Growth, Maturity, Revival, Decline","Start-up, Scale-up, Peak, Merger, Exit","Idea, Plan, Launch, Profit, Exit","Seed, Growth, IPO, Decline, Closure"],a:0,e:"Miller and Friesen's model identifies: Birth, Growth, Maturity, Revival, and Decline."},
+ {ch:12,q:"What is widely regarded as the greatest source of sustained business growth?",o:["Government subsidy","Innovation","Family wealth","Advertising spend"],a:1,e:"Innovation is widely regarded as the greatest source of sustained business growth."}
+];
 
-function getCourse(){ return COURSES.find(c=>c.id===state.courseId); }
-function courseProgress(id){
-  if(!progress[id]) progress[id] = { known:{}, bestScore:0, attempts:0 };
-  return progress[id];
-}
+/* ======================= STATE ======================= */
+let currentChapter = 1;
+let currentMode = 'notes';
 
-/* =========================================================
-   RENDER: drawer
-   ========================================================= */
-function renderDrawer(){
-  const list = document.getElementById('courseList');
-  list.innerHTML = COURSES.map(c=>{
-    const active = c.id===state.courseId ? 'active':'';
-    return `<div class="course-item ${active}" style="--accent:var(${c.accent})" data-id="${c.id}">
-      <span class="swatch"></span>
-      <span class="label">${c.title}<span class="code">${c.code}</span></span>
-    </div>`;
-  }).join('');
-  list.querySelectorAll('.course-item').forEach(el=>{
-    el.addEventListener('click',()=>{ state.courseId = el.dataset.id; state.quizIndex=0; state.quizScore=0; state.quizAnswered=false; renderAll(); window.scrollTo(0,0);});
+/* Flashcards state */
+let fcDeck = [];
+let fcIndex = 0;
+let fcKnownCount = 0;
+let fcFlipped = false;
+
+/* Quiz state */
+let quizSet = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+/* ======================= INIT ======================= */
+function init(){
+  buildSidebar();
+  buildChapterSelects();
+  renderNotes(currentChapter);
+  buildFlashDeck('all');
+  renderFlashcard();
+  updateBestScoreStat();
+
+  document.querySelectorAll('.mode-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=> switchMode(btn.dataset.mode));
+  });
+  document.getElementById('prevChapter').addEventListener('click', ()=>{
+    if(currentChapter>1){ currentChapter--; renderNotes(currentChapter); highlightSidebar(); }
+  });
+  document.getElementById('nextChapter').addEventListener('click', ()=>{
+    if(currentChapter<CHAPTERS.length){ currentChapter++; renderNotes(currentChapter); highlightSidebar(); }
+  });
+  document.getElementById('resetProgress').addEventListener('click', ()=>{
+    localStorage.removeItem('ces211_best_score');
+    updateBestScoreStat();
   });
 
-  const totalCards = COURSES.reduce((s,c)=>s+c.cards.length,0);
-  let knownCards = 0;
-  COURSES.forEach(c=>{ const p=courseProgress(c.id); knownCards += Object.values(p.known).filter(Boolean).length; });
-  document.getElementById('progressNote').innerHTML =
-    `flashcards mastered: ${knownCards} / ${totalCards}<br>quiz best-scores saved locally`;
+  // Flashcards
+  document.getElementById('flashcard').addEventListener('click', flipCard);
+  document.getElementById('fcKnow').addEventListener('click', (e)=>{ e.stopPropagation(); fcKnownCount++; document.getElementById('fcKnownCount').textContent=fcKnownCount; nextCard(); });
+  document.getElementById('fcDontKnow').addEventListener('click', (e)=>{ e.stopPropagation(); nextCard(); });
+  document.getElementById('fcPrev').addEventListener('click', (e)=>{ e.stopPropagation(); prevCard(); });
+  document.getElementById('fcShuffle').addEventListener('click', ()=>{ shuffleDeck(); renderFlashcard(); });
+  document.getElementById('fcChapterFilter').addEventListener('change', (e)=>{
+    buildFlashDeck(e.target.value); renderFlashcard();
+  });
+
+  // Quiz
+  document.getElementById('quizStart').addEventListener('click', startQuiz);
+  document.getElementById('quizNext').addEventListener('click', nextQuizQuestion);
+  document.getElementById('quizRetry').addEventListener('click', retryQuiz);
+  document.getElementById('quizNewRun').addEventListener('click', newQuizRun);
 }
 
-/* =========================================================
-   RENDER: header + tabs
-   ========================================================= */
-function renderHeader(){
-  const c = getCourse();
-  document.querySelectorAll('.drawer').forEach(d=>d.style.setProperty('--accent', `var(${c.accent})`));
-  document.getElementById('hdrEyebrow').textContent = c.code;
-  document.getElementById('hdrEyebrow').style.color = `var(${c.accent})`;
-  document.getElementById('hdrTitle').textContent = c.title;
-  document.getElementById('hdrDesc').textContent = c.desc;
-  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.tab===state.tab));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+state.tab).classList.add('active');
-}
-
-/* =========================================================
-   RENDER: notes
-   ========================================================= */
-function renderNotes(){
-  const c = getCourse();
-  const el = document.getElementById('panel-notes');
-  el.style.setProperty('--accent', `var(${c.accent})`);
-  el.innerHTML = c.notes.map(block=>`
-    <div class="note-block" style="--accent:var(${c.accent})">
-      <h3>${block.h}</h3>
-      <ul>${block.items.map(i=>`<li>${i}</li>`).join('')}</ul>
-    </div>`).join('');
-}
-
-/* =========================================================
-   RENDER: flashcards
-   ========================================================= */
-function renderCards(){
-  const c = getCourse();
-  const p = courseProgress(c.id);
-  const el = document.getElementById('panel-cards');
-  const knownCount = Object.values(p.known).filter(Boolean).length;
-  el.innerHTML = `
-    <div class="deck-meta">${c.cards.length} specimen cards — click to flip, mark known when confident. Mastered: <span id="knownCount">${knownCount}</span> / ${c.cards.length}</div>
-    <div class="deck" id="deckGrid"></div>
-    <div class="deck-controls">
-      <button class="btn" id="resetKnown">Reset mastered marks</button>
-    </div>`;
-  const grid = document.getElementById('deckGrid');
-  c.cards.forEach((pair,i)=>{
-    const known = !!p.known[i];
-    const card = document.createElement('div');
-    card.className = 'spec-card'+(known?' known':'');
-    card.style.setProperty('--accent', `var(${c.accent})`);
-    card.innerHTML = `
-      <div class="spec-inner">
-        <div class="spec-face">
-          <span class="spec-mark">${known?'&#10003;':''}</span>
-          <div class="spec-tag">No. ${String(i+1).padStart(2,'0')} — Term</div>
-          <div class="spec-body">${pair[0]}</div>
-          <div class="spec-hint">tap to reveal</div>
-        </div>
-        <div class="spec-face back">
-          <div class="spec-tag">Definition</div>
-          <div class="spec-body">${pair[1]}</div>
-          <div class="spec-hint">tap = ✓ known</div>
-        </div>
-      </div>`;
-    card.addEventListener('click', (e)=>{
-      if(!card.classList.contains('flipped')){
-        card.classList.add('flipped');
-      } else {
-        p.known[i] = !p.known[i];
-        card.classList.toggle('known', p.known[i]);
-        card.querySelector('.spec-mark').innerHTML = p.known[i] ? '&#10003;' : '';
-        saveProgress(progress);
-        document.getElementById('knownCount').textContent = Object.values(p.known).filter(Boolean).length;
-        setTimeout(()=>card.classList.remove('flipped'), 350);
-      }
+function buildSidebar(){
+  const list = document.getElementById('chapterList');
+  list.innerHTML = CHAPTERS.map(c=>`
+    <li><button class="chapter-btn ${c.id===currentChapter?'active':''}" data-id="${c.id}">
+      <span class="num">${String(c.id).padStart(2,'0')}</span>${c.title}
+    </button></li>
+  `).join('');
+  list.querySelectorAll('.chapter-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      currentChapter = parseInt(btn.dataset.id);
+      if(currentMode!=='notes') switchMode('notes');
+      renderNotes(currentChapter);
+      highlightSidebar();
     });
-    grid.appendChild(card);
   });
-  document.getElementById('resetKnown').addEventListener('click', ()=>{
-    p.known = {}; saveProgress(progress); renderCards(); renderDrawer();
+}
+function highlightSidebar(){
+  document.querySelectorAll('.chapter-btn').forEach(b=>{
+    b.classList.toggle('active', parseInt(b.dataset.id)===currentChapter);
   });
 }
 
-/* =========================================================
-   RENDER: quiz
-   ========================================================= */
-function renderQuiz(){
-  const c = getCourse();
-  const el = document.getElementById('panel-quiz');
-  el.style.setProperty('--accent', `var(${c.accent})`);
+function buildChapterSelects(){
+  const fcSel = document.getElementById('fcChapterFilter');
+  const qSel = document.getElementById('quizChapterSelect');
+  let opts = '<option value="all">All chapters</option>' + CHAPTERS.map(c=>`<option value="${c.id}">Ch ${c.id} — ${c.title.split(',')[0]}</option>`).join('');
+  fcSel.innerHTML = opts;
+  qSel.innerHTML = opts;
+}
 
-  if(state.quizIndex >= c.quiz.length){
-    const p = courseProgress(c.id);
-    const pct = Math.round(100*state.quizScore/c.quiz.length);
-    if(pct > p.bestScore) p.bestScore = pct;
-    p.attempts = (p.attempts||0)+1;
-    saveProgress(progress);
-    el.innerHTML = `
-      <div class="quiz-wrap"><div class="q-card q-result">
-        <div class="mono" style="color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;">Result</div>
-        <div class="score">${state.quizScore} / ${c.quiz.length}</div>
-        <p style="color:var(--muted);">${pct}% — best saved score for this course: ${p.bestScore}%</p>
-        <button class="btn primary" id="retryQuiz">Retry quiz</button>
-      </div></div>`;
-    document.getElementById('retryQuiz').addEventListener('click', ()=>{
-      state.quizIndex=0; state.quizScore=0; state.quizAnswered=false; renderQuiz();
-    });
-    renderDrawer();
-    return;
-  }
+/* ======================= MODE SWITCH ======================= */
+function switchMode(mode){
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(b=> b.classList.toggle('active', b.dataset.mode===mode));
+  document.getElementById('view-notes').classList.toggle('hidden', mode!=='notes');
+  document.getElementById('view-flash').classList.toggle('hidden', mode!=='flash');
+  document.getElementById('view-quiz').classList.toggle('hidden', mode!=='quiz');
+}
 
-  const item = c.quiz[state.quizIndex];
-  el.innerHTML = `
-    <div class="quiz-wrap">
-      <div class="q-progress">Question ${state.quizIndex+1} of ${c.quiz.length} &nbsp;·&nbsp; Score ${state.quizScore}</div>
-      <div class="q-card">
-        <div class="q-text">${item.q}</div>
-        <div id="optWrap"></div>
-        <div class="q-explain" id="explainWrap" style="display:none;"></div>
-        <div style="margin-top:16px;text-align:right;">
-          <button class="btn primary" id="nextBtn" style="display:none;">Next →</button>
-        </div>
-      </div>
-    </div>`;
-  const optWrap = document.getElementById('optWrap');
-  item.opts.forEach((opt,i)=>{
-    const b = document.createElement('button');
-    b.className='q-opt'; b.textContent=opt;
-    b.addEventListener('click', ()=>{
-      if(state.quizAnswered) return;
-      state.quizAnswered = true;
-      const correct = i===item.a;
-      if(correct) state.quizScore++;
-      [...optWrap.children].forEach((btn,j)=>{
-        btn.disabled = true;
-        if(j===item.a) btn.classList.add('correct');
-        else if(j===i) btn.classList.add('wrong');
+/* ======================= NOTES ======================= */
+function renderNotes(id){
+  const ch = CHAPTERS.find(c=>c.id===id);
+  document.getElementById('notesChapterEyebrow').textContent = `Chapter ${String(id).padStart(2,'0')} of ${CHAPTERS.length}`;
+  document.getElementById('notesChapterTitle').textContent = ch.title;
+
+  let html = '';
+  ch.sections.forEach(sec=>{
+    html += `<h3>${sec.h}</h3>`;
+    if(sec.points){
+      html += '<ul>' + sec.points.map(p=>`<li>${p}</li>`).join('') + '</ul>';
+    }
+    if(sec.table){
+      html += '<table><thead><tr>' + sec.table.headers.map(h=>`<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+      sec.table.rows.forEach(row=>{
+        html += '<tr>' + row.map(cell=>`<td>${cell}</td>`).join('') + '</tr>';
       });
-      document.getElementById('explainWrap').style.display='block';
-      document.getElementById('explainWrap').textContent = (correct?'Correct. ':'Not quite. ') + item.e;
-      document.getElementById('nextBtn').style.display='inline-block';
-    });
-    optWrap.appendChild(b);
+      html += '</tbody></table>';
+    }
   });
-  document.getElementById('nextBtn').addEventListener('click', ()=>{
-    state.quizIndex++; state.quizAnswered=false; renderQuiz();
+  html += `<div class="quickfacts"><span class="label">🧠 Quick facts to memorize</span><ul>${ch.quickfacts.map(f=>`<li>${f}</li>`).join('')}</ul></div>`;
+
+  document.getElementById('notesContent').innerHTML = html;
+  document.getElementById('prevChapter').disabled = id===1;
+  document.getElementById('nextChapter').disabled = id===CHAPTERS.length;
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+/* ======================= FLASHCARDS ======================= */
+function buildFlashDeck(filter){
+  fcDeck = filter==='all' ? [...FLASHCARDS] : FLASHCARDS.filter(f=>f.ch===parseInt(filter));
+  fcIndex = 0;
+  fcFlipped = false;
+}
+function shuffleDeck(){
+  for(let i=fcDeck.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [fcDeck[i],fcDeck[j]] = [fcDeck[j],fcDeck[i]];
+  }
+  fcIndex = 0;
+}
+function renderFlashcard(){
+  if(fcDeck.length===0) return;
+  const card = fcDeck[fcIndex];
+  document.getElementById('flashcard').classList.remove('flipped');
+  fcFlipped = false;
+  document.getElementById('fcFrontTag').textContent = 'Chapter ' + card.ch;
+  document.getElementById('fcFrontTerm').textContent = card.term;
+  document.getElementById('fcBackText').textContent = card.def;
+  document.getElementById('fcProgress').textContent = `Card ${fcIndex+1} of ${fcDeck.length}`;
+}
+function flipCard(){
+  fcFlipped = !fcFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', fcFlipped);
+}
+function nextCard(){
+  if(fcIndex < fcDeck.length-1){ fcIndex++; } else { fcIndex = 0; }
+  renderFlashcard();
+}
+function prevCard(){
+  if(fcIndex > 0){ fcIndex--; } else { fcIndex = fcDeck.length-1; }
+  renderFlashcard();
+}
+
+/* ======================= QUIZ ======================= */
+function updateBestScoreStat(){
+  const best = localStorage.getItem('ces211_best_score');
+  document.getElementById('bestScoreStat').textContent = best ? best : '—';
+}
+
+function startQuiz(){
+  const chVal = document.getElementById('quizChapterSelect').value;
+  let count = parseInt(document.getElementById('quizCount').value) || 15;
+  let pool = chVal==='all' ? [...QUIZ] : QUIZ.filter(q=>q.ch===parseInt(chVal));
+  if(pool.length===0) pool = [...QUIZ];
+  // shuffle
+  for(let i=pool.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [pool[i],pool[j]] = [pool[j],pool[i]];
+  }
+  count = Math.min(count, pool.length);
+  quizSet = pool.slice(0, count);
+  quizIndex = 0;
+  quizScore = 0;
+  document.getElementById('quizSetup').classList.add('hidden');
+  document.getElementById('quizDone').classList.add('hidden');
+  document.getElementById('quizPlay').classList.remove('hidden');
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion(){
+  quizAnswered = false;
+  const q = quizSet[quizIndex];
+  document.getElementById('quizQCount').textContent = `Question ${quizIndex+1} of ${quizSet.length} — Chapter ${q.ch}`;
+  document.getElementById('quizQText').textContent = q.q;
+  const pct = (quizIndex / quizSet.length) * 100;
+  document.getElementById('quizProgressFill').style.width = pct + '%';
+
+  const optsWrap = document.getElementById('quizOptions');
+  const letters = ['A','B','C','D'];
+  optsWrap.innerHTML = q.o.map((opt,i)=>`
+    <button class="quiz-option" data-i="${i}">
+      <span class="letter">${letters[i]}</span><span>${opt}</span>
+    </button>
+  `).join('');
+  document.getElementById('quizExplain').classList.remove('show');
+  document.getElementById('quizExplain').textContent = '';
+  document.getElementById('quizNext').classList.remove('show');
+
+  optsWrap.querySelectorAll('.quiz-option').forEach(btn=>{
+    btn.addEventListener('click', ()=> selectAnswer(parseInt(btn.dataset.i)));
   });
 }
 
-/* =========================================================
-   TABS + INIT
-   ========================================================= */
-document.querySelectorAll('.tabbtn').forEach(b=>{
-  b.addEventListener('click', ()=>{ state.tab=b.dataset.tab; renderHeader(); if(state.tab==='notes')renderNotes(); if(state.tab==='cards')renderCards(); if(state.tab==='quiz')renderQuiz(); });
-});
+function selectAnswer(i){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const q = quizSet[quizIndex];
+  const opts = document.querySelectorAll('.quiz-option');
+  opts.forEach(o=> o.classList.add('disabled'));
+  opts[i].classList.add(i===q.a ? 'correct' : 'incorrect');
+  if(i!==q.a) opts[q.a].classList.add('correct');
+  if(i===q.a) quizScore++;
 
-function renderAll(){
-  renderDrawer();
-  renderHeader();
-  renderNotes();
-  renderCards();
-  state.quizIndex=0; state.quizScore=0; state.quizAnswered=false;
-  renderQuiz();
+  const explain = document.getElementById('quizExplain');
+  explain.textContent = q.e;
+  explain.classList.add('show');
+  document.getElementById('quizNext').classList.add('show');
 }
-renderAll();
+
+function nextQuizQuestion(){
+  if(quizIndex < quizSet.length-1){
+    quizIndex++;
+    renderQuizQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz(){
+  document.getElementById('quizPlay').classList.add('hidden');
+  document.getElementById('quizDone').classList.remove('hidden');
+  document.getElementById('quizProgressFill').style.width = '100%';
+  document.getElementById('quizFinalScore').textContent = `${quizScore}/${quizSet.length}`;
+  const pct = Math.round((quizScore/quizSet.length)*100);
+  let verdict = 'Keep revising';
+  if(pct>=90) verdict = 'Exam ready';
+  else if(pct>=70) verdict = 'Strong grasp';
+  else if(pct>=50) verdict = 'Getting there';
+  document.getElementById('quizVerdict').textContent = `${verdict} — ${pct}%`;
+
+  const best = parseInt(localStorage.getItem('ces211_best_pct') || '0');
+  if(pct > best){
+    localStorage.setItem('ces211_best_pct', pct);
+    localStorage.setItem('ces211_best_score', `${pct}%`);
+  }
+  updateBestScoreStat();
+}
+
+function retryQuiz(){
+  quizIndex = 0;
+  quizScore = 0;
+  document.getElementById('quizDone').classList.add('hidden');
+  document.getElementById('quizPlay').classList.remove('hidden');
+  // reshuffle order of the same set for a fresh attempt
+  for(let i=quizSet.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [quizSet[i],quizSet[j]] = [quizSet[j],quizSet[i]];
+  }
+  renderQuizQuestion();
+}
+
+function newQuizRun(){
+  document.getElementById('quizDone').classList.add('hidden');
+  document.getElementById('quizSetup').classList.remove('hidden');
+}
+
+init();
 </script>
 </body>
 </html>
