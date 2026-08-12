@@ -897,4 +897,349 @@ const QUIZ_POOL = [
 {q:"How many sigma and pi bonds are present in a carbon-carbon triple bond?",options:["1σ only","2σ, 1π","1σ, 2π","3σ, 0π"],correct:2,explain:"A triple bond consists of 1 sigma bond plus 2 pi bonds (1σ + 2π) — the sigma bond forms first via direct overlap, and the two pi bonds form from sideways overlap of the remaining two sets of p orbitals."},
 {q:"What is the formula for bond order in Molecular Orbital Theory?",options:["Bond order = Nb + Na","Bond order = (Nb − Na)/2","Bond order = Nb × Na","Bond order = Na/Nb"],correct:1,explain:"Bond order = (Nb − Na)/2, where Nb is the number of electrons in bonding molecular orbitals and Na is the number of electrons in antibonding molecular orbitals."},
 {q:"H₂ has a total of 2 electrons, both in the σ1s bonding orbital. What is its bond order?",options:["0","0.5","1","2"],correct:2,explain:"Bond order = (Nb − Na)/2 = (2 − 0)/2 = 1, corresponding to a single H–H bond. Since there are no unpaired electrons, H₂ is diamagnetic."},
-{q:"He₂ has 4 total electrons: σ1s²σ*1s². What is its bond order, and what does this mean?",options:["Bond order = 1; He₂ is a stable single bond","Bond order = 2; He₂ has a double bond","Bond order = 0; He₂ cannot exist as a stable molecule","Bond order = 0.5; He₂ is highly reactive"],correct:2,explain:"Bond order = (2−2)/2 = 0. A bond order of zero means the bonding and antibonding electrons exactly cancel out, providing no net stabilization — this is why the He₂ mole
+{q:"He₂ has 4 total electrons: σ1s²σ*1s². What is its bond order, and what does this mean?",options:["Bond order = 1; He₂ is a stable single bond","Bond order = 2; He₂ has a double bond","Bond order = 0; He₂ cannot exist as a stable molecule","Bond order = 0.5; He₂ is highly reactive"],correct:2,explain:"Bond order = (2−2)/2 = 0. A bond order of zero means the bonding and antibonding electrons exactly cancel out, providing no net stabilization — this is why the He₂ molecule does not exist."},
+{q:"N₂ has 14 total electrons, giving a bond order of 3. What bond type and magnetic property does this correspond to?",options:["Single bond, paramagnetic","Double bond, paramagnetic","Triple bond, diamagnetic (no unpaired electrons)","Triple bond, paramagnetic"],correct:2,explain:"Bond order 3 corresponds to a triple bond (N≡N), consistent with N₂'s known bonding. All electrons in N₂'s molecular orbital configuration are paired, so N₂ is diamagnetic."},
+{q:"O₂ has 16 total electrons and a bond order of 2. Why is O₂ paramagnetic despite having an even number of electrons?",options:["Because O₂ actually has an odd number of electrons","Because the two highest-energy electrons occupy the degenerate π*2px and π*2py orbitals singly (Hund's Rule), leaving two unpaired electrons","O₂ isn't actually paramagnetic; this is a myth","Because oxygen atoms are magnetic individually"],correct:1,explain:"Even though O₂ has an even total electron count, filling the degenerate π*2px and π*2py antibonding orbitals follows Hund's Rule — each gets one electron before pairing — leaving two unpaired electrons and making O₂ paramagnetic. This is one of MO theory's key successes over simple Lewis structures."},
+{q:"Rank O₂⁺, O₂, O₂⁻, and O₂²⁻ from HIGHEST to LOWEST bond order.",options:["O₂²⁻ > O₂⁻ > O₂ > O₂⁺","O₂⁺ > O₂ > O₂⁻ > O₂²⁻","O₂ > O₂⁺ > O₂²⁻ > O₂⁻","They all have equal bond order"],correct:1,explain:"O₂⁺ = 2.5, O₂ = 2.0, O₂⁻ = 1.5, O₂²⁻ = 1.0. Removing an antibonding electron (forming O₂⁺) increases bond order/strength; adding antibonding electrons (O₂⁻, O₂²⁻) decreases it."},
+{q:"O₂²⁻ (the peroxide ion) has a bond order of 1 with all electrons paired. Is it paramagnetic or diamagnetic?",options:["Paramagnetic, due to unpaired electrons","Diamagnetic, because all electrons are paired","Neither — it has no electrons","Both simultaneously"],correct:1,explain:"With 18 total electrons filling all the way through π*2px² and π*2py², every electron in O₂²⁻ is paired, making it diamagnetic — unlike O₂, O₂⁺, and O₂⁻, which all retain at least one unpaired electron."},
+{q:"How is bond order related to bond length?",options:["Directly proportional — higher bond order means longer bond","Inversely proportional — higher bond order means shorter, stronger bond","They are unrelated","Bond order only affects color, not length"],correct:1,explain:"Bond order is inversely proportional to bond length: the higher the bond order, the shorter and stronger the bond, because more shared electron density pulls the bonded atoms closer together."},
+{q:"What is required for a species to be classified as paramagnetic?",options:["It must have all electrons paired","It must have at least one unpaired electron in its molecular orbitals","It must be a noble gas","It must have a negative bond order"],correct:1,explain:"A paramagnetic species has one or more unpaired electrons in its molecular orbitals, causing it to be weakly attracted into an external magnetic field."},
+{q:"What is the difference between a single, double, and triple bond in terms of shared electron pairs?",options:["Single = 3 pairs, double = 2 pairs, triple = 1 pair","Single = 1 pair, double = 2 pairs, triple = 3 pairs","All bond types involve the same number of pairs","Bond type has nothing to do with electron pairs"],correct:1,explain:"A single bond involves one shared electron pair (e.g. H–H), a double bond involves two shared pairs (e.g. O=O), and a triple bond involves three shared pairs (e.g. N≡N)."},
+{q:"What is intramolecular force, and how does it differ from intermolecular force?",options:["Intramolecular = between separate molecules; intermolecular = within one molecule","Intramolecular = the chemical bonds holding atoms together within a molecule (strong); intermolecular = weaker forces acting between neighboring molecules","They are exactly the same thing","Intramolecular forces only exist in gases"],correct:1,explain:"Intramolecular forces (covalent, ionic, metallic bonds) hold atoms together within a single molecule and are strong. Intermolecular forces act between separate molecules/ions/atoms and are comparatively much weaker (e.g. hydrogen bonding, van der Waals forces)."},
+{q:"What causes metallic bonding?",options:["Sharing of electron pairs between two nonmetal atoms","Electrostatic attraction between delocalised conduction electrons and positively charged metal ions","Transfer of electrons from metal to nonmetal","Hydrogen bonding between metal atoms"],correct:1,explain:"Metallic bonding arises from the electrostatic attraction between a 'sea' of delocalised conduction electrons and the positively charged metal ion cores throughout the metal lattice."},
+{q:"What is the total number of valence electrons in ethene (C₂H₄)?",options:["8","12","16","4"],correct:1,explain:"Carbon contributes 4 electrons each (2×4=8), and hydrogen contributes 1 each (4×1=4). Total = 8+4 = 12 valence electrons, matching the worked calculation shown in the notes."},
+{q:"What is the total number of valence electrons in HF (hydrofluoric acid)?",options:["6","8","2","14"],correct:1,explain:"H contributes 1 electron, F contributes 7 electrons. Total = 1+7 = 8 valence electrons."},
+{q:"Which quantum number determines the shape (subshell type: s, p, d, f) of an orbital?",options:["Principal quantum number (n)","Azimuthal quantum number (l)","Magnetic quantum number (m)","Spin quantum number (s)"],correct:1,explain:"The Azimuthal Quantum Number (l) determines the shape/subshell of the orbital: l=0 is s, l=1 is p, l=2 is d, and l=3 is f."},
+{q:"Which quantum number determines the spatial orientation of an orbital?",options:["Principal quantum number (n)","Azimuthal quantum number (l)","Magnetic quantum number (m)","Spin quantum number (s)"],correct:2,explain:"The Magnetic Quantum Number (m) determines how the orbital is oriented in 3-D space — for example, distinguishing px from py from pz within the same p subshell."},
+{q:"What is the number of nodal planes in a p orbital?",options:["0","1","2","3"],correct:1,explain:"The number of nodal planes in an orbital equals its azimuthal quantum number, l. For a p orbital, l=1, so it has exactly 1 nodal plane passing through the nucleus."},
+{q:"What is the number of nodal planes in a d orbital?",options:["0","1","2","3"],correct:2,explain:"For a d orbital, l=2, so it has 2 nodal planes — this matches the four-lobed clover-leaf shape of most d orbitals, which are divided by two perpendicular nodal planes."},
+{q:"What determines the total number of spherical (radial) nodes in an orbital?",options:["n − l − 1","n + l","2n²","l only"],correct:0,explain:"The number of spherical (radial) nodes in an orbital is given by (n − l − 1). For example, the 2s orbital (n=2, l=0) has (2−0−1)=1 spherical node."},
+{q:"Which of the following correctly lists the (n+l) values used to order 4s and 3d for the Aufbau principle?",options:["4s: n+l=4; 3d: n+l=5, so 4s fills first","4s: n+l=5; 3d: n+l=4, so 3d fills first","Both have n+l=4, filled simultaneously","(n+l) rule doesn't apply here"],correct:0,explain:"4s has n=4, l=0, so n+l=4. 3d has n=3, l=2, so n+l=5. Since 4 is less than 5, 4s fills before 3d according to the Aufbau (n+l) rule."},
+{q:"Which molecule is the standard example given for sp hybridization forming a linear shape?",options:["CH₄","BF₃","BeF₂","SF₆"],correct:2,explain:"BeF₂ is the standard textbook example of sp hybridization — beryllium's excited state has two unpaired electrons that hybridize into two sp orbitals at 180°, giving a linear F–Be–F molecule."},
+{q:"In BF₃'s sp² hybridization, how many unhybridized p orbitals remain on boron?",options:["0","1","2","3"],correct:1,explain:"Boron mixes one s orbital with two p orbitals to form three sp² hybrids; this leaves exactly one p orbital unhybridized (empty in BF₃, since boron has only 3 valence electrons)."},
+{q:"What is the bond angle in a molecule with sp³ hybridization?",options:["180°","120°","109.5°","90°"],correct:2,explain:"sp³ hybrid orbitals point toward the corners of a regular tetrahedron, giving a bond angle of 109.5°, as seen in methane (CH₄)."},
+{q:"According to the relative bond strength table in the notes, which hybridization type produces the strongest relative bond strength among sp, sp², and sp³?",options:["sp (1.930)","sp² (1.991)","sp³ (2.000)","They are all identical"],correct:2,explain:"According to the notes' table of relative bond strengths, sp³ hybrid orbitals (relative strength 2.000) form the strongest bonds among the sp, sp², sp³ series, followed by sp² (1.991), then sp (1.930)."},
+{q:"Which hybridization corresponds to a square planar geometry, as in [CuCl₄]²⁻?",options:["sp³","dsp²","sp³d","sp³d²"],correct:1,explain:"dsp² hybridization (one s, two p, one d orbital) gives a square planar geometry, as seen in complexes like [CuCl₄]²⁻."},
+{q:"What geometry does sp³d³ hybridization produce, as seen in IF₇?",options:["Octahedral","Trigonal bipyramidal","Pentagonal bipyramidal","Square planar"],correct:2,explain:"sp³d³ hybridization (one s, three p, three d orbitals) produces a pentagonal bipyramidal geometry, exemplified by IF₇."},
+{q:"Which statement about the Balmer series formula is correct?",options:["V = R(1/1² − 1/n²), n=2,3,4…","V = R(1/2² − 1/n²), n=3,4,5,6…","V = R(1/3² − 1/n²), n=4,5,6,7…","V = R(1/4² − 1/n²), n=5,6,7,8…"],correct:1,explain:"The Balmer series formula is V = R(1/2² − 1/n²) with n=3,4,5,6…, corresponding to transitions ending at the n=2 level, and it falls in the visible region."},
+{q:"Which statement about the Pfund series is correct?",options:["It falls in the ultraviolet region, ending at n=1","It falls in the visible region, ending at n=2","It falls in the infrared region, ending at n=5","It falls in the infrared region, ending at n=3"],correct:2,explain:"The Pfund series corresponds to transitions ending at n=5 (with n=6,7,8… as the starting levels), and like the Paschen and Brackett series, it falls in the infrared region."},
+{q:"Both propanoic acid and methyl acetate share the formula C₃H₆O₂. What structural feature distinguishes them and explains their very different boiling points?",options:["Molecular weight difference","Propanoic acid has a carboxylic –COOH group (with O–H); methyl acetate has an ester linkage (–COO–) with no O–H hydrogen","Methyl acetate is ionic while propanoic acid is covalent","There is no real difference; boiling points reported were errors"],correct:1,explain:"Propanoic acid's carboxyl group has an O–H bond capable of hydrogen bonding and dimerisation. Methyl acetate's ester linkage has no hydrogen directly bonded to either oxygen, so it cannot hydrogen bond, resulting in a much lower boiling point (57°C vs 141°C)."},
+{q:"What is the key structural requirement for intramolecular hydrogen bonding to occur (as in o-nitrophenol)?",options:["The hydrogen-bond donor and acceptor groups must be on completely opposite ends of a large molecule","The hydrogen-bond donor and acceptor groups must be close enough in space, within the same molecule, to bond directly to each other","The molecule must contain a metal ion","Only symmetric molecules can form intramolecular hydrogen bonds"],correct:1,explain:"Intramolecular hydrogen bonding requires the donor (e.g., O–H) and acceptor (e.g., NO₂) groups to be positioned close enough within the same molecule to bond directly — as happens in the ortho position of o-nitrophenol, but not in the para position of p-nitrophenol."},
+{q:"Which of these best explains why ionic compounds are typically hard and brittle solids?",options:["They lack any intermolecular forces","They form a 3-D crystal lattice held together by strong, non-directional electrostatic forces throughout the structure","They are made only of nonmetal atoms","Ionic bonds are weaker than covalent bonds"],correct:1,explain:"Ionic compounds form an extended 3-D crystal lattice where every ion is held in place by strong electrostatic attraction to its neighbors in all directions. This rigid, strongly-bonded lattice is what makes ionic compounds hard yet brittle (they shatter rather than deform, because ion layers shifting can bring like charges together, causing repulsion and fracture)."}
+];
+</script>
+<script>
+/* =========================================================================
+   APP LOGIC
+   ========================================================================= */
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* ---------------- Navigation ---------------- */
+const navBtns = document.querySelectorAll('.navbtn');
+const views = {
+  notes: document.getElementById('view-notes'),
+  flash: document.getElementById('view-flash'),
+  quiz: document.getElementById('view-quiz')
+};
+navBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    navBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    Object.values(views).forEach(v=>v.classList.remove('active'));
+    views[btn.dataset.view].classList.add('active');
+    const grp = document.getElementById('unitNavGroup');
+    grp.style.display = btn.dataset.view==='notes' ? 'block' : 'none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------------- Notes: render units + sidebar links ---------------- */
+const notesContainer = document.getElementById('notesContainer');
+const unitList = document.getElementById('unitList');
+UNITS.forEach((u,idx)=>{
+  const sec = document.createElement('div');
+  sec.className = 'unit';
+  sec.id = 'unit-'+u.id;
+  sec.innerHTML = `<h3>${u.title}</h3>${u.html}`;
+  notesContainer.appendChild(sec);
+
+  const link = document.createElement('div');
+  link.className = 'unitlink';
+  link.textContent = u.title.replace(/^Unit \d+ — /,'');
+  link.addEventListener('click', ()=>{
+    document.getElementById('unit-'+u.id).scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  unitList.appendChild(link);
+});
+
+/* Highlight active unit link on scroll */
+const unitSections = UNITS.map(u=>document.getElementById('unit-'+u.id));
+const unitLinks = Array.from(unitList.children);
+window.addEventListener('scroll', ()=>{
+  if(!views.notes.classList.contains('active')) return;
+  let activeIdx = 0;
+  unitSections.forEach((sec,i)=>{
+    if(sec.getBoundingClientRect().top < 140) activeIdx = i;
+  });
+  unitLinks.forEach((l,i)=>l.classList.toggle('active', i===activeIdx));
+});
+
+/* ---------------- Flashcards ---------------- */
+let fcOrder = shuffle(FLASHCARDS.map((_,i)=>i));
+let fcPos = 0;
+let fcMissedQueue = [];
+let fcKnownSet = new Set();
+
+const fcCard = document.getElementById('fcCard');
+const fcFrontText = document.getElementById('fcFrontText');
+const fcBackText = document.getElementById('fcBackText');
+const fcPosEl = document.getElementById('fcPos');
+const fcTotalEl = document.getElementById('fcTotal');
+const fcMissedEl = document.getElementById('fcMissed');
+
+function renderFlashcard(){
+  fcCard.classList.remove('flipped');
+  const idx = fcOrder[fcPos];
+  const card = FLASHCARDS[idx];
+  fcFrontText.textContent = card.f;
+  fcBackText.textContent = card.b;
+  fcPosEl.textContent = fcPos+1;
+  fcTotalEl.textContent = fcOrder.length;
+  fcMissedEl.textContent = fcMissedQueue.length;
+}
+fcCard.addEventListener('click', ()=> fcCard.classList.toggle('flipped'));
+document.getElementById('fcNext').addEventListener('click', ()=>{
+  fcPos = (fcPos+1) % fcOrder.length;
+  renderFlashcard();
+});
+document.getElementById('fcPrev').addEventListener('click', ()=>{
+  fcPos = (fcPos-1+fcOrder.length) % fcOrder.length;
+  renderFlashcard();
+});
+document.getElementById('fcShuffle').addEventListener('click', ()=>{
+  fcOrder = shuffle(FLASHCARDS.map((_,i)=>i));
+  fcPos = 0;
+  renderFlashcard();
+});
+document.getElementById('fcRestart').addEventListener('click', ()=>{
+  fcOrder = shuffle(FLASHCARDS.map((_,i)=>i));
+  fcPos = 0;
+  fcMissedQueue = [];
+  renderFlashcard();
+});
+document.getElementById('fcKnow').addEventListener('click', ()=>{
+  const idx = fcOrder[fcPos];
+  fcMissedQueue = fcMissedQueue.filter(i=>i!==idx);
+  fcPos = (fcPos+1) % fcOrder.length;
+  renderFlashcard();
+});
+document.getElementById('fcDontKnow').addEventListener('click', ()=>{
+  const idx = fcOrder[fcPos];
+  if(!fcMissedQueue.includes(idx)) fcMissedQueue.push(idx);
+  fcPos = (fcPos+1) % fcOrder.length;
+  renderFlashcard();
+});
+document.getElementById('fcLoop').addEventListener('click', ()=>{
+  if(fcMissedQueue.length===0){ alert("No missed cards queued yet — mark cards \u2715 Didn't know as you go, then loop back through them."); return; }
+  fcOrder = shuffle(fcMissedQueue.slice());
+  fcPos = 0;
+  renderFlashcard();
+});
+renderFlashcard();
+
+/* ---------------- Quiz ---------------- */
+const QUIZ_LENGTH = 50;
+let quizQuestions = [];
+let quizIdx = 0;
+let quizScore = 0;
+let quizAnswers = []; // {q, chosenText, correctText, wasCorrect, explain}
+let quizLocked = false;
+
+const quizStartWrap = document.getElementById('quizStartWrap');
+const quizRunWrap = document.getElementById('quizRunWrap');
+const quizResultsWrap = document.getElementById('quizResultsWrap');
+const quizCard = document.getElementById('quizCard');
+const quizPosTag = document.getElementById('quizPosTag');
+const quizScoreTag = document.getElementById('quizScoreTag');
+const quizProgFill = document.getElementById('quizProgFill');
+
+function buildQuizSet(){
+  const poolIdx = shuffle(QUIZ_POOL.map((_,i)=>i)).slice(0, Math.min(QUIZ_LENGTH, QUIZ_POOL.length));
+  return poolIdx.map(i=>{
+    const item = QUIZ_POOL[i];
+    const optIdx = shuffle(item.options.map((_,k)=>k));
+    const options = optIdx.map(k=>item.options[k]);
+    const correctIndex = optIdx.indexOf(item.correct);
+    return { q:item.q, options, correctIndex, explain:item.explain };
+  });
+}
+
+document.getElementById('quizBeginBtn').addEventListener('click', startQuiz);
+
+function startQuiz(){
+  quizQuestions = buildQuizSet();
+  quizIdx = 0;
+  quizScore = 0;
+  quizAnswers = [];
+  quizStartWrap.style.display = 'none';
+  quizResultsWrap.style.display = 'none';
+  quizRunWrap.style.display = 'block';
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion(){
+  quizLocked = false;
+  const total = quizQuestions.length;
+  const item = quizQuestions[quizIdx];
+  quizPosTag.textContent = `Question ${quizIdx+1} / ${total}`;
+  quizScoreTag.textContent = `Score: ${quizScore}`;
+  quizProgFill.style.width = (((quizIdx)/total)*100)+'%';
+
+  const letters = ['A','B','C','D','E','F'];
+  quizCard.innerHTML = `
+    <div class="qnum">QUESTION ${quizIdx+1}</div>
+    <h4>${item.q}</h4>
+    <div class="opts" id="quizOpts">
+      ${item.options.map((opt,i)=>`
+        <button class="opt" data-i="${i}">
+          <span class="letter">${letters[i]}</span><span>${opt}</span>
+        </button>`).join('')}
+    </div>
+    <div class="explain" id="quizExplain"></div>
+    <div class="qfoot">
+      <button class="btn primary" id="quizNextBtn" style="display:none;">${quizIdx+1===total ? 'See Full Breakdown →' : 'Next Question →'}</button>
+    </div>
+  `;
+
+  const optBtns = quizCard.querySelectorAll('.opt');
+  optBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(quizLocked) return;
+      quizLocked = true;
+      const chosen = parseInt(btn.dataset.i);
+      const correct = item.correctIndex;
+      const wasCorrect = chosen===correct;
+      if(wasCorrect) quizScore++;
+
+      optBtns.forEach(b=>{
+        b.classList.add('locked');
+        const bi = parseInt(b.dataset.i);
+        if(bi===correct) b.classList.add('correct');
+        else if(bi===chosen) b.classList.add('wrong');
+      });
+
+      const explainEl = document.getElementById('quizExplain');
+      explainEl.classList.add('show');
+      explainEl.classList.add(wasCorrect ? 'right' : 'wrongbox');
+      explainEl.innerHTML = `<b>${wasCorrect ? 'Correct.' : 'Not quite.'}</b> ${item.explain}`;
+
+      quizScoreTag.textContent = `Score: ${quizScore}`;
+      document.getElementById('quizNextBtn').style.display = 'inline-block';
+
+      quizAnswers.push({
+        q:item.q,
+        chosenText:item.options[chosen],
+        correctText:item.options[correct],
+        wasCorrect,
+        explain:item.explain
+      });
+    });
+  });
+
+  document.getElementById('quizNextBtn').addEventListener('click', ()=>{
+    quizIdx++;
+    if(quizIdx >= quizQuestions.length){
+      showQuizResults();
+    } else {
+      renderQuizQuestion();
+    }
+  });
+}
+
+function showQuizResults(){
+  quizRunWrap.style.display = 'none';
+  quizResultsWrap.style.display = 'block';
+  const total = quizAnswers.length;
+  const pct = Math.round((quizScore/total)*100);
+  let msg;
+  if(pct>=85) msg = "Excellent — you clearly know this unit cold.";
+  else if(pct>=65) msg = "Solid grasp — review the missed ones below and you're set.";
+  else if(pct>=45) msg = "Getting there — go through the full breakdown carefully before your next attempt.";
+  else msg = "This needs another pass through the Notes first — use the breakdown below to see exactly where the gaps are.";
+
+  const missed = quizAnswers.filter(a=>!a.wasCorrect);
+  const got = quizAnswers.filter(a=>a.wasCorrect);
+
+  quizResultsWrap.innerHTML = `
+    <div class="results">
+      <div class="score-hero">
+        <div class="big">${quizScore}<span>/${total}</span></div>
+        <div class="msg">${pct}% — ${msg}</div>
+      </div>
+
+      <div class="breakdown-head">
+        <h4>Full Breakdown — Questions Missed (${missed.length})</h4>
+      </div>
+      <div id="bdMissed"></div>
+
+      <div class="breakdown-head" style="margin-top:26px;">
+        <h4>Full Breakdown — Questions Answered Correctly (${got.length})</h4>
+      </div>
+      <div id="bdGot"></div>
+
+      <div class="qfoot" style="margin-top:10px;">
+        <button class="btn primary" id="quizRetryBtn">Take Another Random 50 →</button>
+      </div>
+    </div>
+  `;
+
+  const bdMissed = document.getElementById('bdMissed');
+  if(missed.length===0){
+    bdMissed.innerHTML = `<p style="color:var(--text-dim);font-size:13.5px;">None — every question was answered correctly.</p>`;
+  } else {
+    missed.forEach(a=>{
+      const div = document.createElement('div');
+      div.className = 'bd-item miss';
+      div.innerHTML = `
+        <div class="bd-q">${a.q}</div>
+        <div class="bd-row bad-txt"><span class="k">Your answer</span>${a.chosenText}</div>
+        <div class="bd-row ok-txt"><span class="k">Correct answer</span>${a.correctText}</div>
+        <div class="bd-exp">${a.explain}</div>
+      `;
+      bdMissed.appendChild(div);
+    });
+  }
+
+  const bdGot = document.getElementById('bdGot');
+  got.forEach(a=>{
+    const div = document.createElement('div');
+    div.className = 'bd-item hit';
+    div.innerHTML = `
+      <div class="bd-q">${a.q}</div>
+      <div class="bd-row ok-txt"><span class="k">Your answer</span>${a.chosenText} ✓</div>
+      <div class="bd-exp">${a.explain}</div>
+    `;
+    bdGot.appendChild(div);
+  });
+
+  document.getElementById('quizRetryBtn').addEventListener('click', ()=>{
+    quizResultsWrap.style.display = 'none';
+    startQuiz();
+  });
+
+  quizProgFill.style.width = '100%';
+}
+
+/* Default: hide unit nav group unless on notes view (already visible by default) */
+document.getElementById('unitNavGroup').style.display = 'block';
+</script>
+</body>
+</html>
