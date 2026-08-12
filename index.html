@@ -1,133 +1,900 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHM 213 — Textile Chemistry</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHM 212 — The Study Loom | Structure &amp; Bonding</title>
+<style>
+:root{
+  --navy-deep:#050b1a;
+  --navy:#0b1730;
+  --navy-panel:#101f3f;
+  --navy-line:#213262;
+  --gold:#d4af37;
+  --gold-bright:#f0cf6a;
+  --gold-dim:#8a7230;
+  --text:#e9edf7;
+  --text-dim:#9fb0d3;
+  --ok:#5fd393;
+  --bad:#e2645c;
+  --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+  --sans:"Avenir Next","Segoe UI",-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:"JetBrains Mono","SF Mono",Consolas,monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(1200px 700px at 85% -10%, rgba(212,175,55,.07), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(212,175,55,.05), transparent 60%),
+    var(--navy-deep);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+}
+::selection{background:var(--gold);color:#0b1730;}
+
+/* ---------- shell ---------- */
+.shell{display:flex;min-height:100vh;}
+.sidebar{
+  width:250px;flex-shrink:0;
+  background:linear-gradient(180deg,var(--navy) 0%, var(--navy-deep) 100%);
+  border-right:1px solid var(--navy-line);
+  padding:28px 20px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.brand{margin-bottom:6px;}
+.brand .kicker{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--gold-dim);text-transform:uppercase;
+}
+.brand h1{
+  font-family:var(--serif);font-size:26px;line-height:1.15;margin:6px 0 2px;color:var(--gold-bright);
+  font-weight:600;
+}
+.brand p{font-size:12px;color:var(--text-dim);margin:0 0 26px;line-height:1.5;}
+
+.navgroup{margin-bottom:22px;}
+.navgroup .label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--gold-dim);text-transform:uppercase;margin:0 0 10px 2px;}
+.navbtn{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  background:transparent;border:1px solid transparent;color:var(--text-dim);
+  padding:10px 12px;border-radius:8px;font-size:14.5px;cursor:pointer;margin-bottom:4px;
+  font-family:var(--sans);transition:all .15s ease;
+}
+.navbtn:hover{background:rgba(212,175,55,.06);color:var(--text);}
+.navbtn.active{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.35);color:var(--gold-bright);}
+.navbtn .dot{width:6px;height:6px;border-radius:50%;background:var(--navy-line);flex-shrink:0;}
+.navbtn.active .dot{background:var(--gold);}
+
+.unitlist{max-height:340px;overflow-y:auto;padding-right:4px;}
+.unitlink{
+  display:block;font-size:12.5px;color:var(--text-dim);padding:7px 10px;border-radius:6px;cursor:pointer;
+  border-left:2px solid transparent;line-height:1.35;
+}
+.unitlink:hover{color:var(--gold-bright);background:rgba(212,175,55,.05);}
+.unitlink.active{color:var(--gold-bright);border-left-color:var(--gold);background:rgba(212,175,55,.08);}
+
+.progress-mini{margin-top:auto;padding-top:20px;border-top:1px solid var(--navy-line);font-size:11px;color:var(--text-dim);}
+
+/* ---------- main ---------- */
+.main{flex:1;min-width:0;padding:40px 48px 90px;max-width:980px;}
+.view{display:none;}
+.view.active{display:block;animation:fadeUp .35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.pagehead{margin-bottom:32px;border-bottom:1px solid var(--navy-line);padding-bottom:22px;}
+.pagehead .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;}
+.pagehead h2{font-family:var(--serif);font-size:34px;margin:8px 0 6px;color:var(--text);font-weight:600;}
+.pagehead p{color:var(--text-dim);font-size:14.5px;max-width:640px;line-height:1.6;margin:0;}
+
+/* ---------- notes ---------- */
+.unit{
+  background:var(--navy-panel);border:1px solid var(--navy-line);border-radius:14px;
+  padding:30px 32px;margin-bottom:22px;
+}
+.unit h3{
+  font-family:var(--serif);color:var(--gold-bright);font-size:22px;margin:0 0 14px;
+  padding-bottom:12px;border-bottom:1px solid var(--navy-line);
+}
+.unit h4{font-family:var(--serif);color:var(--gold);font-size:16.5px;margin:22px 0 8px;}
+.unit p{color:var(--text);font-size:14.8px;line-height:1.75;margin:0 0 12px;}
+.unit p.dim{color:var(--text-dim);}
+.unit ul,.unit ol{margin:0 0 14px;padding-left:22px;color:var(--text);font-size:14.8px;line-height:1.7;}
+.unit li{margin-bottom:6px;}
+.unit strong{color:var(--gold-bright);font-weight:600;}
+.callout{
+  background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.25);border-left:3px solid var(--gold);
+  border-radius:8px;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);line-height:1.65;
+}
+.callout .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:6px;}
+.worked{
+  background:var(--navy-deep);border:1px solid var(--navy-line);border-radius:8px;padding:16px 18px;margin:14px 0;
+  font-family:var(--mono);font-size:13px;color:#c7d3ee;line-height:1.9;overflow-x:auto;white-space:pre-wrap;
+}
+.tblwrap{overflow-x:auto;margin:14px 0;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+th{background:rgba(212,175,55,.09);color:var(--gold-bright);text-align:left;padding:9px 12px;font-weight:600;border-bottom:1px solid var(--navy-line);}
+td{padding:8px 12px;border-bottom:1px solid var(--navy-line);color:var(--text);}
+tr:hover td{background:rgba(212,175,55,.03);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:720px){.grid2{grid-template-columns:1fr;}}
+.mini{background:var(--navy-deep);border:1px solid var(--navy-line);border-radius:8px;padding:12px 14px;font-size:13.5px;color:var(--text-dim);}
+.mini b{color:var(--gold-bright);}
+
+/* ---------- flashcards ---------- */
+.fc-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
+.fc-count{font-family:var(--mono);font-size:12px;color:var(--text-dim);}
+.fc-count b{color:var(--gold-bright);}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;}
+.btn{
+  background:var(--navy-panel);border:1px solid var(--navy-line);color:var(--text);
+  padding:9px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:var(--sans);
+  transition:all .15s ease;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold-bright);}
+.btn.primary{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:#0b1730;border:none;font-weight:600;}
+.btn.primary:hover{filter:brightness(1.1);color:#0b1730;}
+.btn:disabled{opacity:.35;cursor:not-allowed;}
+
+.fc-stage{display:flex;justify-content:center;margin-bottom:22px;}
+.fc-card{
+  width:100%;max-width:620px;height:320px;perspective:1400px;cursor:pointer;
+}
+.fc-inner{
+  position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  transform-style:preserve-3d;
+}
+.fc-card.flipped .fc-inner{transform:rotateY(180deg);}
+.fc-face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  padding:36px;border:1px solid var(--navy-line);
+}
+.fc-front{background:linear-gradient(150deg,var(--navy-panel),var(--navy));}
+.fc-back{
+  background:linear-gradient(150deg,#16213f,#0d1730);transform:rotateY(180deg);border-color:rgba(212,175,55,.4);
+}
+.fc-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:16px;}
+.fc-face h3{font-family:var(--serif);font-size:22px;color:var(--text);line-height:1.4;font-weight:500;margin:0;}
+.fc-face p{font-size:14.5px;color:var(--text-dim);line-height:1.7;margin:0;}
+.fc-back p{color:var(--text);}
+.fc-hint{position:absolute;bottom:16px;font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:.08em;}
+.fc-nav{display:flex;justify-content:center;gap:14px;align-items:center;}
+.fc-nav .btn{min-width:90px;}
+.fc-jump{font-family:var(--mono);font-size:12px;color:var(--text-dim);}
+
+/* ---------- quiz ---------- */
+.quiz-start{
+  background:var(--navy-panel);border:1px solid var(--navy-line);border-radius:14px;padding:44px;text-align:center;
+}
+.quiz-start h3{font-family:var(--serif);font-size:26px;color:var(--gold-bright);margin:0 0 10px;}
+.quiz-start p{color:var(--text-dim);font-size:14.5px;max-width:520px;margin:0 auto 26px;line-height:1.7;}
+.quiz-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.qp-bar{flex:1;height:6px;background:var(--navy-line);border-radius:4px;overflow:hidden;margin:0 16px;min-width:120px;}
+.qp-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold-bright));transition:width .3s ease;}
+.qtag{font-family:var(--mono);font-size:11.5px;color:var(--text-dim);}
+.qcard{background:var(--navy-panel);border:1px solid var(--navy-line);border-radius:14px;padding:32px;}
+.qcard .qnum{font-family:var(--mono);font-size:11px;color:var(--gold-dim);letter-spacing:.12em;margin-bottom:10px;}
+.qcard h4{font-family:var(--serif);font-size:19px;color:var(--text);font-weight:500;line-height:1.5;margin:0 0 22px;}
+.opts{display:flex;flex-direction:column;gap:10px;margin-bottom:8px;}
+.opt{
+  display:flex;gap:12px;align-items:flex-start;text-align:left;background:var(--navy-deep);
+  border:1px solid var(--navy-line);border-radius:9px;padding:13px 16px;cursor:pointer;font-size:14px;color:var(--text);
+  font-family:var(--sans);transition:all .12s ease;
+}
+.opt:hover:not(.locked){border-color:var(--gold);background:rgba(212,175,55,.05);}
+.opt .letter{font-family:var(--mono);color:var(--gold-dim);font-weight:600;flex-shrink:0;}
+.opt.correct{border-color:var(--ok);background:rgba(95,211,147,.1);}
+.opt.correct .letter{color:var(--ok);}
+.opt.wrong{border-color:var(--bad);background:rgba(226,100,92,.1);}
+.opt.wrong .letter{color:var(--bad);}
+.opt.locked{cursor:default;}
+.explain{
+  margin-top:16px;padding:16px 18px;border-radius:9px;font-size:13.8px;line-height:1.7;display:none;
+}
+.explain.show{display:block;animation:fadeUp .3s ease;}
+.explain.right{background:rgba(95,211,147,.08);border:1px solid rgba(95,211,147,.35);color:var(--text);}
+.explain.wrongbox{background:rgba(226,100,92,.08);border:1px solid rgba(226,100,92,.35);color:var(--text);}
+.explain b{color:var(--gold-bright);}
+.qfoot{display:flex;justify-content:flex-end;margin-top:20px;}
+
+/* results / breakdown */
+.results{background:var(--navy-panel);border:1px solid var(--navy-line);border-radius:14px;padding:38px;}
+.score-hero{text-align:center;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--navy-line);}
+.score-hero .big{font-family:var(--serif);font-size:64px;color:var(--gold-bright);line-height:1;}
+.score-hero .big span{font-size:26px;color:var(--text-dim);}
+.score-hero .msg{color:var(--text-dim);font-size:14.5px;margin-top:10px;}
+.breakdown-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.breakdown-head h4{font-family:var(--serif);color:var(--gold-bright);font-size:19px;margin:0;}
+.bd-item{border:1px solid var(--navy-line);border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.bd-item.miss{border-color:rgba(226,100,92,.4);background:rgba(226,100,92,.04);}
+.bd-item.hit{border-color:rgba(95,211,147,.3);background:rgba(95,211,147,.03);}
+.bd-q{font-size:14.2px;color:var(--text);margin-bottom:8px;line-height:1.55;}
+.bd-row{font-size:13px;line-height:1.6;margin-bottom:3px;}
+.bd-row .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--gold-dim);text-transform:uppercase;margin-right:6px;}
+.bd-row.ok-txt{color:var(--ok);}
+.bd-row.bad-txt{color:var(--bad);}
+.bd-exp{font-size:13.2px;color:var(--text-dim);margin-top:8px;line-height:1.65;padding-top:8px;border-top:1px dashed var(--navy-line);}
+
+footer.sitefoot{margin-top:40px;padding-top:20px;border-top:1px solid var(--navy-line);color:var(--text-dim);font-size:11.5px;font-family:var(--mono);text-align:center;}
+
+@media(max-width:860px){
+  .shell{flex-direction:column;}
+  .sidebar{width:100%;height:auto;position:relative;top:0;}
+  .main{padding:26px 18px 60px;}
+  .unit{padding:22px 18px;}
+}
+</style>
 </head>
 <body>
-  <header class="hero">
-    <div>
-      <p class="eyebrow">CHM 213 • Textile Chemistry</p>
-      <h1>Textile Chemistry Study Hub</h1>
-      <p class="sub">Notes, 50 flashcards and a 50-question quiz — all in one place.</p>
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="kicker">The Study Loom · DELSU</div>
+      <h1>CHM 212</h1>
+      <p>Structure &amp; Bonding — atomic structure, quantum theory, hydrogen bonding, hybridization &amp; molecular orbital theory.</p>
     </div>
-    <div class="progress-card">
-      <span>Quiz best</span>
-      <strong id="bestScore">0/50</strong>
+
+    <div class="navgroup">
+      <div class="label">Study Modes</div>
+      <button class="navbtn active" data-view="notes"><span class="dot"></span>Notes</button>
+      <button class="navbtn" data-view="flash"><span class="dot"></span>Flashcards</button>
+      <button class="navbtn" data-view="quiz"><span class="dot"></span>Quiz (50)</button>
     </div>
-  </header>
 
-  <nav class="tabs">
-    <button class="tab active" data-page="home">Home</button>
-    <button class="tab" data-page="notes">Notes</button>
-    <button class="tab" data-page="flashcards">Flashcards <span>50</span></button>
-    <button class="tab" data-page="quiz">Quiz <span>50</span></button>
-    <a class="tab pdf-link" href="CHM213_Textile_Chemistry_Notes.pdf" target="_blank">Original PDF ↗</a>
-  </nav>
+    <div class="navgroup" id="unitNavGroup">
+      <div class="label">Units — Notes</div>
+      <div class="unitlist" id="unitList"></div>
+    </div>
 
-  <main>
-    <section id="home" class="page active">
-      <div class="grid">
-        <article class="card">
-          <div class="icon">📚</div>
-          <h2>Study the notes</h2>
-          <p>Review the main fibre, yarn, colour and dye topics covered in the uploaded material.</p>
-          <button class="primary" data-go="notes">Open notes</button>
-        </article>
-        <article class="card">
-          <div class="icon">🧠</div>
-          <h2>50 flashcards</h2>
-          <p>Tap a card to reveal the answer. Use Previous/Next or shuffle the deck.</p>
-          <button class="primary" data-go="flashcards">Start flashcards</button>
-        </article>
-        <article class="card">
-          <div class="icon">⚡</div>
-          <h2>50-question quiz</h2>
-          <p>Multiple-choice practice with instant feedback and a final score.</p>
-          <button class="primary" data-go="quiz">Take quiz</button>
-        </article>
+    <div class="progress-mini">
+      CHM 212 · 2nd Semester<br>200 Level · Chemistry
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ================= NOTES ================= -->
+    <section class="view active" id="view-notes">
+      <div class="pagehead">
+        <div class="eyebrow">Full Breakdown — No Shortcuts</div>
+        <h2>Structure &amp; Bonding</h2>
+        <p>Everything from your lecture notes explained in full: atomic structure, orbital shapes, quantum numbers, the hydrogen spectrum, hydrogen bonding, hybridization, valence forces and molecular orbital theory — with the reasoning behind every rule and every worked calculation shown step by step.</p>
       </div>
-
-      <div class="notice">
-        <b>Study tip:</b> Know the definitions first (fibre, filament, yarn, spinning), then move into fibre classes,
-        fibre properties, dye classes and nylon/polymer manufacture.
-      </div>
+      <div id="notesContainer"></div>
     </section>
 
-    <section id="notes" class="page">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Quick revision</p>
-          <h2>Core notes</h2>
-        </div>
-        <input id="noteSearch" class="search" placeholder="Search notes...">
-      </div>
-      <div id="notesList" class="notes-list"></div>
-    </section>
-
-    <section id="flashcards" class="page">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Active recall</p>
-          <h2>50 Flashcards</h2>
-        </div>
-        <button id="shuffleBtn" class="secondary">🔀 Shuffle</button>
+    <!-- ================= FLASHCARDS ================= -->
+    <section class="view" id="view-flash">
+      <div class="pagehead">
+        <div class="eyebrow">Active Recall</div>
+        <h2>Flashcards</h2>
+        <p>Randomly ordered every time you shuffle. Tap a card to flip it, then mark whether you knew it — that's what "Study loop" replays.</p>
       </div>
 
-      <div class="flash-wrap">
-        <div id="flashCard" class="flash-card" tabindex="0">
-          <div class="flash-top">
-            <span id="flashNumber">1 / 50</span>
-            <span>Tap card to flip</span>
-          </div>
-          <div class="flash-face front">
-            <div class="fc-label">QUESTION</div>
-            <h3 id="flashQuestion"></h3>
-          </div>
-          <div class="flash-face back">
-            <div class="fc-label">ANSWER</div>
-            <p id="flashAnswer"></p>
+      <div class="fc-bar">
+        <div class="fc-count">Card <b id="fcPos">1</b> of <b id="fcTotal">0</b> &nbsp;·&nbsp; Missed queued: <b id="fcMissed">0</b></div>
+        <div class="btnrow">
+          <button class="btn" id="fcShuffle">🔀 Shuffle</button>
+          <button class="btn" id="fcLoop">↻ Study Loop (missed)</button>
+          <button class="btn primary" id="fcRestart">Restart Deck</button>
+        </div>
+      </div>
+
+      <div class="fc-stage">
+        <div class="fc-card" id="fcCard">
+          <div class="fc-inner">
+            <div class="fc-face fc-front">
+              <div class="fc-label">Term / Prompt</div>
+              <h3 id="fcFrontText">Loading…</h3>
+              <div class="fc-hint">tap to reveal</div>
+            </div>
+            <div class="fc-face fc-back">
+              <div class="fc-label">Answer</div>
+              <p id="fcBackText"></p>
+              <div class="fc-hint">tap to flip back</div>
+            </div>
           </div>
         </div>
-        <div class="controls">
-          <button id="prevFlash" class="secondary">← Previous</button>
-          <button id="nextFlash" class="primary">Next →</button>
-        </div>
+      </div>
+
+      <div class="fc-nav">
+        <button class="btn" id="fcPrev">← Prev</button>
+        <button class="btn" id="fcDontKnow" style="border-color:var(--bad);">✕ Didn't know</button>
+        <button class="btn" id="fcKnow" style="border-color:var(--ok);">✓ Knew it</button>
+        <button class="btn" id="fcNext">Next →</button>
       </div>
     </section>
 
-    <section id="quiz" class="page">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Practice mode</p>
-          <h2>50-Question Quiz</h2>
+    <!-- ================= QUIZ ================= -->
+    <section class="view" id="view-quiz">
+      <div class="pagehead">
+        <div class="eyebrow">Test Yourself</div>
+        <h2>50-Question Quiz</h2>
+        <p>Every attempt pulls 50 questions at random from a larger advanced pool and shuffles the answer choices — so it's never the same quiz twice. Full explanations after each answer, and a complete breakdown of every question at the end.</p>
+      </div>
+
+      <div id="quizStartWrap">
+        <div class="quiz-start">
+          <h3>Ready when you are</h3>
+          <p>Covers electronic structure, quantum numbers, the hydrogen spectrum, Bohr's model, hydrogen bonding &amp; boiling points, hybridization, valence forces, Lewis structures, resonance, and molecular orbital theory / bond order — including calculation questions.</p>
+          <button class="btn primary" id="quizBeginBtn" style="padding:13px 32px;font-size:14.5px;">Start Quiz →</button>
         </div>
-        <div class="quiz-meta"><span id="quizCount">Question 1 of 50</span><span id="quizScore">Score: 0</span></div>
-      </div>
-      <div class="bar"><div id="quizBar"></div></div>
-
-      <div id="quizBox" class="quiz-box">
-        <h3 id="quizQuestion"></h3>
-        <div id="options"></div>
-        <div id="quizFeedback" class="feedback"></div>
-        <button id="nextQuiz" class="primary hidden">Next question →</button>
       </div>
 
-      <div id="quizResult" class="result hidden">
-        <div class="big-score" id="finalScore">0/50</div>
-        <h2 id="resultTitle">Done!</h2>
-        <p id="resultText"></p>
-        <button id="restartQuiz" class="primary">Try again</button>
+      <div id="quizRunWrap" style="display:none;">
+        <div class="quiz-topbar">
+          <span class="qtag" id="quizPosTag">Question 1 / 50</span>
+          <div class="qp-bar"><div class="qp-fill" id="quizProgFill" style="width:2%;"></div></div>
+          <span class="qtag" id="quizScoreTag">Score: 0</span>
+        </div>
+        <div class="qcard" id="quizCard"></div>
       </div>
+
+      <div id="quizResultsWrap" style="display:none;"></div>
     </section>
+
+    <footer class="sitefoot">CHM 212 · The Study Loom · built for close, careful revision</footer>
   </main>
+</div>
 
-  <footer>
-    <p>CHM 213 • Textile Chemistry Study Hub</p>
-  </footer>
+<script>
+/* =========================================================================
+   CONTENT DATA
+   ========================================================================= */
 
-  <script src="app.js"></script>
-</body>
-</html>
+const UNITS = [
+{
+ id:'u1', title:'Unit 1 — Electronic Structure of the Atom',
+ html:`
+ <p>Every atom is built from a <strong>dense, positively charged nucleus</strong> surrounded by a cloud of negatively charged electrons. The number of electrons surrounding a neutral atom is numerically equal to the number of protons in the nucleus — this is why a neutral atom carries no overall charge. Almost all of the atom's mass sits in the nucleus, because protons and neutrons are roughly 1836 times heavier than an electron; the electrons contribute negligible mass but define almost all of the atom's chemistry.</p>
+ <p>Electrons are not spread randomly around the nucleus. They occupy specific three-dimensional regions of space called <strong>orbitals</strong>. An orbital is defined as a region where there is a high probability (conventionally taken as 90%) of finding an electron. Each individual orbital can hold a <strong>maximum of two electrons</strong>, and those two electrons must have opposite spins (this is a direct consequence of the Pauli Exclusion Principle, covered later).</p>
+ <p>Because each shell is built from a fixed number of orbitals, each shell has a maximum electron capacity:</p>
+ <ul>
+  <li><strong>1st shell (n = 1):</strong> only the 1s orbital exists → holds a maximum of <strong>2 electrons</strong>.</li>
+  <li><strong>2nd shell (n = 2):</strong> the 2s and three 2p orbitals (2px, 2py, 2pz) exist → holds a maximum of <strong>8 electrons</strong>.</li>
+  <li><strong>3rd shell (n = 3):</strong> the 3s, three 3p, and five 3d orbitals exist → holds a maximum of <strong>18 electrons</strong>.</li>
+ </ul>
+ <div class="callout"><span class="tag">Why this matters</span>These capacities (2, 8, 18…) come directly from the formula <strong>2n²</strong>, where n is the shell number. This is the same reason the periodic table's rows have the lengths they do.</div>
+
+ <h4>Electronic configuration of the first 18 elements</h4>
+ <p>Filling electrons into 1s, 2s, 2px, 2py, 2pz, 3s, 3px, 3py, 3pz in order of increasing energy gives the configurations below. Notice how each orbital fills singly before pairing (this is Hund's Rule in action, even before it is formally stated).</p>
+ <div class="tblwrap"><table>
+ <tr><th>Element</th><th>Z</th><th>1s</th><th>2s</th><th>2px</th><th>2py</th><th>2pz</th><th>3s</th><th>3px</th><th>3py</th><th>3pz</th></tr>
+ <tr><td>H</td><td>1</td><td>1</td><td colspan="8"></td></tr>
+ <tr><td>He</td><td>2</td><td>2</td><td colspan="8"></td></tr>
+ <tr><td>Li</td><td>3</td><td>2</td><td>1</td><td colspan="7"></td></tr>
+ <tr><td>Be</td><td>4</td><td>2</td><td>2</td><td colspan="7"></td></tr>
+ <tr><td>B</td><td>5</td><td>2</td><td>2</td><td>1</td><td colspan="6"></td></tr>
+ <tr><td>C</td><td>6</td><td>2</td><td>2</td><td>1</td><td>1</td><td colspan="5"></td></tr>
+ <tr><td>N</td><td>7</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td><td colspan="4"></td></tr>
+ <tr><td>O</td><td>8</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td colspan="4"></td></tr>
+ <tr><td>F</td><td>9</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td colspan="4"></td></tr>
+ <tr><td>Ne</td><td>10</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td colspan="4"></td></tr>
+ <tr><td>Na</td><td>11</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td colspan="3"></td></tr>
+ <tr><td>Mg</td><td>12</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td colspan="3"></td></tr>
+ <tr><td>Al</td><td>13</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td colspan="2"></td></tr>
+ <tr><td>Si</td><td>14</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td></td></tr>
+ <tr><td>P</td><td>15</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>1</td></tr>
+ <tr><td>S</td><td>16</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td></tr>
+ <tr><td>Cl</td><td>17</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td></tr>
+ <tr><td>Ar</td><td>18</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+ </table></div>
+
+ <h4>Valence electrons</h4>
+ <p>The electrons in the <strong>outermost shell</strong> (the valence shell) are called <strong>valence electrons</strong>. These are the electrons that actually participate in chemical bonding and reactions — the inner, "core" electrons are shielded and essentially chemically inactive. Valence electrons are represented as dots surrounding the element's symbol (Lewis dot notation).</p>
+ <p>The <strong>valency</strong> of an element is the number of bonds it can form, which is dictated by how many valence electrons it has and how many more it needs to complete an octet:</p>
+ <ul>
+  <li><strong>Hydrogen:</strong> 1 valence electron, needs 1 more → valency 1</li>
+  <li><strong>Oxygen:</strong> 6 valence electrons, needs 2 more → valency 2</li>
+  <li><strong>Nitrogen:</strong> 5 valence electrons, needs 3 more → valency 3</li>
+  <li><strong>Carbon:</strong> 4 valence electrons, needs 4 more → valency 4</li>
+  <li><strong>Halogens (F, Cl, Br, I):</strong> 7 valence electrons, need 1 more → valency 1</li>
+ </ul>
+ <p class="dim">These valencies combine through some appropriate mixture of single, double and triple bonds to satisfy every atom's octet in a molecule.</p>
+ `
+},
+{
+ id:'u2', title:'Unit 2 — Ground State, Excited State & Degenerate Orbitals',
+ html:`
+ <h4>Ground state</h4>
+ <p>The <strong>ground state</strong> is the lowest-energy, most stable arrangement of an atom's electrons. For carbon, the ground state configuration is 1s² 2s² 2px¹ 2py¹ 2pz⁰ — two paired electrons in 1s, two paired in 2s, and two unpaired single electrons occupying two of the three 2p orbitals (following Hund's Rule).</p>
+ <h4>Excited state and sp³ hybrid formation</h4>
+ <p>When one electron is promoted from the filled 2s orbital into the empty 2pz orbital, carbon reaches an <strong>excited state</strong>: 1s² 2s¹ 2px¹ 2py¹ 2pz¹ — now with four unpaired electrons. The 2s orbital and the three 2p orbitals then mathematically combine (mix) to produce four new, identical orbitals called <strong>sp³ hybrid orbitals</strong>, each written as sp³, sp³, sp³, sp³. This promotion-then-mixing process is exactly why carbon can form four equivalent bonds (as in methane, CH₄) rather than the two you might predict from its unexcited ground state.</p>
+ <h4>Degenerate orbitals</h4>
+ <p><strong>Degenerate orbitals</strong> are orbitals belonging to the same subshell that all have exactly the same energy — for example the three 2p orbitals, the five 3d orbitals, or the seven 4f orbitals. A key rule (which becomes Hund's Rule) is that <strong>electron pairing across a set of degenerate orbitals does not happen until every orbital in that set already holds one electron</strong>, and those single electrons all have parallel (same-direction) spin.</p>
+ <div class="callout"><span class="tag">Exam Angle</span>Ground/excited state and degenerate orbitals are the conceptual bridge between "electron filling" and "hybridization" — examiners like to test whether you understand *why* promotion happens, not just that it does.</div>
+ `
+},
+{
+ id:'u3', title:'Unit 3 — Shapes of Atomic Orbitals (s, p, d, f)',
+ html:`
+ <h4>s orbitals</h4>
+ <p>The s orbital is <strong>spherically symmetrical</strong> — the probability of finding the electron is the same in every direction from the nucleus at a given distance. The probability of finding the electron is highest very close to the nucleus and decreases rapidly (though never quite to zero) with distance. Because there is no true outer boundary, chemists draw the orbital as a boundary surface enclosing the region where there is a 90% probability of finding the electron. The s orbital has <strong>no nodal plane</strong> and is assigned a + sign throughout because it has no node.</p>
+ <h4>p orbitals</h4>
+ <p>A p orbital consists of <strong>two lobes on opposite sides of the nucleus</strong>, giving it a dumbbell shape. There are three degenerate p orbitals per shell — px, py, pz — lying along the three mutually perpendicular axes. The probability of finding an electron exactly at the nucleus is zero; this zero-probability point is called a <strong>node</strong>. The two lobes on either side of the node are assigned + and − signs (these are phase signs from the wave mathematics, not electrical charges).</p>
+ <h4>d orbitals</h4>
+ <p>There are <strong>five degenerate d orbitals</strong>: dxy, dxz, dyz, dx²−y², and dz². Four of them (dxy, dxz, dyz, dx²−y²) look like four-leaf clovers, with four lobes pointing in different directions between or along the axes. The fifth, dz², looks different — a dumbbell along the z-axis with a doughnut-shaped ring around its middle. All five d orbitals have mutually perpendicular axes.</p>
+ <h4>f orbitals</h4>
+ <p>There are <strong>seven degenerate f orbitals</strong> (fx, fy, fz, fxy, fxz, fyz, fxyz). Three look like a dumbbell with two doughnuts around the middle; the other four look like a bundle of eight balloons tied together, pointing toward the corners of a cube.</p>
+
+ <h4>Summary table — orbital shapes &amp; nodal planes</h4>
+ <div class="tblwrap"><table>
+ <tr><th>Orbital</th><th>Shape</th><th>Number in subshell</th><th>Nodal planes (l value)</th></tr>
+ <tr><td>s</td><td>Spherical</td><td>1</td><td>0 (l = 0)</td></tr>
+ <tr><td>p</td><td>Dumbbell (2 lobes)</td><td>3</td><td>1 (l = 1)</td></tr>
+ <tr><td>d</td><td>Four clover-leaf + one donut/dumbbell</td><td>5</td><td>2 (l = 2)</td></tr>
+ <tr><td>f</td><td>Complex multi-lobed</td><td>7</td><td>3 (l = 3)</td></tr>
+ </table></div>
+ <p class="dim">General rule: the number of nodal planes passing through the nucleus in an orbital equals l (the azimuthal quantum number), and increases as n increases (nodal planes = n − l − 1 for the additional spherical/radial nodes). The 1s orbital has zero nodal planes; 2s has one node (but it is a spherical/radial node, not angular).</p>
+ <p>Spherical (radial) nodes are surfaces within an orbital where the probability of finding the electron is exactly zero. The number of spherical nodes in an orbital = (n − l − 1). The number of angular (non-spherical) nodes = l. Total nodes in any orbital = (n − 1).</p>
+ `
+},
+{
+ id:'u4', title:'Unit 4 — Quantum Numbers',
+ html:`
+ <p>Electrons occupying orbitals are fully described by a set of <strong>four quantum numbers</strong>. Together these numbers specify the size, shape, orientation, and spin of the "electron wave" in a particular orbital — think of them as the electron's full postal address inside the atom.</p>
+
+ <h4>a) Principal Quantum Number (n)</h4>
+ <p>Indicates the <strong>size</strong> (amplitude) of the electron wave and, broadly, the total energy of the orbital/shell. It takes positive integer values: n = 1, 2, 3, 4 … These correspond to the shells historically labelled K, L, M, N. Higher n means the electron is, on average, farther from the nucleus and higher in energy.</p>
+
+ <h4>b) Azimuthal (Angular Momentum) Quantum Number (l)</h4>
+ <p>Indicates the <strong>shape</strong> of the orbital and identifies the subshell. For a given value of n, l can take any integer value from 0 up to (n − 1). l = 0 is an s subshell, l = 1 is a p subshell, l = 2 is a d subshell, l = 3 is an f subshell.</p>
+
+ <h4>c) Magnetic Quantum Number (m)</h4>
+ <p>Indicates the <strong>orientation</strong> of an orbital in space (which direction it points). For each subshell, m can take integer values from −l through 0 to +l, giving (2l + 1) possible orbitals in that subshell. For example, when l = 1 (p subshell), m = −1, 0, +1 → three p orbitals (px, py, pz), matching the (2×1+1)=3 rule.</p>
+
+ <h4>d) Spin Quantum Number (s)</h4>
+ <p>Indicates the direction an electron spins on its own axis. It can only take two values: <strong>+½ (clockwise)</strong> or <strong>−½ (anticlockwise)</strong>. Two electrons occupying the same orbital must have opposite spin values.</p>
+
+ <div class="callout"><span class="tag">Quick cross-check</span>
+ n tells you the shell. l tells you the subshell (shape). m tells you which specific orbital within that subshell. s tells you which of the two electrons within that orbital you mean. No two electrons in the same atom can share all four — this is the Pauli Exclusion Principle.</div>
+ `
+},
+{
+ id:'u5', title:'Unit 5 — Aufbau, Pauli & Hund (Filling Rules)',
+ html:`
+ <h4>Aufbau Principle ("building-up" principle)</h4>
+ <p>Electrons fill orbitals in order of <strong>increasing energy</strong>, and the energy ordering of orbitals is governed by the <strong>(n + l) rule</strong>: the orbital with the lower sum of (n + l) fills first. If two orbitals have the same (n + l) value, the one with the lower n fills first.</p>
+ <div class="worked">Order of filling (the standard "diagonal rule" sequence):
+1s < 2s < 2p < 3s < 3p < 4s < 3d < 4p < 5s < 4d < 5p
+< 6s < 4f < 5d < 6p < 7s < 5f < 6d < 7p < 8s</div>
+ <p>Anomalies show up mainly among the transition metals, because a half-filled or completely filled d subshell has extra stability. Chromium's actual configuration is <strong>3d⁵ 4s¹</strong> rather than the "expected" 3d⁴ 4s², because a half-filled d⁵ set is more stable. Similarly, copper's actual configuration is <strong>3d¹⁰ 4s¹</strong> rather than 3d⁹ 4s², because a fully-filled d¹⁰ set is more stable.</p>
+
+ <h4>Pauli's Exclusion Principle</h4>
+ <p>No two electrons in the same atom can have <strong>identical values for all four quantum numbers</strong>. Practically, this is why an orbital (fixed n, l, m) can only ever hold two electrons — and those two must have opposite spin (+½ and −½) to differ in at least one quantum number.</p>
+
+ <h4>Hund's Rule (maximum multiplicity)</h4>
+ <p>When electrons are being added to a set of degenerate orbitals (like the three 2p orbitals), <strong>pairing does not occur until every orbital in that set already contains one electron</strong>, and all of those singly-occupying electrons have parallel spin. This is why, going across the ground-state configuration for carbon, nitrogen and oxygen, electrons enter the three 2p orbitals singly first (C: 2px¹2py¹; N: 2px¹2py¹2pz¹) before any pairing starts (O: 2px²2py¹2pz¹).</p>
+
+ <div class="callout"><span class="tag">Why degenerate orbitals half-fill first</span>Electrons repel each other (they are all negatively charged). Spreading out into separate, same-energy orbitals with parallel spin minimises electron–electron repulsion and is therefore lower in energy than forcing two electrons into one orbital while another orbital in the same subshell sits empty.</div>
+
+ <h4>Sublevels and orbital capacities — quick reference</h4>
+ <div class="tblwrap"><table>
+ <tr><th>Sublevel</th><th>Max electrons</th><th>No. of degenerate orbitals</th><th>Filled-orbital notation</th></tr>
+ <tr><td>s</td><td>2</td><td>1</td><td>s²</td></tr>
+ <tr><td>p</td><td>6</td><td>3</td><td>p⁶</td></tr>
+ <tr><td>d</td><td>10</td><td>5</td><td>d¹⁰</td></tr>
+ <tr><td>f</td><td>14</td><td>7</td><td>f¹⁴</td></tr>
+ </table></div>
+ `
+},
+{
+ id:'u6', title:'Unit 6 — Bohr\u2019s Model & the Hydrogen Spectrum',
+ html:`
+ <h4>Postulates of Bohr's atomic model (1913)</h4>
+ <ol>
+  <li><strong>Electrons move in specific circular orbits</strong> around the nucleus without radiating energy. These orbits (also called shells or energy levels) are quantised — only certain orbits, where the electron's angular momentum is a whole-number multiple of h/2π, are allowed.</li>
+  <li><strong>Quantisation of energy:</strong> electrons can only occupy certain discrete, allowed energy levels. An electron only emits or absorbs energy when it transitions between these levels, and it does so in discrete packets called <strong>quanta</strong>, with energy E = hf (h = Planck's constant, f = frequency of the emitted/absorbed light).</li>
+  <li><strong>Angular momentum quantisation:</strong> the angular momentum of an electron in a given orbit is an integer multiple of h/2π. This condition is what makes only certain orbits stable.</li>
+  <li><strong>Radiation absorption/emission:</strong> when an electron jumps between energy levels it absorbs or emits electromagnetic radiation whose frequency is directly proportional to the energy difference between the initial and final states.</li>
+  <li><strong>Stability of orbits:</strong> an electron can exist stably in an allowed orbit because the centripetal force from its circular motion is exactly balanced by the electrostatic attraction pulling it toward the nucleus.</li>
+  <li><strong>Limitations:</strong> the model explains hydrogen's stability and its discrete spectral lines very well, but it cannot explain the fine structure of spectral lines, nor the behaviour of atoms with more than one electron (multi-electron atoms). Even so, it laid essential groundwork for modern quantum mechanics.</li>
+ </ol>
+ <p class="dim">Rule of thumb for jumps: when an electron falls from a higher energy level to a lower one, it <strong>loses</strong> energy (emits a photon). When it is promoted from a lower level to a higher one, it <strong>gains</strong> energy (absorbs a photon).</p>
+
+ <h4>The hydrogen emission spectrum — five named series</h4>
+ <p>Each series corresponds to all possible electron transitions that land on (or start from) one specific lower energy level (n₁), with the general formula:</p>
+ <div class="worked">1/λ  =  R_H ( 1/n₁²  −  1/n₂² )      where R_H = 1.097 × 10⁷ m⁻¹ (Rydberg constant)</div>
+ <div class="tblwrap"><table>
+ <tr><th>Series</th><th>Formula</th><th>Final level n₁</th><th>n₂ range</th><th>EM region</th></tr>
+ <tr><td>Lyman</td><td>R(1/1² − 1/n²)</td><td>1</td><td>n = 2, 3, 4, 5…</td><td>Ultraviolet</td></tr>
+ <tr><td>Balmer</td><td>R(1/2² − 1/n²)</td><td>2</td><td>n = 3, 4, 5, 6…</td><td>Visible</td></tr>
+ <tr><td>Paschen</td><td>R(1/3² − 1/n²)</td><td>3</td><td>n = 4, 5, 6, 7…</td><td>Infrared</td></tr>
+ <tr><td>Brackett</td><td>R(1/4² − 1/n²)</td><td>4</td><td>n = 5, 6, 7, 8…</td><td>Infrared</td></tr>
+ <tr><td>Pfund</td><td>R(1/5² − 1/n²)</td><td>5</td><td>n = 6, 7, 8, 9…</td><td>Infrared</td></tr>
+ </table></div>
+ <p>Only the <strong>Balmer series</strong> (transitions landing on n = 2) falls in the visible region — this is why it was discovered first, historically, and it's the series most exam questions probe first.</p>
+
+ <h4>Worked example 1 — energy released, n = 3 → n = 1</h4>
+ <p>Using Bohr's formula for the energy of a hydrogen level, E_n = −1312/n² kJ mol⁻¹:</p>
+ <div class="worked">E₃ = −1312/3² = −145.8 kJ mol⁻¹
+E₁ = −1312/1² = −1312 kJ mol⁻¹
+ΔE = E₃ − E₁ = −145.8 − (−1312) = 1166 kJ mol⁻¹  (energy released)
+
+Per atom:  ΔE = 1166 / (6.02×10²³) = 1.93×10⁻²¹ kJ/atom = 1.93×10⁻¹⁸ J/atom</div>
+ <p class="dim">Note: the transition n=3→n=1 falls into the Lyman series (final level 1), so this photon is in the ultraviolet region.</p>
+
+ <h4>Worked example 2 — quantum number from a velocity ratio</h4>
+ <p><em>The velocity of an electron in a certain Bohr orbit of hydrogen bears the ratio 1:275 to the velocity of light. Find n, and the wave number of radiation emitted when the electron falls from (n+1) to the ground state.</em></p>
+ <div class="worked">v_n = (2.19×10⁸ × Z)/n  cm/s     (Z = 1 for hydrogen)
+Given: v_n = (1/275) × c = (1/275) × 3×10¹⁰ cm/s
+
+2.19×10⁸ / n = (1/275) × 3×10¹⁰
+n = (2.19×10⁸ × 275) / (3×10¹⁰) = 2
+
+Wave number for the jump (n+1 → 1), i.e. 3 → 1:
+1/λ = R_H Z² (1/n₁² − 1/n₂²) = 109678 (1/1² − 1/3²)
+    = 109678 × 8/9 = 9.75 × 10⁴ cm⁻¹</div>
+
+ <h4>Worked example 3 — matching a He⁺ line to a hydrogen transition</h4>
+ <p><em>What hydrogen transition gives the same wavelength as the Balmer n=4 transition in the He⁺ (n=2) spectrum?</em></p>
+ <div class="worked">For He⁺:  1/λ = R Z² (1/2² − 1/4²),  Z = 2
+For H:    1/λ = R (1/n₁² − 1/n₂²)
+
+Since λ is identical:  Z²(1/2² − 1/4²) = (1/n₁² − 1/n₂²)
+2² × (1/4 − 1/16) = (1/n₁² − 1/n₂²)
+→ solving gives n₁ = 1 and n₂ = 2 (this is the hydrogen Lyman transition, n=2→n=1)</div>
+
+ <h4>Worked example 4 — identifying the series from a wavelength</h4>
+ <p><em>An electron drops and emits radiation of wavelength 926 Å, lying in the UV (Lyman) region. Find the starting level.</em></p>
+ <div class="worked">λ = 926 Å = 9.26×10⁻¹⁰ m,  R_H = 1.097×10⁷ m⁻¹
+1/λ = R_H (1/n₁² − 1/n₂²),  n₁ = 1 (Lyman → ground state)
+
+1/(9.26×10⁻¹⁰) = 1.097×10⁷ (1 − 1/n₂²)
+1 − 1/n₂² = 1/(9.26×10⁻¹⁰ × 1.097×10⁷) ≈ 0.984
+1/n₂² ≈ 0.0156  →  n₂² ≈ 64  →  n₂ = 8</div>
+ <p class="dim">So the electron dropped from n = 8 down to n = 1, emitting a photon in the Lyman (UV) series.</p>
+ `
+},
+{
+ id:'u7', title:'Unit 7 — Hydrogen Bonding & Boiling Point Trends',
+ html:`
+ <p>A <strong>hydrogen bond</strong> forms when a hydrogen atom is covalently bonded to a small, highly electronegative atom — specifically <strong>oxygen, nitrogen, or fluorine</strong> — so that the shared electron pair is pulled strongly toward that electronegative atom. This creates a large dipole: the hydrogen becomes strongly partially positive (δ+), and it can then be attracted to a lone pair on an electronegative atom of a neighbouring molecule. A hydrogen bond is <strong>longer and much weaker than a normal covalent bond</strong>, but still far stronger than an ordinary van der Waals attraction.</p>
+ <p><strong>General rule:</strong> the more hydrogen bonds a substance can form (and the stronger they are), the higher its boiling point, because more energy is needed to separate the molecules during boiling.</p>
+
+ <h4>Why carboxylic acids boil higher than alcohols of similar mass</h4>
+ <div class="tblwrap"><table>
+ <tr><th>Compound</th><th>Melting Pt (°C)</th><th>Boiling Pt (°C)</th></tr>
+ <tr><td>Ethanoic acid</td><td>16.6</td><td>118</td></tr>
+ <tr><td>Ethanol</td><td>−114.1</td><td>78.37</td></tr>
+ <tr><td>Propanoic acid</td><td>−20.5</td><td>141</td></tr>
+ <tr><td>Propan-1-ol</td><td>−126</td><td>97</td></tr>
+ <tr><td>Butanoic acid</td><td>−7.9</td><td>163.5</td></tr>
+ <tr><td>Butan-1-ol</td><td>−89.8</td><td>117.7</td></tr>
+ </table></div>
+ <p>In the carbonyl (C=O) linkage of a carboxylic acid, mesomeric (resonance) withdrawal of electron density away from the carbon, toward the more electronegative oxygen, leaves the carbon relatively electron-poor. This intensifies the inductive pull of electrons away from the O–H hydrogen, which strengthens the O–H bond's polarity, stabilises the resulting carboxylate anion (RCOO⁻), and makes the O–H proton more available for hydrogen bonding.</p>
+ <p>Crucially, carboxylic acid molecules <strong>dimerise</strong>: in the liquid phase (and even in non-polar solvents like carbon tetrachloride), two carboxylic acid molecules form <strong>two hydrogen bonds</strong> between each other simultaneously (O–H···O=C and C=O···H–O), locking them together as a pair. This doubled hydrogen bonding is why carboxylic acids boil roughly <strong>20 °C higher</strong> than the monohydric alcohol of similar molecular mass — vapour density measurements even show the acid still exists as a dimer just above its boiling point.</p>
+
+ <h4>Propanoic acid vs methyl acetate (same formula, C₃H₆O₂)</h4>
+ <p>Propanoic acid (CH₃CH₂COOH) boils at 141 °C, while methyl acetate (CH₃COOCH₃) — its structural isomer — boils at only 57 °C, despite having the identical molecular formula and similar molar mass. <strong>Reason:</strong> propanoic acid has an O–H bond and can hydrogen-bond (and dimerise) with other acid molecules; methyl acetate has no O–H bond (its oxygens are only ester-linked, with no hydrogen attached to either oxygen), so it cannot hydrogen bond at all and relies only on weaker dipole–dipole and van der Waals forces.</p>
+
+ <h4>o-Nitrophenol vs p-Nitrophenol acidity</h4>
+ <p>In <strong>o-nitrophenol</strong>, the –OH and –NO₂ groups are close together on the ring, so the hydrogen of the hydroxyl group forms an <strong>intramolecular</strong> hydrogen bond directly with the nitrogen/oxygen of the neighbouring NO₂ group (within the same molecule, forming a ring-like structure). Because that hydrogen is "tied up" in this intramolecular bond, it is <strong>not as easily donated</strong> to a base/water — making o-nitrophenol a <strong>weaker acid</strong>.</p>
+ <p>In <strong>p-nitrophenol</strong>, the –OH and –NO₂ groups are on opposite (para) positions of the ring, too far apart for an intramolecular bond. Instead, the O–H hydrogen forms <strong>intermolecular</strong> hydrogen bonds with the NO₂ group of a neighbouring p-nitrophenol molecule. Because this hydrogen is not locked into an internal bond, it is more freely available to be donated — making p-nitrophenol the <strong>stronger acid</strong> of the two.</p>
+
+ <h4>NH₃ vs PH₃ boiling points</h4>
+ <p>NH₃ has a much higher boiling point than PH₃ because nitrogen is small and highly electronegative, allowing NH₃ molecules to form strong intermolecular hydrogen bonds with each other. Phosphorus is larger and much less electronegative, so PH₃ molecules cannot hydrogen bond at all — they rely only on weak van der Waals forces, giving PH₃ a much lower boiling point.</p>
+
+ <h4>Ranking boiling points by hydrogen-bond count</h4>
+ <div class="tblwrap"><table>
+ <tr><th>Compound</th><th>No. of –OH groups (H-bonds)</th><th>Boiling Pt</th></tr>
+ <tr><td>Acetone (ketone, no O–H)</td><td>0</td><td>56 °C</td></tr>
+ <tr><td>Diethyl ether-type (no O–H)</td><td>0</td><td>24 °C</td></tr>
+ <tr><td>1-Propanol (one –OH)</td><td>1</td><td>79 °C</td></tr>
+ <tr><td>1,2-Propanediol (two –OH)</td><td>2</td><td>188 °C</td></tr>
+ <tr><td>Glycerol (three –OH)</td><td>3</td><td>554 °C (decomposes near there)</td></tr>
+ </table></div>
+ <p class="dim"><strong>Pattern:</strong> boiling point rises steadily as the number of –OH groups (and therefore the number of possible hydrogen bonds per molecule) increases — compounds with zero O–H groups can only hydrogen bond weakly or not at all, and boil at the lowest temperatures.</p>
+ `
+},
+{
+ id:'u8', title:'Unit 8 — Electrovalent vs Covalent Compounds',
+ html:`
+ <div class="tblwrap"><table>
+ <tr><th>Property</th><th>Electrovalent (Ionic) Compounds</th><th>Covalent Compounds</th></tr>
+ <tr><td>Physical state</td><td>Usually solids at room temperature; don't vaporise easily</td><td>Often gases, liquids, or relatively soft solids</td></tr>
+ <tr><td>Melting/boiling points</td><td>High</td><td>Low</td></tr>
+ <tr><td>Structure</td><td>Form hard, brittle crystal lattices</td><td>Molecules; soft and readily broken</td></tr>
+ <tr><td>Solubility</td><td>Soluble in water and other polar solvents</td><td>Soluble in non-polar organic solvents</td></tr>
+ <tr><td>Isomerism</td><td>Do not exhibit isomerism</td><td>Exhibit isomerism</td></tr>
+ <tr><td>Electrical conductivity</td><td>Poor as solids, good conductors molten or in solution</td><td>Non-conductors</td></tr>
+ <tr><td>Reaction speed</td><td>Very fast</td><td>Usually slow</td></tr>
+ </table></div>
+ <p class="dim">The key underlying reason for almost every row in this table: ionic compounds are held together by strong, non-directional electrostatic attraction throughout a 3-D lattice of charged ions, while covalent compounds are held together internally by strong but localised shared-electron bonds, with only weak intermolecular forces holding separate molecules to each other.</p>
+ `
+},
+{
+ id:'u9', title:'Unit 9 — Hybridization (sp, sp², sp³, sp³d, sp³d²)',
+ html:`
+ <p><strong>Hybridization</strong> is the mixing (intermixing) of atomic orbitals of an atom that are nearly the same in energy, to produce a new set of orbitals — <strong>hybrid orbitals</strong> — that are identical to each other in shape, energy and size. The number of hybrid orbitals formed always equals the number of atomic orbitals that were mixed. Only completely filled or half-filled atomic orbitals participate in hybridization, and hybrid orbitals form stronger bonds than the original unhybridized atomic orbitals because they are more directional and overlap more effectively.</p>
+
+ <h4>sp hybridization — linear, 180°</h4>
+ <p>One s orbital mixes with one p orbital to give <strong>two sp hybrid orbitals</strong>, oriented at 180° to each other (linear geometry). Example: <strong>BeF₂</strong>. Beryllium's ground state (1s²2s²) has no unpaired electrons; on excitation, one 2s electron is promoted to an empty 2p orbital (1s²2s¹2p¹), giving two unpaired electrons which then hybridize into two equivalent sp orbitals. Each sp orbital overlaps with a half-filled orbital on a fluorine atom, giving a linear F–Be–F molecule. Ethyne (HC≡CH) is another classic sp example.</p>
+
+ <h4>sp² hybridization — trigonal planar, 120°</h4>
+ <p>One s orbital mixes with two p orbitals to give <strong>three sp² hybrid orbitals</strong>, oriented at 120° to each other in a plane (trigonal planar geometry), with one p orbital left unhybridized. Example: <strong>BF₃</strong>. Boron's ground state (1s²2s²2p¹) has one unpaired electron; excitation promotes an electron to give 1s²2s¹2p₁2p¹ (three unpaired electrons), which hybridize into three sp² orbitals overlapping with three fluorine atoms in a trigonal-planar arrangement. Ethene (C₂H₄) is another sp² example — here the leftover unhybridized p orbital on each carbon forms the π bond of the C=C double bond.</p>
+
+ <h4>sp³ hybridization — tetrahedral, 109.5°</h4>
+ <p>One s orbital mixes with three p orbitals to give <strong>four sp³ hybrid orbitals</strong> of equal energy, directed toward the corners of a regular tetrahedron, with a bond angle of 109.5°. Example: <strong>methane (CH₄)</strong>. Carbon's ground state (1s²2s²2p²) is excited to 1s²2s¹2p³ (four unpaired electrons), which then hybridize into four equivalent sp³ orbitals. Each overlaps with a hydrogen 1s orbital, giving the familiar symmetrical tetrahedral shape of methane.</p>
+
+ <h4>sp³d hybridization — trigonal bipyramidal</h4>
+ <p>One s, three p, and one d orbital combine to give <strong>five sp³d hybrid orbitals</strong> of equal energy, in a trigonal bipyramidal arrangement. Example: <strong>PCl₅</strong>. Phosphorus's ground state (3s²3p³) is excited by promoting one 3s electron into an empty 3d orbital, giving five unpaired electrons (3s¹3p³3d¹) that hybridize into five sp³d orbitals, each overlapping with a chlorine atom.</p>
+
+ <h4>sp³d² hybridization — octahedral</h4>
+ <p>One s, three p, and two d orbitals combine to give <strong>six sp³d² hybrid orbitals</strong> of equal energy, in an octahedral arrangement. Example: <strong>SF₆</strong>.</p>
+
+ <h4>Common hybrid orbitals — reference table</h4>
+ <div class="tblwrap"><table>
+ <tr><th>Hybridization</th><th>s</th><th>p</th><th>d</th><th>Geometry</th><th>Relative bond strength</th><th>Examples</th></tr>
+ <tr><td>sp</td><td>1</td><td>1</td><td>0</td><td>Linear</td><td>1.930</td><td>BeX₂</td></tr>
+ <tr><td>sp²</td><td>1</td><td>2</td><td>0</td><td>Trigonal planar</td><td>1.991</td><td>BX₃</td></tr>
+ <tr><td>sp³</td><td>1</td><td>3</td><td>0</td><td>Tetrahedral</td><td>2.000</td><td>CH₄, SiX₄</td></tr>
+ <tr><td>dsp²</td><td>1</td><td>2</td><td>1</td><td>Square planar</td><td>2.694</td><td>[CuCl₄]²⁻</td></tr>
+ <tr><td>dsp³ / sp³d</td><td>1</td><td>3</td><td>1</td><td>Trigonal bipyramidal</td><td>—</td><td>PF₅, PCl₅</td></tr>
+ <tr><td>sp³d²</td><td>1</td><td>3</td><td>2</td><td>Octahedral</td><td>2.923</td><td>SF₆, [SiF₆]²⁻</td></tr>
+ <tr><td>sp³d³</td><td>1</td><td>3</td><td>3</td><td>Pentagonal bipyramidal</td><td>—</td><td>IF₇</td></tr>
+ </table></div>
+ <div class="callout"><span class="tag">Common mix-up</span>Hybridization number = (number of sigma bonds) + (number of lone pairs) on the central atom — count both when predicting geometry, not just the bonds.</div>
+ `
+},
+{
+ id:'u10', title:'Unit 10 — Valence Force, Lewis Structures & Resonance',
+ html:`
+ <h4>Valence force</h4>
+ <p><strong>Valence</strong> is the combining capacity of an atom, determined by the number of hydrogen atoms (or their equivalent) it can combine with. <strong>Valence forces</strong> refer to the attractive or repulsive forces between atoms/molecules arising from their electric charges — these forces determine chemical and physical properties such as boiling/melting points (via intermolecular force strength) and solubility (via the ionic/covalent nature of bonds). There are two main types:</p>
+ <ul>
+  <li><strong>Electrostatic forces:</strong> attractive or repulsive forces between charged particles — e.g. the attraction between the positively charged nucleus and negatively charged electrons that holds an atom together.</li>
+  <li><strong>Covalent forces:</strong> attractive forces from the sharing of electrons between two or more non-metal atoms to achieve a stable electron configuration. Bond strength increases with more shared electron pairs and with closer proximity of the bonded nuclei.</li>
+ </ul>
+ <p><strong>Intramolecular forces</strong> are the chemical bonds holding atoms together within a molecule (metallic, ionic, covalent bonds — these are strong). <strong>Intermolecular forces</strong> act between neighbouring molecules/ions/atoms and are comparatively weak (e.g. hydrogen bonding, van der Waals forces). <strong>Metallic bonding</strong> arises from the electrostatic attraction between delocalised conduction electrons and the positively charged metal ions/cores.</p>
+
+ <h4>Calculating total valence electrons and Lewis structures</h4>
+ <div class="tblwrap"><table>
+ <tr><th>Molecule</th><th>Calculation</th><th>Total valence e⁻</th><th>Shape</th></tr>
+ <tr><td>Ethene, C₂H₄</td><td>C: 4×2=8, H: 1×4=4</td><td>12</td><td>Trigonal planar</td></tr>
+ <tr><td>Butyne, C₄H₆</td><td>C: 4×4=16, H: 1×6=6</td><td>22</td><td>Linear (around triple bond)</td></tr>
+ <tr><td>Carbon(IV)oxide, CO₂</td><td>C: 4×1=4, O: 6×2=12</td><td>16</td><td>Linear</td></tr>
+ <tr><td>Sulphur(IV)oxide, SO₂</td><td>S: 6×1=6, O: 6×2=12</td><td>18</td><td>Trigonal (bent)</td></tr>
+ <tr><td>Hydrofluoric acid, HF</td><td>H: 1×1=1, F: 7×1=7</td><td>8</td><td>Linear</td></tr>
+ </table></div>
+ <p class="dim">Method: multiply each element's group-valence-electron count by how many atoms of it are present, then sum. Use the total to distribute dots/bonds so every atom (except H, which needs only 2) reaches an octet.</p>
+
+ <h4>Resonance</h4>
+ <p>A chemical system can exist in a variety of energy states — the lowest is the ground state, higher ones are excited states. Some molecules cannot be adequately described by a single Lewis structure; more than one structure is needed, and these contributing structures are called <strong>canonical structures</strong>. The molecule is said to exhibit <strong>resonance</strong>, and its true structure is a blend (hybrid) of all the canonical forms — not a rapid interconversion between them, but one single intermediate structure.</p>
+ <p>The classic teaching example is the carbonate ion, <strong>CO₃²⁻</strong>: if you try to draw one Lewis structure with every atom obeying the octet rule, you're forced to place the double bond on only one of the three oxygens, while the C–O single bonds carry negative charge. Because all three C–O bonds are experimentally found to be identical in length (intermediate between single and double bond length), three equivalent canonical structures are drawn (with the double bond rotating among the three oxygens), and the real structure is the resonance hybrid of all three — delocalising the negative charge equally over all three oxygens.</p>
+ <div class="callout"><span class="tag">Key distinction</span>Resonance structures are NOT different molecules interconverting — they are alternative ways of drawing electrons on ONE real, single structure whose true bonding is a blend of all the drawn forms.</div>
+ `
+},
+{
+ id:'u11', title:'Unit 11 — Molecular Orbital Theory, σ & π Bonds',
+ html:`
+ <p><strong>Molecular Orbital (MO) Theory</strong> was developed by Hund and Mulliken (1932) to describe chemical bond formation. It begins by imagining the nuclei of the bonding atoms stripped of all their electrons and held at their equilibrium internuclear distance. As the atoms approach, their individual atomic orbitals combine ("coalesce") into a new set of <strong>molecular orbitals</strong> that surround both nuclei together — the original atomic orbitals lose their separate identity. Electrons are then fed into these new molecular orbitals one at a time, filling the lowest-energy MO first, obeying the <strong>Pauli Exclusion Principle</strong> (max 2 electrons per MO, opposite spins) and filling degenerate MOs singly first with parallel spin (Hund's Rule) before pairing.</p>
+ <p>When two atomic orbitals combine, they always produce <strong>two</strong> molecular orbitals: one <strong>bonding</strong> molecular orbital (lower in energy — electrons here stabilise the molecule) and one <strong>antibonding</strong> molecular orbital, marked with an asterisk, e.g. σ* (higher in energy — electrons here destabilise the molecule).</p>
+
+ <h4>Sigma (σ) bonds</h4>
+ <p>A sigma bond is formed by <strong>end-to-end (head-on/axial) overlap</strong> of atomic orbitals along the internuclear axis. It can form from s–s, s–p, or p–p overlap.</p>
+ <ul>
+  <li>Formed by end-to-end overlap of half-filled atomic orbitals</li>
+  <li>Overlap occurs directly along the internuclear axis</li>
+  <li>The extent of overlap is large → the bond formed is <strong>stronger</strong></li>
+  <li>The resulting molecular orbital is symmetrical about the internuclear axis</li>
+  <li>Free rotation about a σ bond is possible → no geometric isomers arise from σ bonds alone</li>
+  <li>A σ bond can exist alone (it is always present in every single, double, and triple bond)</li>
+  <li>Both s and p orbitals can participate</li>
+ </ul>
+
+ <h4>Pi (π) bonds</h4>
+ <p>A pi bond is formed by <strong>sidewise (lateral) overlap</strong> of half-filled p orbitals.</p>
+ <ul>
+  <li>Formed only by sidewise overlap of half-filled <strong>p</strong> orbitals (never s orbitals)</li>
+  <li>Overlap occurs <strong>perpendicular</strong> to the internuclear axis</li>
+  <li>The extent of overlap is smaller → the bond formed is <strong>weaker</strong> than a σ bond</li>
+  <li>The resulting molecular orbital has two lobes, above and below the internuclear axis</li>
+  <li>There is <strong>no free rotation</strong> about a π bond → geometric (cis/trans) isomerism becomes possible</li>
+  <li>A π bond is always formed <strong>in addition to</strong> a σ bond — never on its own</li>
+ </ul>
+ <div class="callout"><span class="tag">Bond composition</span>Single bond = 1σ. Double bond = 1σ + 1π. Triple bond = 1σ + 2π. This is why triple bonds are shorter/stronger than double, which are shorter/stronger than single — but each additional π bond adds proportionally less strength than the first σ bond, since π overlap is weaker.</div>
+ `
+},
+{
+ id:'u12', title:'Unit 12 — Bond Order & Diatomic Molecules',
+ html:`
+ <h4>Bond order formula</h4>
+ <p>The <strong>bond order</strong> of a molecule reflects how many bonds effectively hold it together, and directly indicates bond strength/stability:</p>
+ <div class="worked">Bond order = (Nb − Na) / 2
+   Nb = number of electrons in bonding molecular orbitals
+   Na = number of electrons in antibonding molecular orbitals</div>
+ <ul>
+  <li>A molecule is <strong>stable</strong> if Nb &gt; Na (bond order is positive)</li>
+  <li>A molecule is <strong>unstable / cannot exist</strong> if Nb ≤ Na (bond order is zero or negative)</li>
+  <li>The <strong>higher</strong> the bond order → the <strong>greater</strong> the bond dissociation energy and the <strong>shorter</strong> the bond length (bond order is inversely proportional to bond length)</li>
+  <li>A species with <strong>unpaired electrons</strong> in its molecular orbitals is <strong>paramagnetic</strong> (weakly attracted into a magnetic field) — the more unpaired electrons, the stronger the paramagnetism</li>
+  <li>A species with <strong>all electrons paired</strong> is <strong>diamagnetic</strong> (weakly repelled by a magnetic field)</li>
+ </ul>
+
+ <h4>Bond types by number of shared pairs</h4>
+ <ul>
+  <li><strong>Single bond:</strong> one shared electron pair — e.g. H₂ (H–H)</li>
+  <li><strong>Double bond:</strong> two shared electron pairs — e.g. O₂ (O=O)</li>
+  <li><strong>Triple bond:</strong> three shared electron pairs — e.g. N₂ (N≡N)</li>
+ </ul>
+
+ <h4>Worked bond-order examples (fully solved)</h4>
+ <div class="worked">H₂  — total electrons = 2
+Configuration: σ1s² 
+Bond order = (2 − 0)/2 = 1   →  Single bond (H–H). No unpaired e⁻ → diamagnetic.
+
+He₂  — total electrons = 4
+Configuration: σ1s² σ*1s²
+Bond order = (2 − 2)/2 = 0   →  Bond order 0 means He₂ CANNOT EXIST.
+
+N₂  — total electrons = 14
+Configuration: σ1s²σ*1s²σ2s²σ*2s²π2px²=π2py²σ2pz²
+Bond order = (10 − 4)/2 = 3   →  Triple bond (N≡N). No unpaired e⁻ → diamagnetic.
+
+O₂  — total electrons = 16
+Configuration: σ1s²σ*1s²σ2s²σ*2s²σ2pz²π2px²=π2py²π*2px¹π*2py¹
+Bond order = (10 − 6)/2 = 2   →  Double bond. TWO unpaired e⁻ (one in each π*) → paramagnetic.
+
+O₂⁺ (dioxygenyl cation) — total electrons = 15
+Bond order = (10 − 5)/2 = 2.5   →  Paramagnetic (1 unpaired e⁻). Bond order UP from O₂ (removed an antibonding e⁻), so O–O bond is stronger and shorter than in O₂.
+
+O₂⁻ (superoxide ion) — total electrons = 17
+Bond order = (10 − 7)/2 = 1.5   →  Paramagnetic (1 unpaired e⁻). Bond order DOWN from O₂ (added an antibonding e⁻), so bond is weaker/longer than in O₂.
+
+O₂²⁻ (peroxide ion) — total electrons = 18
+Bond order = (10 − 8)/2 = 1   →  All electrons paired → diamagnetic. Weakest O–O bond order of this whole series.</div>
+
+ <h4>Trend across the O₂ series</h4>
+ <div class="tblwrap"><table>
+ <tr><th>Species</th><th>Electrons</th><th>Bond Order</th><th>Magnetism</th><th>Bond strength trend</th></tr>
+ <tr><td>O₂⁺</td><td>15</td><td>2.5</td><td>Paramagnetic</td><td>Strongest</td></tr>
+ <tr><td>O₂</td><td>16</td><td>2.0</td><td>Paramagnetic</td><td>↓</td></tr>
+ <tr><td>O₂⁻</td><td>17</td><td>1.5</td><td>Paramagnetic</td><td>↓</td></tr>
+ <tr><td>O₂²⁻</td><td>18</td><td>1.0</td><td>Diamagnetic</td><td>Weakest</td></tr>
+ </table></div>
+ <div class="callout"><span class="tag">Why O₂ is paramagnetic — the famous MO Theory win</span>Simple Lewis structures draw O₂ as O=O with all electrons paired, predicting it should be diamagnetic. Experimentally, liquid O₂ is attracted into a magnetic field (paramagnetic) — proof that it has unpaired electrons. Only Molecular Orbital Theory correctly predicts this, because filling π*2px and π*2py singly (Hund's Rule) before pairing naturally leaves two unpaired electrons. This is one of MO theory's clearest triumphs over simple Lewis/valence bond thinking.</div>
+ `
+}
+];
+</script>
+<script>
+/* =========================================================================
+   FLASHCARDS DATA (60+ cards spanning all units)
+   ========================================================================= */
+const FLASHCARDS = [
+{f:"What is an orbital?",b:"A three-dimensional region of space around the nucleus where there is a high probability (conventionally 90%) of finding an electron. Each orbital holds a maximum of 2 electrons with opposite spins."},
+{f:"Maximum electron capacity of the 1st, 2nd, and 3rd shells",b:"1st shell = 2 electrons; 2nd shell = 8 electrons; 3rd shell = 18 electrons — following the 2n² rule."},
+{f:"Define valence electrons",b:"Electrons in the outermost (valence) shell of an atom. They participate in chemical bonding and reactions and are represented as dots around the element symbol."},
+{f:"What is the valency of nitrogen, and why?",b:"3. Nitrogen has 5 valence electrons and needs 3 more electrons to complete its octet, so it can form 3 bonds."},
+{f:"Define 'ground state' of an atom",b:"The lowest-energy, most stable electron configuration of an atom — e.g. carbon's ground state is 1s²2s²2px¹2py¹."},
+{f:"What happens to carbon in its excited state?",b:"One electron is promoted from the filled 2s orbital to the empty 2pz orbital, giving 1s²2s¹2px¹2py¹2pz¹ — four unpaired electrons that go on to form four sp³ hybrid orbitals."},
+{f:"Define degenerate orbitals",b:"Orbitals within the same subshell that have exactly the same energy — e.g. the three 2p orbitals, or the five 3d orbitals."},
+{f:"What shape are s orbitals?",b:"Spherically symmetrical — same probability of finding the electron in every direction from the nucleus at a given distance."},
+{f:"What shape are p orbitals, and how many are there per shell?",b:"Dumbbell-shaped (two lobes). There are three degenerate p orbitals per shell: px, py, pz, along mutually perpendicular axes."},
+{f:"Describe the shape of the five d orbitals",b:"Four (dxy, dxz, dyz, dx²−y²) are four-leaf clover shaped; the fifth, dz², is a dumbbell with a doughnut-shaped ring around its middle."},
+{f:"What is a 'node' in an orbital?",b:"A point or region where the probability of finding the electron is exactly zero — e.g. the nucleus is a node for all p orbitals."},
+{f:"What does the Principal Quantum Number (n) indicate?",b:"The size (amplitude) of the electron wave and the overall energy/shell of the orbital. Takes positive integer values 1, 2, 3…"},
+{f:"What does the Azimuthal Quantum Number (l) indicate?",b:"The shape of the orbital / the subshell. For a given n, l ranges from 0 to (n−1). l=0 is s, l=1 is p, l=2 is d, l=3 is f."},
+{f:"What does the Magnetic Quantum Number (m) indicate?",b:"The orientation of the orbital in space. For each subshell, m ranges from −l to +l, giving (2l+1) orbitals."},
+{f:"What does the Spin Quantum Number (s) indicate, and its two values?",b:"The direction the electron spins on its axis. Only two values possible: +½ (clockwise) or −½ (anticlockwise)."},
+{f:"State the Aufbau Principle",b:"Electrons fill orbitals in order of increasing energy, following the (n+l) rule — the orbital with the lowest (n+l) sum fills first."},
+{f:"State Pauli's Exclusion Principle",b:"No two electrons in the same atom can have identical values for all four quantum numbers — practically, this limits each orbital to 2 electrons with opposite spins."},
+{f:"State Hund's Rule",b:"Electron pairing in a set of degenerate orbitals does not occur until every orbital in that set already has one electron, and those electrons have parallel spin."},
+{f:"Why is chromium's configuration 3d⁵4s¹ rather than 3d⁴4s²?",b:"A half-filled d⁵ subshell has extra stability, so an electron shifts from 4s to 3d to achieve this more stable half-filled arrangement."},
+{f:"Why is copper's configuration 3d¹⁰4s¹ rather than 3d⁹4s²?",b:"A completely filled d¹⁰ subshell has extra stability, so an electron shifts from 4s to 3d to achieve the fully-filled arrangement."},
+{f:"State Bohr's postulate about electron orbits",b:"Electrons move in specific, quantised circular orbits around the nucleus without radiating energy; only orbits where angular momentum is a whole-number multiple of h/2π are allowed."},
+{f:"What is the formula relating energy of a photon to frequency?",b:"E = hf, where h is Planck's constant (6.63×10⁻³⁴ Js) and f is the frequency of the emitted or absorbed light."},
+{f:"Which hydrogen spectral series lies in the visible region?",b:"The Balmer series — transitions landing on n=2 (n=3,4,5,6→2)."},
+{f:"Which hydrogen spectral series lies in the ultraviolet region?",b:"The Lyman series — transitions landing on n=1 (n=2,3,4,5→1)."},
+{f:"General formula for hydrogen spectral lines",b:"1/λ = R_H (1/n₁² − 1/n₂²), where R_H = 1.097×10⁷ m⁻¹ is the Rydberg constant, n₁ is the lower (final) level and n₂ is the higher (initial) level."},
+{f:"Name a limitation of Bohr's model",b:"It cannot explain the fine structure of spectral lines, and it cannot explain the behaviour of atoms with more than one electron (multi-electron atoms)."},
+{f:"What atoms allow hydrogen bonding to occur?",b:"Hydrogen bonding requires hydrogen covalently bonded to a small, highly electronegative atom: oxygen, nitrogen, or fluorine."},
+{f:"Why do carboxylic acids boil about 20°C higher than similar-mass alcohols?",b:"Carboxylic acid molecules dimerise, forming TWO hydrogen bonds between each pair of molecules (O–H···O=C and C=O···H–O), roughly doubling the hydrogen-bond attraction compared to a single alcohol O–H."},
+{f:"Why does methyl acetate boil far lower than propanoic acid despite the same formula (C₃H₆O₂)?",b:"Methyl acetate has no O–H bond (both oxygens are ester-linked with no attached hydrogen), so it cannot hydrogen bond at all — only weaker dipole-dipole/van der Waals forces act."},
+{f:"Why is o-nitrophenol a weaker acid than p-nitrophenol?",b:"In o-nitrophenol, the –OH and –NO₂ groups are close enough to form an INTRAmolecular hydrogen bond, which ties up the acidic hydrogen and makes it less available to be donated. p-nitrophenol can only form INTERmolecular hydrogen bonds, leaving its acidic hydrogen more freely available."},
+{f:"Why does NH₃ have a higher boiling point than PH₃?",b:"Nitrogen is small and highly electronegative, so NH₃ forms strong intermolecular hydrogen bonds. Phosphorus is larger and far less electronegative, so PH₃ cannot hydrogen bond at all."},
+{f:"List 3 characteristic properties caused by hydrogen bonding",b:"1) Abnormally high boiling/melting points. 2) High solubility of hydrogen-bonding compounds in water. 3) Hydrogen bonds are directional and strong enough to form 3-D crystal lattices, e.g. ice."},
+{f:"List 3 differences between electrovalent and covalent compounds",b:"Electrovalent: high melting/boiling points, soluble in water, conduct electricity molten/in solution. Covalent: low melting/boiling points, soluble in non-polar solvents, generally non-conductors."},
+{f:"Define hybridization",b:"The mixing (intermixing) of atomic orbitals of nearly equal energy to produce a new set of hybrid orbitals identical in shape, energy, and size. The number of hybrid orbitals formed equals the number of atomic orbitals mixed."},
+{f:"sp hybridization: geometry, angle, and an example",b:"Linear geometry, 180° angle. Example: BeF₂ (also ethyne, HC≡CH)."},
+{f:"sp² hybridization: geometry, angle, and an example",b:"Trigonal planar geometry, 120° angle. Example: BF₃ (also ethene, C₂H₄)."},
+{f:"sp³ hybridization: geometry, angle, and an example",b:"Tetrahedral geometry, 109.5° angle. Example: methane, CH₄."},
+{f:"sp³d hybridization: geometry and an example",b:"Trigonal bipyramidal geometry. Example: PCl₅."},
+{f:"sp³d² hybridization: geometry and an example",b:"Octahedral geometry. Example: SF₆."},
+{f:"What is valence force?",b:"The combining capacity of an atom, and more broadly the attractive/repulsive electrostatic and covalent forces between atoms or molecules that determine chemical bonding and physical properties."},
+{f:"Difference between intramolecular and intermolecular forces",b:"Intramolecular forces are the chemical bonds holding atoms together WITHIN a molecule (strong: covalent, ionic, metallic). Intermolecular forces act BETWEEN neighbouring molecules (weak: e.g. hydrogen bonding, van der Waals)."},
+{f:"What is resonance?",b:"When a single Lewis structure cannot adequately describe a molecule, so multiple contributing (canonical) structures are drawn; the real structure is a blend/hybrid of all of them — not a rapid interconversion."},
+{f:"Give the classic textbook example of resonance",b:"The carbonate ion, CO₃²⁻ — drawn as three equivalent canonical structures with the C=O double bond rotating among the three oxygens; the true structure is the resonance hybrid with charge delocalised equally over all three oxygens."},
+{f:"Who developed Molecular Orbital Theory, and when?",b:"Hund and Mulliken, in 1932."},
+{f:"Describe the core idea of Molecular Orbital Theory",b:"Individual atomic orbitals of the bonding atoms coalesce into new molecular orbitals that surround both nuclei; electrons are then fed into these MOs one at a time, filling the lowest-energy MO first, following the Pauli Exclusion Principle and Hund's Rule."},
+{f:"What is a sigma (σ) bond, and how is it formed?",b:"A bond formed by end-to-end (head-on/axial) overlap of atomic orbitals along the internuclear axis; can form from s-s, s-p, or p-p overlap. It is strong, and free rotation about it is possible."},
+{f:"What is a pi (π) bond, and how is it formed?",b:"A bond formed by sidewise (lateral) overlap of half-filled p orbitals only, perpendicular to the internuclear axis. It is weaker than a σ bond, has no free rotation (allowing geometric isomerism), and always accompanies a σ bond."},
+{f:"How many σ and π bonds make up a single, double, and triple bond?",b:"Single bond = 1σ. Double bond = 1σ + 1π. Triple bond = 1σ + 2π."},
+{f:"Give the formula for bond order",b:"Bond order = (Nb − Na) / 2, where Nb = number of electrons in bonding MOs and Na = number of electrons in antibonding MOs."},
+{f:"What does a bond order of zero mean?",b:"The species cannot exist — this is why He₂ does not exist (bond order = (2−2)/2 = 0)."},
+{f:"What is the bond order of N₂, and what does it correspond to?",b:"Bond order = 3, corresponding to a triple bond (N≡N). N₂ is diamagnetic (no unpaired electrons)."},
+{f:"What is the bond order of O₂, and is it paramagnetic or diamagnetic?",b:"Bond order = 2 (double bond). O₂ is PARAMAGNETIC — it has two unpaired electrons in its π* antibonding orbitals, which simple Lewis theory fails to predict."},
+{f:"Rank O₂⁺, O₂, O₂⁻, O₂²⁻ by bond order (highest to lowest)",b:"O₂⁺ (2.5) > O₂ (2.0) > O₂⁻ (1.5) > O₂²⁻ (1.0). Higher bond order means shorter, stronger bond."},
+{f:"What determines whether a species is paramagnetic or diamagnetic?",b:"Paramagnetic = has unpaired electrons in its molecular orbitals (attracted into a magnetic field). Diamagnetic = all electrons are paired (weakly repelled by a magnetic field)."},
+{f:"How is bond order related to bond length?",b:"Bond order is inversely proportional to bond length — the higher the bond order, the shorter (and stronger) the bond."},
+{f:"How many nodal planes does an s orbital have vs a p orbital?",b:"s orbital: 0 nodal planes (l=0). p orbital: 1 nodal plane (l=1). In general, nodal planes = l."},
+{f:"What's the difference between an angular node and a spherical (radial) node?",b:"Angular nodes = l (a plane/surface where probability is zero due to orbital shape). Spherical/radial nodes = (n − l − 1), a spherical surface within the orbital where probability is zero. Total nodes = (n−1)."},
+{f:"Why do carboxylic acid molecules dimerise?",b:"Each carboxylic acid molecule has both a hydrogen-bond donor (O–H) and two hydrogen-bond acceptor sites (C=O and O–H oxygen), letting two molecules simultaneously form two hydrogen bonds with each other, locking them into a stable pair even in non-polar solvents or the vapour phase."},
+{f:"What is the relationship between R_H, the series, and the EM region for Paschen series?",b:"Paschen series: 1/λ = R_H(1/3² − 1/n²), n=4,5,6,7… — falls in the infrared region."},
+{f:"Why does He₂ not exist but H₂ does?",b:"H₂: bond order = (2-0)/2 = 1 (net bonding). He₂: bond order = (2-2)/2 = 0 (bonding and antibonding electrons cancel out exactly), so there's no net stabilisation and He₂ cannot exist."},
+{f:"What is the electron configuration and total electron count used for O₂ in MO theory?",b:"16 total electrons: σ1s²σ*1s²σ2s²σ*2s²σ2pz²π2px²π2py²π*2px¹π*2py¹ — the last two singly-filled π* orbitals are why O₂ is paramagnetic."}
+];
+</script>
+<script>
+/* =========================================================================
+   QUIZ QUESTION POOL — large pool; 50 are drawn at random per attempt,
+   and each question's options are shuffled at random too.
+   Each item: { q, options:[...], correctIndex, explain }
+   ========================================================================= */
+const QUIZ_POOL = [
+{q:"An orbital can hold a maximum of how many electrons, and under what condition?",options:["2 electrons, with the same spin","2 electrons, with opposite spins","8 electrons, regardless of spin","1 electron only"],correct:1,explain:"Each orbital holds a maximum of 2 electrons, and by the Pauli Exclusion Principle they must have opposite spins (+½ and −½) since they otherwise share the same n, l, and m values."},
+{q:"What is the maximum number of electrons the third shell (n=3) can hold?",options:["8","18","32","9"],correct:1,explain:"Using 2n²: 2(3)² = 18. The third shell consists of the 3s, three 3p, and five 3d orbitals — (1+3+5)=9 orbitals × 2 electrons each = 18."},
+{q:"Which of the following is the ground-state electron configuration of nitrogen (Z=7)?",options:["1s²2s²2px²2py¹","1s²2s²2px¹2py¹2pz¹","1s²2s¹2px²2py²","1s²2s²2p⁵"],correct:1,explain:"Nitrogen has 7 electrons. Following Hund's Rule, the three 2p electrons occupy the three degenerate 2p orbitals singly before any pairing: 1s²2s²2px¹2py¹2pz¹."},
+{q:"Why does oxygen's ground-state configuration show 2px²2py¹2pz¹ rather than 2px¹2py¹2pz¹ with an extra unpaired electron?",options:["Oxygen has only 6 valence electrons, so pairing must begin once all three 2p orbitals hold one electron each","Oxygen's 2p orbitals are not degenerate","Pauli's principle forces pairing early","Oxygen has no 2pz orbital"],correct:0,explain:"Oxygen has 8 electrons total (1s²2s²2p⁴ in the 2p set specifically = 4 electrons). After placing one electron in each of the three 2p orbitals (as nitrogen does), the fourth 2p electron must pair up in one of them, giving 2px²2py¹2pz¹."},
+{q:"What is the valency of oxygen, and why?",options:["1, because it needs 1 more electron","2, because it has 6 valence electrons and needs 2 more for an octet","6, equal to its valence electron count","8, equal to its atomic number"],correct:1,explain:"Oxygen has 6 valence electrons and needs 2 more electrons to complete its octet, giving it a valency (bond-forming capacity) of 2, as seen in H₂O."},
+{q:"Which statement correctly describes valence electrons?",options:["They are the electrons closest to the nucleus","They are electrons in the outermost (valence) shell that participate in bonding and reactions","They are only found in noble gases","They are the same as core electrons"],correct:1,explain:"Valence electrons occupy the outermost shell and are the electrons directly involved in chemical bonding and reactions; core (inner-shell) electrons are largely shielded and chemically inert."},
+{q:"Carbon's ground state configuration is 1s²2s²2px¹2py¹. What happens during excitation to allow 4 bonds?",options:["A 1s electron moves to 2s","A 2s electron is promoted into the empty 2pz orbital, giving four unpaired electrons that hybridize","Carbon gains an extra electron","Nothing changes; carbon always has 4 unpaired electrons"],correct:1,explain:"Promotion of one 2s electron into 2pz gives 1s²2s¹2px¹2py¹2pz¹ — four unpaired electrons. These then combine (hybridize) into four equivalent sp³ orbitals, explaining carbon's tetravalency."},
+{q:"What are degenerate orbitals?",options:["Orbitals in different shells with the same shape","Orbitals belonging to the same subshell that share the exact same energy","Orbitals that have decayed and can no longer hold electrons","Orbitals only found in transition metals"],correct:1,explain:"Degenerate orbitals are orbitals within one subshell (like the three 2p orbitals) that are identical in energy, even though they point in different spatial directions."},
+{q:"Which orbital shape is described as spherically symmetrical?",options:["p orbital","d orbital","s orbital","f orbital"],correct:2,explain:"The s orbital has the same electron-finding probability in every direction from the nucleus at a given radius, making it spherically symmetrical — unlike p, d, or f orbitals, which have directional lobes."},
+{q:"How many degenerate p orbitals exist in a given shell, and what are they called?",options:["Two: px, py","Three: px, py, pz","Five: px, py, pz, pxy, pyz","One: just p"],correct:1,explain:"There are three mutually perpendicular p orbitals per shell — px, py, and pz — each shaped like a dumbbell along its respective axis."},
+{q:"Which d orbital has a distinctly different shape (dumbbell + doughnut) compared to the other four?",options:["dxy","dxz","dz²","dx²−y²"],correct:2,explain:"dz² looks like a dumbbell along the z-axis with a doughnut-shaped ring around the middle, while dxy, dxz, dyz, and dx²−y² are all clover-leaf shaped with four lobes."},
+{q:"How many degenerate f orbitals exist per shell?",options:["3","5","7","9"],correct:2,explain:"There are seven degenerate f orbitals: fx, fy, fz, fxy, fxz, fyz, and fxyz."},
+{q:"At the nucleus of a p orbital, what is the probability of finding the electron?",options:["Maximum probability","50% probability","Zero — this point is called a node","It varies depending on which p orbital"],correct:2,explain:"The nucleus of a p orbital is a node — a point where the electron probability is exactly zero, separating the two lobes of the dumbbell."},
+{q:"The Principal Quantum Number (n) primarily indicates:",options:["The shape of the orbital","The size/energy level (shell) of the orbital","The spin direction of the electron","The orientation of the orbital in space"],correct:1,explain:"n indicates the size (amplitude of the electron wave) and overall energy level of the shell — it takes positive integer values 1, 2, 3, and so on."},
+{q:"For a shell with n = 3, what values can the Azimuthal Quantum Number (l) take?",options:["Only l = 3","l = 0, 1, 2","l = 0, 1, 2, 3","l = 1, 2, 3"],correct:1,explain:"l can range from 0 to (n−1). For n=3, l = 0, 1, 2, corresponding to the 3s, 3p, and 3d subshells."},
+{q:"If l = 2 (a d subshell), how many orbitals (values of m) does this subshell contain?",options:["3","5","7","2"],correct:1,explain:"The number of orbitals per subshell = (2l+1). For l=2: (2×2+1) = 5 orbitals, matching the five degenerate d orbitals."},
+{q:"What are the only two possible values of the Spin Quantum Number (s)?",options:["0 and 1","+1 and −1","+½ and −½","+2 and −2"],correct:2,explain:"The spin quantum number can only be +½ (clockwise) or −½ (anticlockwise), representing the two possible spin orientations of an electron."},
+{q:"According to the Aufbau Principle, which rule governs the order in which orbitals are filled?",options:["The (n − l) rule","The (n + l) rule; lower n breaks ties","Alphabetical order of orbital names","Random filling order"],correct:1,explain:"Orbitals fill in order of increasing (n+l) value. Where two orbitals share the same (n+l) sum, the orbital with the lower n value fills first."},
+{q:"Using the (n+l) rule, which fills first: 4s or 3d?",options:["3d fills first, because 3+2=5 is less than 4+0=4","4s fills first, because (4+0)=4 is less than 3d's (3+2)=5","They fill simultaneously","Neither rule applies to 4s vs 3d"],correct:1,explain:"4s: n+l = 4+0 = 4. 3d: n+l = 3+2 = 5. Since 4 < 5, the 4s orbital fills before the 3d orbital, despite 3d being numerically 'lower' in shell number."},
+{q:"What does Pauli's Exclusion Principle state?",options:["Electrons always pair up immediately in the lowest orbital","No two electrons in an atom can share all four identical quantum numbers","Electrons repel each other and never occupy the same atom","Only 2 electrons can exist in an entire atom"],correct:1,explain:"Pauli's Exclusion Principle states that no two electrons in the same atom can have an identical set of all four quantum numbers — which is exactly why each orbital caps out at two electrons of opposite spin."},
+{q:"What does Hund's Rule state about filling degenerate orbitals?",options:["Electrons must pair up in the first available orbital before moving to the next","Electrons occupy each degenerate orbital singly, with parallel spins, before any pairing occurs","Electrons fill from highest to lowest energy","Degenerate orbitals cannot hold more than 1 electron total"],correct:1,explain:"Hund's Rule states that electrons fill separate orbitals of a degenerate set singly (with parallel spin) before any orbital receives a second, paired electron — this minimizes electron-electron repulsion."},
+{q:"Why is chromium's actual electron configuration 3d⁵4s¹ instead of the 'expected' 3d⁴4s²?",options:["Chromium doesn't follow the Aufbau principle at all","A half-filled d⁵ subshell provides extra stability","4s electrons are always removed first in chromium","This is a printing error in most textbooks"],correct:1,explain:"A half-filled d⁵ subshell is unusually stable (minimized electron repulsion, maximized exchange energy), so one 4s electron shifts into the 3d subshell to achieve this more stable arrangement."},
+{q:"Why is copper's actual configuration 3d¹⁰4s¹ rather than 3d⁹4s²?",options:["Because copper is a noble metal","A fully-filled d¹⁰ subshell provides extra stability, driving one 4s electron into 3d","Copper has no 4s orbital","3d orbitals in copper are lower energy than 3s"],correct:1,explain:"A completely filled d¹⁰ subshell has extra stability (like a half-filled one), so one electron shifts from 4s into 3d to reach 3d¹⁰4s¹ instead of the 'expected' 3d⁹4s²."},
+{q:"According to Bohr's model, what happens when an electron moves from a lower energy level to a higher one?",options:["It emits energy (a photon)","It gains/absorbs energy (a photon)","Nothing changes","The electron leaves the atom permanently"],correct:1,explain:"When an electron is promoted from a lower to a higher energy level, it absorbs a discrete packet (quantum) of energy in the process."},
+{q:"In Bohr's model, what happens when an electron falls from a higher energy level to a lower one?",options:["It gains energy","It emits energy in the form of a photon","It becomes stationary","It changes its charge"],correct:1,explain:"When an electron falls from a higher to a lower energy level, it loses energy, which is emitted as a photon (quantum) of electromagnetic radiation."},
+{q:"Which hydrogen spectral series corresponds to transitions ending at n=1, and in which region of the EM spectrum does it fall?",options:["Balmer series, visible region","Lyman series, ultraviolet region","Paschen series, infrared region","Pfund series, infrared region"],correct:1,explain:"The Lyman series consists of all transitions that end at n=1 (the ground state), and because this involves the largest energy gaps, it falls in the ultraviolet region."},
+{q:"Which hydrogen spectral series falls in the visible region of the electromagnetic spectrum?",options:["Lyman series (n=1)","Balmer series (n=2)","Paschen series (n=3)","Brackett series (n=4)"],correct:1,explain:"The Balmer series (transitions ending at n=2) is the only one of the five series that falls within the visible light region — this is why it was discovered first."},
+{q:"What is the general formula for calculating hydrogen spectral line wavelengths?",options:["E = mc²","1/λ = R_H(1/n₁² − 1/n₂²)","PV = nRT","λ = h/mv"],correct:1,explain:"The Rydberg-type formula 1/λ = R_H(1/n₁² − 1/n₂²) relates the wavelength of emitted/absorbed light to the initial and final energy levels, using the Rydberg constant R_H = 1.097×10⁷ m⁻¹."},
+{q:"An electron in a hydrogen atom transitions from n=3 to n=1. Using E_n = −1312/n² kJ/mol, what is the energy released?",options:["582 kJ/mol","1166 kJ/mol","437 kJ/mol","1312 kJ/mol"],correct:1,explain:"E₃ = −1312/9 = −145.8 kJ/mol. E₁ = −1312/1 = −1312 kJ/mol. ΔE = E₃ − E₁ = −145.8 − (−1312) = 1166 kJ/mol released, matching the worked example in the lecture notes."},
+{q:"A hydrogen electron transition emits a photon of wavelength 926 Å (in the Lyman/UV series). From which energy level did the electron fall?",options:["n=4","n=6","n=8","n=10"],correct:2,explain:"Solving 1/(9.26×10⁻¹⁰) = 1.097×10⁷(1 − 1/n₂²) gives 1/n₂² ≈ 0.0156, so n₂² ≈ 64 and n₂ = 8. The electron fell from n=8 down to n=1."},
+{q:"The velocity of an electron in a Bohr orbit of hydrogen is 1:275 of the speed of light. What is the quantum number n of that orbit?",options:["n=1","n=2","n=3","n=4"],correct:1,explain:"Using v_n = (2.19×10⁸×Z)/n with Z=1: 2.19×10⁸/n = (1/275)(3×10¹⁰). Solving gives n = (2.19×10⁸×275)/(3×10¹⁰) = 2."},
+{q:"Which of the following is a stated limitation of Bohr's atomic model?",options:["It cannot explain hydrogen's stability","It cannot explain the fine structure of spectral lines or multi-electron atom behavior","It predicts too many spectral lines for hydrogen","It cannot explain quantization of energy at all"],correct:1,explain:"While Bohr's model successfully explains hydrogen's stability and its discrete spectral lines, it fails to explain the fine structure of spectral lines and cannot correctly describe atoms with more than one electron."},
+{q:"For hydrogen bonding to occur, hydrogen must be covalently bonded to which types of atoms?",options:["Any nonmetal","Small, highly electronegative atoms: O, N, or F","Only carbon","Any halogen, including iodine"],correct:1,explain:"Hydrogen bonding specifically requires H covalently bonded to one of the three small, highly electronegative atoms: oxygen, nitrogen, or fluorine — creating a strong enough dipole for the effect."},
+{q:"Why do carboxylic acids have significantly higher boiling points than monohydric alcohols of similar molecular mass?",options:["Carboxylic acids are always heavier","Carboxylic acid molecules dimerise, forming two hydrogen bonds per molecular pair rather than one","Alcohols cannot hydrogen bond at all","Carboxylic acids are ionic compounds"],correct:1,explain:"Carboxylic acid molecules dimerise — each pair forms TWO hydrogen bonds simultaneously (O–H···O=C and C=O···H–O) — roughly doubling the hydrogen-bonding attraction compared to an alcohol's single O–H hydrogen bond, raising the boiling point by about 20°C."},
+{q:"Propanoic acid (bp 141°C) and methyl acetate (bp 57°C) share the same molecular formula, C₃H₆O₂. Why is there such a large difference in boiling point?",options:["Methyl acetate is heavier","Propanoic acid has an O–H bond and can hydrogen bond/dimerise; methyl acetate has no O–H bond and cannot hydrogen bond","Methyl acetate is ionic","They actually have identical boiling points"],correct:1,explain:"Propanoic acid's O–H group allows strong hydrogen bonding and dimerisation. Methyl acetate's oxygens are both ester-linked with no attached hydrogen, so it can only rely on weaker dipole-dipole and van der Waals forces, giving a much lower boiling point."},
+{q:"Why is o-nitrophenol a weaker acid than p-nitrophenol?",options:["o-nitrophenol has no OH group","o-nitrophenol forms an intramolecular hydrogen bond that ties up the acidic proton, making it less available for donation","p-nitrophenol has a lower molecular weight","o-nitrophenol is more polar"],correct:1,explain:"In o-nitrophenol, the –OH and –NO₂ groups are positioned close enough to form an intramolecular hydrogen bond within the same molecule. This locks up the hydroxyl hydrogen, making it less easily donated as a proton, so o-nitrophenol is a weaker acid than p-nitrophenol, which can only hydrogen bond intermolecularly."},
+{q:"What type of hydrogen bonding occurs in p-nitrophenol, and why?",options:["Intramolecular, because the groups are close together","Intermolecular, because the –OH and –NO₂ groups are too far apart (para position) to bond within one molecule","No hydrogen bonding occurs at all","Both intra- and intermolecular equally"],correct:1,explain:"In p-nitrophenol, –OH and –NO₂ sit on opposite (para) ends of the ring, too far apart for an intramolecular bond, so the OH hydrogen instead bonds intermolecularly with the NO₂ group of a neighboring molecule."},
+{q:"Why does NH₃ have a much higher boiling point than PH₃?",options:["Nitrogen is heavier than phosphorus","NH₃ can form strong intermolecular hydrogen bonds (N is small and electronegative); PH₃ cannot hydrogen bond at all","PH₃ molecules are ionic","NH₃ has more valence electrons"],correct:1,explain:"Nitrogen's small size and high electronegativity let NH₃ molecules form strong hydrogen bonds with each other. Phosphorus is larger and far less electronegative, so PH₃ relies only on weak van der Waals forces, giving it a much lower boiling point."},
+{q:"Which of these is NOT a characteristic property caused by hydrogen bonding?",options:["Abnormally high boiling and melting points","High solubility of some covalent compounds in water","Hydrogen bonds forming 3-D crystal lattices (e.g. ice)","Increased electrical conductivity in the solid state"],correct:3,explain:"Hydrogen bonding causes abnormally high boiling/melting points, high solubility of relevant compounds in water, and directional bonds strong enough to build 3-D lattices like ice — it does not, by itself, increase electrical conductivity."},
+{q:"Which property is generally true of electrovalent (ionic) compounds compared to covalent compounds?",options:["Lower melting and boiling points","Higher melting and boiling points, and they form hard, brittle crystal lattices","They are always gases at room temperature","They are non-conductors in every state"],correct:1,explain:"Electrovalent compounds have high melting and boiling points because breaking their crystal lattice requires overcoming strong, non-directional electrostatic attraction throughout the whole structure, unlike the weaker intermolecular forces in covalent compounds."},
+{q:"Which of the following correctly describes covalent compounds?",options:["They form hard, brittle crystal lattices and conduct electricity well","They are often soluble in polar solvents like water and always solids","They are often gases/liquids/soft solids, soluble in non-polar solvents, and generally non-conductors","They always react extremely fast"],correct:2,explain:"Covalent compounds are typically gases, liquids, or soft solids; they dissolve well in non-polar organic solvents (not water, generally); and because they lack free ions or delocalized electrons, they are usually non-conductors of electricity."},
+{q:"Do ionic (electrovalent) compounds exhibit isomerism?",options:["Yes, extensively","No — they do not exhibit isomerism, unlike covalent compounds","Only in the molten state","Only noble gas compounds do"],correct:1,explain:"Ionic compounds do not exhibit isomerism because their structure is a repeating 3-D lattice of ions rather than discrete molecules with a specific spatial arrangement of atoms — unlike covalent molecules, which frequently show isomerism."},
+{q:"What is hybridization?",options:["The transfer of electrons from one atom to another","The mixing of atomic orbitals of similar energy to form new, identical hybrid orbitals","The process of ionizing an atom","The splitting of one orbital into many different-energy orbitals"],correct:1,explain:"Hybridization is the intermixing of atomic orbitals of nearly the same energy to produce a new set of hybrid orbitals that are identical to each other in shape, energy, and size — with the total number of hybrid orbitals equal to the number mixed."},
+{q:"BeF₂ exhibits which type of hybridization, and what is its molecular geometry?",options:["sp², trigonal planar","sp, linear (180°)","sp³, tetrahedral","sp³d, trigonal bipyramidal"],correct:1,explain:"BeF₂ shows sp hybridization: one s and one p orbital combine to form two hybrid orbitals oriented at 180° to each other, giving a linear F–Be–F molecule."},
+{q:"BF₃ exhibits which type of hybridization, and what is its bond angle?",options:["sp, 180°","sp², 120°","sp³, 109.5°","sp³d, 90°/120°"],correct:1,explain:"BF₃ shows sp² hybridization: one s orbital mixes with two p orbitals to form three hybrid orbitals arranged in a trigonal planar shape with 120° bond angles."},
+{q:"Methane (CH₄) exhibits which type of hybridization, and what is its geometry?",options:["sp, linear","sp², trigonal planar","sp³, tetrahedral (109.5°)","sp³d², octahedral"],correct:2,explain:"Methane shows sp³ hybridization: one s orbital and three p orbitals combine into four equivalent hybrid orbitals pointing to the corners of a tetrahedron, with a bond angle of 109.5°."},
+{q:"PCl₅ exhibits which type of hybridization?",options:["sp³","sp³d, trigonal bipyramidal","sp³d², octahedral","sp², trigonal planar"],correct:1,explain:"PCl₅ shows sp³d hybridization: one s, three p, and one d orbital combine to form five hybrid orbitals in a trigonal bipyramidal arrangement."},
+{q:"SF₆ exhibits which type of hybridization?",options:["sp³d, trigonal bipyramidal","sp³d², octahedral","sp³, tetrahedral","sp, linear"],correct:1,explain:"SF₆ shows sp³d² hybridization: one s, three p, and two d orbitals combine to form six hybrid orbitals arranged octahedrally."},
+{q:"Why do fully-filled or half-filled atomic orbitals participate preferentially in hybridization?",options:["Empty orbitals hybridize better","Because only fully-filled or half-filled atomic orbitals are stable and available to mix into equivalent new hybrid orbitals","Hybridization requires exactly 2 electrons per orbital","This is a random rule with no chemical reasoning"],correct:1,explain:"Hybridization mixes orbitals that already have electrons available for bonding — completely filled or half-filled atomic orbitals can take part, producing hybrid orbitals that go on to form stronger, more directional bonds than the unhybridized originals."},
+{q:"What is the total number of valence electrons in CO₂ (Carbon(IV)oxide)?",options:["12","16","8","24"],correct:1,explain:"C contributes 4×1=4, and each O contributes 6, so 2 oxygens contribute 6×2=12. Total = 4+12 = 16 valence electrons, matching the worked calculation in the notes."},
+{q:"What is the total number of valence electrons in SO₂ (Sulphur(IV)oxide)?",options:["6","12","18","24"],correct:2,explain:"S contributes 6×1=6, and each O contributes 6, so 2 oxygens contribute 6×2=12. Total = 6+12 = 18 valence electrons."},
+{q:"What is the molecular shape of CO₂ based on its Lewis structure?",options:["Bent (trigonal)","Linear","Trigonal planar","Tetrahedral"],correct:1,explain:"CO₂ has the structure O=C=O with no lone pairs on the central carbon, giving it a linear molecular shape."},
+{q:"What is resonance?",options:["A molecule rapidly switching between two completely different molecules","A situation where more than one Lewis (canonical) structure is needed to describe a molecule, whose true structure is a blend of all of them","The process of an atom losing an electron","A type of hydrogen bonding"],correct:1,explain:"Resonance occurs when a single Lewis structure cannot adequately describe a molecule; multiple canonical structures are drawn, and the real molecule is a hybrid blend of all of them — not an interconversion between separate structures."},
+{q:"Which ion is the classic textbook example used to illustrate resonance?",options:["NH₄⁺","CO₃²⁻ (carbonate ion)","Na⁺","Cl⁻"],correct:1,explain:"The carbonate ion, CO₃²⁻, is the classic resonance example: three equivalent canonical structures are drawn with the double bond rotating among the three oxygens, and the true structure is a hybrid with charge delocalised equally over all three."},
+{q:"Who developed Molecular Orbital Theory, and in what year?",options:["Bohr and Rutherford, 1913","Hund and Mulliken, 1932","Pauli and Heisenberg, 1925","Lewis and Langmuir, 1916"],correct:1,explain:"Molecular Orbital Theory was developed by Hund and Mulliken in 1932 to describe chemical bond formation by combining atomic orbitals into molecular orbitals."},
+{q:"According to Molecular Orbital Theory, when two atomic orbitals combine, how many molecular orbitals form?",options:["One","Two: one bonding, one antibonding","Three","Zero — atomic orbitals cannot combine"],correct:1,explain:"Combining two atomic orbitals always produces two molecular orbitals: a lower-energy bonding orbital and a higher-energy antibonding orbital (marked with an asterisk, e.g. σ*)."},
+{q:"What type of overlap forms a sigma (σ) bond?",options:["Sidewise overlap of p orbitals only","End-to-end (head-on/axial) overlap along the internuclear axis","No overlap is needed","Overlap perpendicular to the internuclear axis"],correct:1,explain:"A sigma bond forms from end-to-end (head-on) overlap of atomic orbitals directly along the internuclear axis, and can arise from s-s, s-p, or p-p overlap."},
+{q:"What type of overlap forms a pi (π) bond?",options:["End-to-end overlap along the internuclear axis","Sidewise (lateral) overlap of half-filled p orbitals, perpendicular to the internuclear axis","Overlap of s orbitals only","Overlap of d orbitals only"],correct:1,explain:"A pi bond forms from the sidewise (lateral) overlap of half-filled p orbitals, with overlap occurring perpendicular to the internuclear axis — it is weaker than a sigma bond due to smaller overlap extent."},
+{q:"Why can geometric (cis/trans) isomerism arise around a π bond but not a σ bond?",options:["σ bonds are always symmetric","There is no free rotation about a π bond, while free rotation is possible about a σ bond","π bonds don't actually exist","Geometric isomerism has nothing to do with bond type"],correct:1,explain:"Because a π bond's sideways p-orbital overlap would break if the atoms rotated relative to each other, rotation about a π bond is restricted — this rigidity is what allows cis/trans (geometric) isomers to exist. A σ bond, by contrast, permits free rotation."},
+{q:"How many sigma and pi bonds are present in a carbon-carbon triple bond?",options:["1σ only","2σ, 1π","1σ, 2π","3σ, 0π"],correct:2,explain:"A triple bond consists of 1 sigma bond plus 2 pi bonds (1σ + 2π) — the sigma bond forms first via direct overlap, and the two pi bonds form from sideways overlap of the remaining two sets of p orbitals."},
+{q:"What is the formula for bond order in Molecular Orbital Theory?",options:["Bond order = Nb + Na","Bond order = (Nb − Na)/2","Bond order = Nb × Na","Bond order = Na/Nb"],correct:1,explain:"Bond order = (Nb − Na)/2, where Nb is the number of electrons in bonding molecular orbitals and Na is the number of electrons in antibonding molecular orbitals."},
+{q:"H₂ has a total of 2 electrons, both in the σ1s bonding orbital. What is its bond order?",options:["0","0.5","1","2"],correct:2,explain:"Bond order = (Nb − Na)/2 = (2 − 0)/2 = 1, corresponding to a single H–H bond. Since there are no unpaired electrons, H₂ is diamagnetic."},
+{q:"He₂ has 4 total electrons: σ1s²σ*1s². What is its bond order, and what does this mean?",options:["Bond order = 1; He₂ is a stable single bond","Bond order = 2; He₂ has a double bond","Bond order = 0; He₂ cannot exist as a stable molecule","Bond order = 0.5; He₂ is highly reactive"],correct:2,explain:"Bond order = (2−2)/2 = 0. A bond order of zero means the bonding and antibonding electrons exactly cancel out, providing no net stabilization — this is why the He₂ mole
