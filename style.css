@@ -1,4 +1,4 @@
-*{box-sizing:border-box}
+u*{box-sizing:border-box}
 :root{--bg:#f6f7fb;--card:#fff;--text:#171923;--muted:#687083;--line:#e5e7ef;--accent:#6c4df6;--accent2:#8d73ff;--good:#149447;--bad:#d93030}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
 .hero{padding:48px max(22px,calc((100% - 1100px)/2));background:linear-gradient(135deg,#18152b,#3e2d88);color:#fff;display:flex;justify-content:space-between;gap:24px;align-items:center}
