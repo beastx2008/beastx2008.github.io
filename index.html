@@ -3,1166 +3,708 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>D-CHM 214 | Metallurgy &amp; Extraction of Metals</title>
+<title>CHM 216 — Petrochemicals | DELSU Study Guide</title>
 <style>
-:root{
-  --navy-950:#050d1f;
-  --navy-900:#0a1628;
-  --navy-800:#0f2038;
-  --navy-700:#16304f;
-  --navy-600:#1e3d63;
-  --navy-500:#2a4f7c;
-  --gold:#d4af37;
-  --gold-bright:#f0cf6a;
-  --gold-dim:#8a7228;
-  --cream:#f4ecd8;
-  --text:#e8e4d8;
-  --text-dim:#9fb0c5;
-  --good:#4caf7d;
-  --bad:#d9645a;
-}
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
-  background:radial-gradient(ellipse at top, var(--navy-800) 0%, var(--navy-950) 55%, #030812 100%);
-  color:var(--text);
-  font-family:'Georgia', 'Iowan Old Style', serif;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-}
-::selection{background:var(--gold-dim);color:#fff;}
+  :root{
+    --navy:#0a1f44;
+    --navy2:#0f2a5c;
+    --gold:#d4af37;
+    --gold2:#f0d78c;
+    --cream:#f7f3e9;
+    --text:#1c1c1c;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',Georgia,serif;
+    background:linear-gradient(180deg,var(--navy) 0%, var(--navy2) 220px, var(--cream) 220px);
+    color:var(--text);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  header{
+    text-align:center;
+    padding:28px 16px 18px;
+    color:var(--gold2);
+  }
+  header .crest{
+    font-size:2rem;
+  }
+  header h1{
+    font-size:1.4rem;
+    color:var(--gold);
+    letter-spacing:1px;
+    margin-top:6px;
+  }
+  header h2{
+    font-size:1rem;
+    font-weight:400;
+    color:#e8e0c8;
+    margin-top:4px;
+  }
+  header p{
+    font-size:0.85rem;
+    color:#c9c2a0;
+    margin-top:6px;
+  }
+  nav{
+    max-width:720px;
+    margin:0 auto;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    padding:0 12px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--navy2);
+    padding-top:10px;
+    padding-bottom:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.25);
+  }
+  nav button{
+    flex:1;
+    max-width:160px;
+    background:transparent;
+    border:1px solid var(--gold);
+    color:var(--gold2);
+    padding:10px 6px;
+    border-radius:8px;
+    font-size:0.85rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  nav button.active, nav button:hover{
+    background:var(--gold);
+    color:var(--navy);
+  }
+  main{
+    max-width:760px;
+    margin:22px auto;
+    padding:0 14px;
+  }
+  .tab{display:none;}
+  .tab.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-/* Header */
-header{
-  padding:28px 20px 18px;
-  text-align:center;
-  border-bottom:1px solid var(--navy-600);
-  position:relative;
-}
-header::before,header::after{
-  content:"";
-  position:absolute;
-  top:0;left:0;right:0;
-  height:3px;
-  background:linear-gradient(90deg, transparent, var(--gold), transparent);
-}
-.eyebrow{
-  font-family:'Courier New',monospace;
-  letter-spacing:.28em;
-  font-size:11px;
-  color:var(--gold);
-  text-transform:uppercase;
-  margin-bottom:8px;
-}
-h1{
-  font-size:26px;
-  margin:0 0 6px;
-  color:var(--cream);
-  letter-spacing:.02em;
-  font-weight:700;
-}
-.subtitle{
-  color:var(--text-dim);
-  font-size:14px;
-  font-style:italic;
-}
+  .section-card{
+    background:var(--card);
+    border-left:5px solid var(--gold);
+    border-radius:10px;
+    padding:18px 20px;
+    margin-bottom:18px;
+    box-shadow:0 2px 10px rgba(10,31,68,0.08);
+  }
+  .section-card h3{
+    color:var(--navy);
+    font-size:1.08rem;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .section-card h3 .tag{
+    background:var(--navy);
+    color:var(--gold);
+    font-size:0.7rem;
+    padding:2px 8px;
+    border-radius:20px;
+    font-weight:700;
+  }
+  .section-card h4{
+    color:var(--navy2);
+    font-size:0.95rem;
+    margin:12px 0 4px;
+  }
+  .section-card p, .section-card li{
+    font-size:0.92rem;
+    line-height:1.55;
+    color:#2b2b2b;
+  }
+  .section-card ul, .section-card ol{
+    padding-left:20px;
+    margin-bottom:6px;
+  }
+  .eqn{
+    background:#f1eee2;
+    border:1px dashed var(--gold);
+    border-radius:6px;
+    padding:8px 12px;
+    margin:6px 0;
+    font-family:'Courier New',monospace;
+    font-size:0.85rem;
+    color:var(--navy);
+    overflow-x:auto;
+  }
+  table.diff{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+    font-size:0.85rem;
+  }
+  table.diff th{
+    background:var(--navy);
+    color:var(--gold2);
+    padding:6px 8px;
+    text-align:left;
+  }
+  table.diff td{
+    padding:6px 8px;
+    border-bottom:1px solid #e0dcc8;
+  }
+  table.diff tr:nth-child(even){background:#f7f4e8;}
 
-/* Nav tabs */
-nav{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  padding:16px 12px;
-  flex-wrap:wrap;
-  position:sticky;
-  top:0;
-  background:rgba(5,13,31,.94);
-  backdrop-filter:blur(6px);
-  z-index:50;
-  border-bottom:1px solid var(--navy-700);
-}
-.tab-btn{
-  font-family:'Courier New',monospace;
-  background:transparent;
-  border:1px solid var(--navy-600);
-  color:var(--text-dim);
-  padding:9px 16px;
-  border-radius:3px;
-  cursor:pointer;
-  font-size:12px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  transition:.2s;
-}
-.tab-btn:hover{border-color:var(--gold-dim);color:var(--cream);}
-.tab-btn.active{
-  background:var(--gold);
-  border-color:var(--gold);
-  color:var(--navy-950);
-  font-weight:bold;
-}
+  /* Flashcards */
+  .fc-controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+    color:var(--navy);
+    font-size:0.85rem;
+    font-weight:600;
+  }
+  .flashcard-wrap{
+    perspective:1200px;
+    height:260px;
+    margin-bottom:16px;
+  }
+  .flashcard{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .5s;
+    cursor:pointer;
+  }
+  .flashcard.flipped{transform:rotateY(180deg);}
+  .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:22px;
+    box-shadow:0 6px 18px rgba(10,31,68,0.18);
+  }
+  .face.front{
+    background:linear-gradient(135deg,var(--navy),var(--navy2));
+    color:var(--gold2);
+    font-size:1.05rem;
+    font-weight:600;
+  }
+  .face.back{
+    background:linear-gradient(135deg,var(--gold2),var(--gold));
+    color:var(--navy);
+    font-size:0.95rem;
+    transform:rotateY(180deg);
+    line-height:1.5;
+  }
+  .fc-nav{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+  }
+  .fc-nav button{
+    background:var(--navy);
+    color:var(--gold2);
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    font-size:0.85rem;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .fc-nav button:hover{background:var(--navy2);}
 
-main{
-  max-width:880px;
-  margin:0 auto;
-  padding:24px 18px 80px;
-}
-
-.view{display:none;}
-.view.active{display:block;animation:fade .35s ease;}
-@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-
-/* ---- NOTES ---- */
-.topic-nav{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:22px;
-}
-.topic-chip{
-  font-family:'Courier New',monospace;
-  font-size:11px;
-  padding:6px 11px;
-  border:1px solid var(--navy-600);
-  border-radius:20px;
-  color:var(--text-dim);
-  cursor:pointer;
-  transition:.15s;
-}
-.topic-chip:hover{border-color:var(--gold);color:var(--cream);}
-.topic-chip.active{background:var(--navy-700);border-color:var(--gold);color:var(--gold-bright);}
-
-.section{
-  background:var(--navy-800);
-  border:1px solid var(--navy-600);
-  border-left:4px solid var(--gold);
-  border-radius:6px;
-  padding:22px 22px 20px;
-  margin-bottom:20px;
-}
-.section h2{
-  color:var(--gold-bright);
-  font-size:19px;
-  margin:0 0 4px;
-  display:flex;
-  align-items:baseline;
-  gap:10px;
-}
-.section h2 .tag{
-  font-family:'Courier New',monospace;
-  font-size:10px;
-  color:var(--gold-dim);
-  letter-spacing:.1em;
-}
-.section h3{
-  color:var(--cream);
-  font-size:15px;
-  margin:16px 0 6px;
-  border-bottom:1px solid var(--navy-600);
-  padding-bottom:4px;
-}
-.section p{line-height:1.65;color:var(--text);margin:8px 0;font-size:15px;}
-.section ul,.section ol{margin:8px 0;padding-left:22px;line-height:1.6;}
-.section li{margin-bottom:5px;font-size:14.5px;}
-.chem{font-family:'Courier New',monospace;background:var(--navy-950);padding:2px 6px;border-radius:3px;color:var(--gold-bright);}
-.eqn{
-  font-family:'Courier New',monospace;
-  background:var(--navy-950);
-  border:1px solid var(--navy-600);
-  border-radius:4px;
-  padding:10px 14px;
-  margin:10px 0;
-  color:var(--gold-bright);
-  font-size:14px;
-  overflow-x:auto;
-}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px;}
-th,td{border:1px solid var(--navy-600);padding:8px 10px;text-align:left;}
-th{background:var(--navy-700);color:var(--gold-bright);font-family:'Courier New',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;}
-td{color:var(--text);}
-tr:nth-child(even) td{background:rgba(255,255,255,.02);}
-.callout{
-  background:rgba(212,175,55,.08);
-  border:1px solid var(--gold-dim);
-  border-radius:5px;
-  padding:12px 14px;
-  margin:12px 0;
-  font-size:13.5px;
-  color:var(--cream);
-}
-.callout b{color:var(--gold-bright);}
-.diagram-flow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  align-items:center;
-  margin:14px 0;
-  font-family:'Courier New',monospace;
-  font-size:12px;
-}
-.flow-step{
-  background:var(--navy-700);
-  border:1px solid var(--gold-dim);
-  padding:6px 10px;
-  border-radius:4px;
-  color:var(--cream);
-}
-.flow-arrow{color:var(--gold);}
-
-/* ---- FLASHCARDS ---- */
-.fc-wrap{display:flex;flex-direction:column;align-items:center;}
-.fc-progress{
-  font-family:'Courier New',monospace;
-  color:var(--text-dim);
-  font-size:12px;
-  margin-bottom:14px;
-  letter-spacing:.05em;
-}
-.flashcard{
-  width:100%;
-  max-width:560px;
-  min-height:260px;
-  perspective:1400px;
-  cursor:pointer;
-  margin-bottom:20px;
-}
-.fc-inner{
-  position:relative;
-  width:100%;
-  height:100%;
-  min-height:260px;
-  transform-style:preserve-3d;
-  transition:transform .5s;
-}
-.flashcard.flipped .fc-inner{transform:rotateY(180deg);}
-.fc-face{
-  position:absolute;
-  inset:0;
-  backface-visibility:hidden;
-  border-radius:10px;
-  border:1px solid var(--gold-dim);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:30px 26px;
-  font-size:17px;
-  line-height:1.55;
-}
-.fc-front{
-  background:linear-gradient(160deg, var(--navy-800), var(--navy-900));
-  color:var(--cream);
-}
-.fc-back{
-  background:linear-gradient(160deg, var(--gold-dim), #6b5a1e);
-  color:#fff8e6;
-  transform:rotateY(180deg);
-  font-size:15px;
-}
-.fc-hint{
-  font-family:'Courier New',monospace;
-  font-size:10.5px;
-  color:var(--text-dim);
-  letter-spacing:.1em;
-  margin-bottom:16px;
-}
-.fc-controls{
-  display:flex;
-  gap:10px;
-  width:100%;
-  max-width:560px;
-}
-.fc-btn{
-  flex:1;
-  padding:12px;
-  border-radius:6px;
-  border:1px solid var(--navy-600);
-  background:var(--navy-800);
-  color:var(--text);
-  font-family:'Courier New',monospace;
-  font-size:13px;
-  cursor:pointer;
-  letter-spacing:.05em;
-}
-.fc-btn:hover{border-color:var(--gold);color:var(--gold-bright);}
-.fc-btn.primary{background:var(--gold);color:var(--navy-950);border-color:var(--gold);font-weight:bold;}
-.fc-btn.primary:hover{background:var(--gold-bright);}
-
-/* ---- QUIZ ---- */
-.quiz-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-family:'Courier New',monospace;font-size:12px;color:var(--text-dim);}
-.quiz-score{color:var(--gold-bright);}
-.q-card{
-  background:var(--navy-800);
-  border:1px solid var(--navy-600);
-  border-radius:8px;
-  padding:22px;
-  margin-bottom:18px;
-}
-.q-text{font-size:16px;color:var(--cream);margin-bottom:16px;line-height:1.5;}
-.q-opt{
-  display:block;
-  width:100%;
-  text-align:left;
-  background:var(--navy-900);
-  border:1px solid var(--navy-600);
-  color:var(--text);
-  padding:12px 14px;
-  border-radius:6px;
-  margin-bottom:9px;
-  cursor:pointer;
-  font-size:14px;
-  font-family:'Georgia',serif;
-  transition:.15s;
-}
-.q-opt:hover{border-color:var(--gold-dim);}
-.q-opt.correct{background:rgba(76,175,125,.18);border-color:var(--good);color:#c9f5dd;}
-.q-opt.incorrect{background:rgba(217,100,90,.18);border-color:var(--bad);color:#ffd9d5;}
-.q-opt:disabled{cursor:default;}
-.q-explain{
-  font-size:13px;
-  color:var(--text-dim);
-  margin-top:10px;
-  padding-top:10px;
-  border-top:1px dashed var(--navy-600);
-  display:none;
-  line-height:1.5;
-}
-.q-explain.show{display:block;}
-.quiz-nav{display:flex;gap:10px;justify-content:center;margin-top:6px;}
-.quiz-result{
-  text-align:center;
-  padding:40px 20px;
-}
-.quiz-result h2{color:var(--gold-bright);font-size:30px;margin-bottom:6px;}
-.quiz-result p{color:var(--text-dim);}
-
-footer{
-  text-align:center;
-  padding:26px;
-  color:var(--text-dim);
-  font-family:'Courier New',monospace;
-  font-size:11px;
-  letter-spacing:.1em;
-  border-top:1px solid var(--navy-700);
-}
-
-@media(max-width:520px){
-  h1{font-size:21px;}
-  .section{padding:16px 15px;}
-  .fc-face{font-size:15px;padding:22px 18px;}
-}
+  /* Quiz */
+  #quizArea .q-card{
+    background:var(--card);
+    border-radius:10px;
+    padding:16px 18px;
+    margin-bottom:14px;
+    box-shadow:0 2px 10px rgba(10,31,68,0.08);
+  }
+  .q-card p.question{font-weight:600;color:var(--navy);margin-bottom:10px;font-size:0.95rem;}
+  .opt{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:#f7f4e8;
+    border:1px solid #ddd6ba;
+    padding:9px 12px;
+    margin-bottom:7px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:0.88rem;
+    color:#2b2b2b;
+  }
+  .opt.correct{background:#d7f0d0;border-color:#4a9c3c;font-weight:700;}
+  .opt.wrong{background:#f5d0d0;border-color:#b23b3b;}
+  .opt:disabled{cursor:default;}
+  #quizScore{
+    text-align:center;
+    color:var(--navy);
+    font-weight:700;
+    margin-bottom:14px;
+    font-size:1rem;
+  }
+  #quizSubmitWrap{text-align:center;margin-top:10px;}
+  #quizSubmitWrap button{
+    background:var(--gold);
+    color:var(--navy);
+    border:none;
+    padding:12px 28px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:0.95rem;
+    cursor:pointer;
+  }
+  footer{
+    text-align:center;
+    color:#8a8368;
+    font-size:0.75rem;
+    margin-top:30px;
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="eyebrow">D-CHM 214 &middot; Second Semester</div>
-  <h1>Metallurgy &amp; Extraction of Metals</h1>
-  <div class="subtitle">Fundamental Concepts &middot; Mineral Identification &middot; Extraction of Metals</div>
+  <div class="crest">🎓</div>
+  <h1>DELTA STATE UNIVERSITY, ABRAKA</h1>
+  <h2>Faculty of Science — Department of Chemistry</h2>
+  <p>CHM 216 · Petrochemicals · 2 Units</p>
 </header>
 
 <nav>
-  <button class="tab-btn active" data-view="notes">Notes</button>
-  <button class="tab-btn" data-view="flashcards">Flashcards</button>
-  <button class="tab-btn" data-view="quiz">Quiz</button>
+  <button class="tab-btn active" data-tab="notes">Notes</button>
+  <button class="tab-btn" data-tab="flashcards">Flashcards</button>
+  <button class="tab-btn" data-tab="quiz">Quiz</button>
 </nav>
 
 <main>
 
   <!-- ================= NOTES ================= -->
-  <section class="view active" id="view-notes">
-    <div class="topic-nav" id="topicNav"></div>
-    <div id="notesContent"></div>
-  </section>
+  <div class="tab active" id="notes">
+
+    <div class="section-card">
+      <h3><span class="tag">Q1</span> Introduction to Petrochemicals</h3>
+
+      <h4>(a) Definition of Petrochemical</h4>
+      <p>A petrochemical is any chemical compound or product derived from petroleum (crude oil) or natural gas through refining and chemical processing, rather than being extracted directly as fuel. They serve as the building blocks for plastics, synthetic fibres, rubbers, solvents, detergents and many other industrial chemicals.</p>
+
+      <h4>(b) Three Categories of Primary Petrochemicals</h4>
+      <ol>
+        <li><b>Olefins (Aliphatics):</b> ethylene, propylene, butylenes and butadiene — obtained mainly by steam cracking.</li>
+        <li><b>Aromatics:</b> benzene, toluene and xylenes (BTX) — obtained mainly by catalytic reforming.</li>
+        <li><b>Synthesis gas (Syngas):</b> a mixture of carbon monoxide and hydrogen (CO + H₂) obtained by gasification/steam reforming, used to make methanol and ammonia.</li>
+      </ol>
+
+      <h4>(c) Four Methods for Production of Primary Petrochemicals</h4>
+      <ul>
+        <li><b>Steam cracking</b> — thermal decomposition of hydrocarbons (ethane, propane, naphtha) at high temperature to give olefins.</li>
+        <li><b>Catalytic cracking</b> — breaking of heavier hydrocarbon fractions using a catalyst (e.g. zeolites) at lower temperature than thermal cracking.</li>
+        <li><b>Catalytic reforming</b> — conversion of naphtha into aromatics (BTX) using platinum-based catalysts.</li>
+        <li><b>Gasification / Partial oxidation</b> — reaction of hydrocarbons or coal with limited oxygen/steam to produce synthesis gas.</li>
+      </ul>
+
+      <h4>(d) Classification of Petrochemicals Based on Raw Material Source</h4>
+      <ul>
+        <li><b>Natural gas-based petrochemicals</b> — derived from methane, ethane, propane (e.g. ammonia, methanol).</li>
+        <li><b>Petroleum (liquid)-based petrochemicals</b> — derived from naphtha and gas oil (e.g. olefins, aromatics).</li>
+        <li><b>Coal-based petrochemicals</b> — derived from coal gasification/carbonisation (less common today).</li>
+      </ul>
+
+      <h4>(e) Types of Petrochemicals Based on Chemical Structure</h4>
+      <ul>
+        <li><b>Aliphatic (olefinic) petrochemicals</b> — straight/branched chain, e.g. ethylene, propylene.</li>
+        <li><b>Aromatic petrochemicals</b> — ring-structured, e.g. benzene, toluene, xylene.</li>
+        <li><b>Diolefins</b> — two double bonds, e.g. butadiene.</li>
+        <li><b>Synthesis-gas-based petrochemicals</b> — e.g. methanol, ammonia.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="tag">Q2</span> Ethylene (Ethene)</h3>
+
+      <h4>(a) Five Reasons Ethylene is "The King" of Petrochemicals</h4>
+      <ol>
+        <li>It is produced in the largest volume of all petrochemicals worldwide.</li>
+        <li>It is highly reactive due to its C=C double bond, allowing many types of reactions (addition, oxidation, polymerisation, halogenation).</li>
+        <li>It is the starting material for the widest range of derivatives (polyethylene, ethylene oxide, ethylene glycol, vinyl chloride, styrene, ethanol).</li>
+        <li>It is relatively cheap and easy to obtain from steam cracking of abundant feedstocks (ethane, naphtha).</li>
+        <li>It has a simple structure that makes downstream processing and purification straightforward.</li>
+      </ol>
+
+      <h4>(b) Production of Ethylene through Steam Cracking</h4>
+      <p>Feedstock (ethane, propane or naphtha) is mixed with steam and passed through tubes in a furnace heated to about 750–900 °C. The high temperature causes thermal cracking (breaking of C–C and C–H bonds), converting the saturated hydrocarbons into ethylene and other olefins. The hot gas is rapidly quenched to stop further reaction, then compressed and sent to a fractionation train where ethylene is separated from propylene, methane, hydrogen and other by-products.</p>
+      <div class="eqn">C₂H₆ (ethane) → C₂H₄ (ethylene) + H₂ (steam, ~800 °C)</div>
+
+      <h4>(c) Five Important Uses of Ethylene</h4>
+      <ul>
+        <li>Production of polyethylene (LDPE/HDPE) for plastics and packaging.</li>
+        <li>Production of ethylene oxide (→ ethylene glycol, antifreeze, polyester fibres).</li>
+        <li>Production of vinyl chloride monomer (→ PVC).</li>
+        <li>Production of styrene (via ethylbenzene) for polystyrene and SBR.</li>
+        <li>Production of ethanol by hydration.</li>
+      </ul>
+
+      <h4>(d) Production of Ethylene Oxide</h4>
+      <p>Ethylene is oxidised directly with oxygen (or air) over a silver catalyst at moderate temperature and pressure.</p>
+      <div class="eqn">2 C₂H₄ + O₂ --(Ag catalyst)--> 2 C₂H₄O (ethylene oxide)</div>
+
+      <h4>(e) Four Uses of Ethylene Oxide</h4>
+      <ul>
+        <li>Manufacture of ethylene glycol (antifreeze and polyester/PET fibre production).</li>
+        <li>Manufacture of surfactants and detergents.</li>
+        <li>Used as a sterilising agent for medical equipment.</li>
+        <li>Solvent and intermediate in the chemical industry.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="tag">Q3</span> Propylene</h3>
+
+      <h4>(a) Production of Propylene by Steam Cracking</h4>
+      <p>Propylene is obtained as a co-product of ethylene production. Propane or naphtha feedstock is cracked with steam at high temperature (~750–850 °C) in a furnace, breaking C–C bonds to yield a mixture of olefins. The cracked gases are quenched and fractionated, and propylene is separated from ethylene, methane and heavier fractions by distillation (the propylene/propane splitter).</p>
+
+      <h4>(b) Five Uses of Propylene</h4>
+      <ul>
+        <li>Production of polypropylene (packaging, textiles, automotive parts).</li>
+        <li>Production of propylene oxide (→ polyurethane, propylene glycol).</li>
+        <li>Production of acrylonitrile (→ acrylic fibres, ABS resin).</li>
+        <li>Production of cumene (→ phenol and acetone).</li>
+        <li>Production of isopropanol (rubbing alcohol, solvent).</li>
+      </ul>
+
+      <h4>(c) Propylene Oxide via the Chlorohydrin Process</h4>
+      <p>Propylene reacts with chlorine and water to form propylene chlorohydrin, which is then treated with a base (e.g. calcium hydroxide) to eliminate HCl and form propylene oxide.</p>
+      <div class="eqn">CH₂=CHCH₃ + Cl₂ + H₂O → CH₂(OH)CHClCH₃ (propylene chlorohydrin)
+CH₂(OH)CHClCH₃ + Ca(OH)₂ → propylene oxide + CaCl₂ + H₂O</div>
+
+      <h4>(d) Propylene Oxide via the Hydroperoxide Process</h4>
+      <p>Propylene reacts with an organic hydroperoxide (such as ethylbenzene hydroperoxide or tert-butyl hydroperoxide) in the presence of a catalyst. The oxygen atom is transferred to propylene to form propylene oxide, while the hydroperoxide is reduced to an alcohol (e.g. styrene or tert-butanol as co-product).</p>
+      <div class="eqn">CH₂=CHCH₃ + R-OOH --(catalyst)--> propylene oxide + R-OH</div>
+
+      <h4>(e) Four Uses of Propylene Oxide</h4>
+      <ul>
+        <li>Manufacture of polyether polyols for polyurethane foams.</li>
+        <li>Manufacture of propylene glycol (used in food, cosmetics, antifreeze).</li>
+        <li>Manufacture of surfactants.</li>
+        <li>Solvent and chemical intermediate.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="tag">Q4</span> Butylene Oxide, Polybutadiene, SBR & Neoprene</h3>
+
+      <h4>(a)(i) Production of Butylene Oxide</h4>
+      <p>Similar to propylene oxide, butylene can be converted to butylene oxide via the chlorohydrin route (chlorination/hydration followed by dehydrohalogenation) or via catalytic epoxidation with a hydroperoxide.</p>
+      <div class="eqn">CH₃CH=CHCH₃ + Cl₂ + H₂O → butylene chlorohydrin
+Butylene chlorohydrin + Ca(OH)₂ → butylene oxide + CaCl₂ + H₂O</div>
+
+      <h4>(a)(ii) Two Uses of Butylene Oxide</h4>
+      <ul>
+        <li>Used as a chemical intermediate for making polyols/polyurethanes.</li>
+        <li>Used as a solvent and stabiliser in chlorinated compounds.</li>
+      </ul>
+
+      <h4>(b) Two Types of Polymerisation for Polybutadiene</h4>
+      <ul>
+        <li><b>Solution polymerisation:</b> butadiene is polymerised in an organic solvent using Ziegler-Natta or organolithium catalysts, giving highly stereoregular <i>cis</i>-1,4-polybutadiene with good elasticity — mainly used in tyres.</li>
+        <li><b>Emulsion polymerisation:</b> butadiene is polymerised as droplets dispersed in water using free-radical initiators (e.g. persulfate), giving polybutadiene with a more random/mixed structure — used for general-purpose rubber goods.</li>
+      </ul>
+
+      <h4>(c)(i) Production of SBR (Styrene Butadiene Rubber)</h4>
+      <p>SBR is produced by the copolymerisation of styrene and butadiene monomers (roughly 1:3 ratio), usually by emulsion (free-radical) polymerisation, though solution polymerisation is also used.</p>
+      <div class="eqn">n CH₂=CHC₆H₅ (styrene) + n CH₂=CH-CH=CH₂ (butadiene) --(polymerisation)--> SBR copolymer</div>
+
+      <h4>(c)(ii) Three Applications of SBR</h4>
+      <ul>
+        <li>Manufacture of vehicle tyres and tyre treads.</li>
+        <li>Footwear soles.</li>
+        <li>Adhesives, conveyor belts and gaskets.</li>
+      </ul>
+
+      <h4>(d) Production of Chloroprene and Neoprene</h4>
+      <p>Chloroprene (2-chloro-1,3-butadiene) is produced from butadiene by chlorination followed by dehydrochlorination (isomerisation). It is then polymerised by free-radical emulsion polymerisation to form neoprene (polychloroprene).</p>
+      <div class="eqn">CH₂=CH-CH=CH₂ + Cl₂ → 3,4-dichlorobut-1-ene → (dehydrochlorination) → CH₂=CCl-CH=CH₂ (chloroprene)
+n Chloroprene --(polymerisation)--> Neoprene (polychloroprene)</div>
+
+      <h4>(e) Five Differences Between SBR and Neoprene</h4>
+      <table class="diff">
+        <tr><th>Property</th><th>SBR</th><th>Neoprene</th></tr>
+        <tr><td>Monomer(s)</td><td>Styrene + Butadiene</td><td>Chloroprene</td></tr>
+        <tr><td>Oil/chemical resistance</td><td>Poor</td><td>Excellent</td></tr>
+        <tr><td>Cost</td><td>Cheaper</td><td>More expensive</td></tr>
+        <tr><td>Heat resistance</td><td>Moderate</td><td>Very good</td></tr>
+        <tr><td>Typical use</td><td>Tyres, general rubber goods</td><td>Hoses, gaskets, wetsuits, cable insulation</td></tr>
+      </table>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="tag">Q5</span> Ethylbenzene, Styrene, LABS, TNT, TPA/DMTA</h3>
+
+      <h4>(a)(i) Production of Ethylbenzene</h4>
+      <p>Ethylbenzene is produced by alkylation of benzene with ethylene, typically using a Friedel-Crafts catalyst (AlCl₃) or a zeolite catalyst at elevated temperature and pressure.</p>
+      <div class="eqn">C₆H₆ (benzene) + C₂H₄ (ethylene) --(AlCl₃ / zeolite)--> C₆H₅C₂H₅ (ethylbenzene)</div>
+
+      <h4>(a)(ii) Two Applications of Ethylbenzene</h4>
+      <ul>
+        <li>Main feedstock for styrene production.</li>
+        <li>Used as a solvent in industry.</li>
+      </ul>
+
+      <h4>(b)(i) Production of Styrene from Ethylbenzene</h4>
+      <p>Styrene is produced by catalytic dehydrogenation of ethylbenzene, passing it with steam over an iron oxide catalyst at high temperature (~600 °C), removing hydrogen.</p>
+      <div class="eqn">C₆H₅CH₂CH₃ --(Fe₂O₃ catalyst, steam, heat)--> C₆H₅CH=CH₂ (styrene) + H₂</div>
+
+      <h4>(b)(ii) Two Uses of Styrene</h4>
+      <ul>
+        <li>Production of polystyrene (packaging, insulation, disposable products).</li>
+        <li>Production of SBR and ABS resins.</li>
+      </ul>
+
+      <h4>(c)(i) Production of Linear Alkylbenzene Sulfonate (LABS)</h4>
+      <p>Linear paraffins are dehydrogenated to linear olefins, which are used to alkylate benzene (Friedel-Crafts alkylation) to form linear alkylbenzene (LAB). The LAB is then sulfonated using sulfur trioxide (SO₃) or oleum to produce linear alkylbenzene sulfonic acid, which is neutralised (e.g. with NaOH) to give LABS.</p>
+      <div class="eqn">Benzene + linear olefin --(AlCl₃/HF)--> LAB
+LAB + SO₃ → LAB-sulfonic acid --(NaOH)--> LABS (sodium salt)</div>
+
+      <h4>(c)(ii) Two Uses of LABS</h4>
+      <ul>
+        <li>Main active ingredient in household and industrial detergents.</li>
+        <li>Used as a surfactant/wetting agent in cleaning products.</li>
+      </ul>
+
+      <h4>(d)(i) Production of Trinitrotoluene (TNT)</h4>
+      <p>TNT is produced industrially by stepwise nitration of toluene using a mixture of concentrated nitric acid and sulfuric acid (mixed acid), which progressively introduces nitro groups at the 2, 4 and 6 positions of the ring, forming mono-, di-, and finally tri-nitrotoluene.</p>
+      <div class="eqn">C₆H₅CH₃ (toluene) + 3 HNO₃ --(conc. H₂SO₄)--> C₆H₂CH₃(NO₂)₃ (TNT) + 3 H₂O</div>
+
+      <h4>(d)(ii) Two Uses of TNT</h4>
+      <ul>
+        <li>Used as a military and industrial explosive (blasting, mining, demolition).</li>
+        <li>Used as a reference standard in explosive-yield chemistry.</li>
+      </ul>
+
+      <h4>(e)(i) Production of TPA and DMTA</h4>
+      <p><b>Terephthalic acid (TPA)</b> is produced by the catalytic oxidation of para-xylene with air/oxygen, using a cobalt/manganese acetate catalyst with a bromide promoter (Amoco/Mid-Century process).</p>
+      <div class="eqn">p-xylene + 3 O₂ --(Co/Mn/Br catalyst)--> Terephthalic acid (TPA) + 2 H₂O</div>
+      <p><b>Dimethyl terephthalate (DMTA)</b> is produced by esterifying TPA with methanol (or by oxidising p-xylene and esterifying the intermediate directly).</p>
+      <div class="eqn">TPA + 2 CH₃OH --(acid catalyst)--> Dimethyl terephthalate (DMTA) + 2 H₂O</div>
+
+      <h4>(e)(ii) Two Applications of TPA/DMTA</h4>
+      <ul>
+        <li>Manufacture of polyethylene terephthalate (PET) for synthetic fibres (polyester) and plastic bottles.</li>
+        <li>Production of polyester films used in packaging and photographic/recording tape.</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h3><span class="tag">Extra</span> Quick Revision Summary Table</h3>
+      <table class="diff">
+        <tr><th>Feedstock</th><th>Key Process</th><th>Major Product(s)</th></tr>
+        <tr><td>Ethane/Naphtha</td><td>Steam cracking</td><td>Ethylene</td></tr>
+        <tr><td>Propane/Naphtha</td><td>Steam cracking</td><td>Propylene</td></tr>
+        <tr><td>Ethylene + O₂</td><td>Catalytic oxidation (Ag)</td><td>Ethylene oxide</td></tr>
+        <tr><td>Propylene + Cl₂/H₂O</td><td>Chlorohydrin process</td><td>Propylene oxide</td></tr>
+        <tr><td>Butadiene</td><td>Solution/Emulsion polymerisation</td><td>Polybutadiene</td></tr>
+        <tr><td>Styrene + Butadiene</td><td>Emulsion copolymerisation</td><td>SBR</td></tr>
+        <tr><td>Chloroprene</td><td>Emulsion polymerisation</td><td>Neoprene</td></tr>
+        <tr><td>Benzene + Ethylene</td><td>Friedel-Crafts alkylation</td><td>Ethylbenzene</td></tr>
+        <tr><td>Ethylbenzene</td><td>Catalytic dehydrogenation</td><td>Styrene</td></tr>
+        <tr><td>Benzene + linear olefin</td><td>Alkylation + sulfonation</td><td>LABS</td></tr>
+        <tr><td>Toluene + HNO₃/H₂SO₄</td><td>Nitration</td><td>TNT</td></tr>
+        <tr><td>p-Xylene + O₂</td><td>Catalytic oxidation</td><td>TPA / DMTA</td></tr>
+      </table>
+    </div>
+
+  </div>
 
   <!-- ================= FLASHCARDS ================= -->
-  <section class="view" id="view-flashcards">
-    <div class="fc-wrap">
-      <div class="fc-progress" id="fcProgress">CARD 1 / 1</div>
+  <div class="tab" id="flashcards">
+    <div class="fc-controls">
+      <span id="fcCount">Card 1 / 24</span>
+      <span>Tap card to flip</span>
+    </div>
+    <div class="flashcard-wrap">
       <div class="flashcard" id="flashcard">
-        <div class="fc-inner">
-          <div class="fc-face fc-front" id="fcFront"></div>
-          <div class="fc-face fc-back" id="fcBack"></div>
-        </div>
-      </div>
-      <div class="fc-controls">
-        <button class="fc-btn" id="fcPrev">&larr; Prev</button>
-        <button class="fc-btn primary" id="fcFlip">Flip Card</button>
-        <button class="fc-btn" id="fcNext">Next &rarr;</button>
-      </div>
-      <div class="fc-controls" style="margin-top:10px;">
-        <button class="fc-btn" id="fcShuffle">&#8635; Shuffle</button>
+        <div class="face front" id="fcFront"></div>
+        <div class="face back" id="fcBack"></div>
       </div>
     </div>
-  </section>
+    <div class="fc-nav">
+      <button id="fcPrev">◀ Prev</button>
+      <button id="fcShuffle">🔀 Shuffle</button>
+      <button id="fcNext">Next ▶</button>
+    </div>
+  </div>
 
   <!-- ================= QUIZ ================= -->
-  <section class="view" id="view-quiz">
+  <div class="tab" id="quiz">
+    <div id="quizScore"></div>
     <div id="quizArea"></div>
-  </section>
+    <div id="quizSubmitWrap">
+      <button id="quizSubmit">Submit Quiz</button>
+    </div>
+  </div>
 
 </main>
 
-<footer>D-CHM 214 STUDY APP &middot; BEASTX2008.GITHUB.IO</footer>
+<footer>CHM 216 · Petrochemicals · Study Guide built for exam prep · Good luck!</footer>
 
 <script>
-/* ============================================================
-   CONTENT DATA
-   ============================================================ */
-
-const notesData = [
-{
-  id:"ch1",
-  title:"1. Fundamental Concepts",
-  tag:"CHAPTER 1",
-  html:`
-  <div class="section">
-    <h2>1.1 Introduction <span class="tag">CH.1</span></h2>
-    <p>This chapter introduces types of impacts mining and mineral processing operations may have on the environment. Adequate knowledge of these impacts is important during site scoping, characterization, and alternative selection, giving insight into contaminants that may be present, threats to human health and the environment, and the feasibility of response actions.</p>
-    <p>Globally there are several inactive and/or abandoned mines that may create significant impacts. The cumulative impact of multiple sites within a historic mining district often has the potential to impair beneficial uses of local land, surface, and groundwater resources.</p>
-    <div class="callout"><b>Chapter outline:</b> Introduction &rarr; Metallurgy &rarr; Physical Metallurgy &rarr; Mechanical Metallurgy &rarr; Chemical Metallurgy &rarr; Powder Metallurgy &rarr; Engineering Metallurgy &rarr; Run-of-Mine Materials/Minerals.</div>
-  </div>
-
-  <div class="section">
-    <h2>1.2 Metallurgy</h2>
-    <p><b>Metallurgy</b> is a domain in material science and engineering. It may be defined as the study of the physical and chemical behavior of metallic elements and their mixtures, called <b>alloys</b>.</p>
-    <p>Metallurgy can also be referred to as the various processes involved in the <b>extraction of metals from their ore, refining, and preparing them</b> for various applications.</p>
-    <p>Metallurgy is broadly divided into:</p>
-    <ul>
-      <li><b>Extractive metallurgy</b></li>
-      <li><b>Physical metallurgy</b></li>
-    </ul>
-    <p>Extractive metallurgy is further sub-divided into: mineral processing (ore dressing/beneficiation), electrometallurgy, hydrometallurgy, and pyrometallurgy. Physical metallurgy is further sub-divided into: mechanical metallurgy, chemical metallurgy, powder metallurgy, and engineering metallurgy.</p>
-    <p>These branches, individually or collectively, enable metallurgy to play a pivotal role in 21st century science and technological advancement. Metallurgy also draws input from other disciplines: chemistry, physics, mathematics, chemical engineering, instrumentation technology, design engineering, etc.</p>
-
-    <h3>Branches of Metallurgy (Fig. 1.1)</h3>
-    <table>
-      <tr><th>Branch</th><th>Focus</th></tr>
-      <tr><td>Physical Metallurgy</td><td>Scientific study of materials, phase transformations, recovery and recrystallization, precipitation, hardening, structure-property correlations, characterization of microstructure</td></tr>
-      <tr><td>Chemical Metallurgy</td><td>Extraction of materials from naturally occurring compounds through physical &amp; chemical treatments, refinement to levels of purity suitable for commercial application; chemical properties of materials guiding formation</td></tr>
-      <tr><td>Mineral Processing / Beneficiation</td><td>Crushing and grinding to liberate desired substances from ore, physically entrapped with other or matrix, making them adaptable for further processing. Liberated materials undergo physical beneficiation e.g. magnetic separation, electrostatic separation, froth flotation</td></tr>
-      <tr><td>Engineering Metallurgy</td><td>Processing of metals and materials in molten state, e.g. foundry, metal joining</td></tr>
-      <tr><td>Powder Metallurgy</td><td>Production and processing of powdery forms of metals and materials</td></tr>
-    </table>
-
-    <h3>Extractive Metallurgy</h3>
-    <p>Defined as the science and art of extracting metals from their ore, refining and processing them for specific applications. Major divisions:</p>
-    <ul>
-      <li>Mineral processing (beneficiation)</li>
-      <li>Electrometallurgy</li>
-      <li>Hydrometallurgy</li>
-      <li>Pyrometallurgy</li>
-    </ul>
-    <p><b>Physical metallurgy</b> (winning of metal) is where the composition and treatment of metals are varied to provide desired physical and mechanical characteristics.</p>
-  </div>
-
-  <div class="section">
-    <h2>1.3 Mineral Processing</h2>
-    <p>Mineral processing can be broadly described as the physical and/or chemical processing methods of mineral resources which may lead to alterations in the physical or chemical characteristics of a mined ore, ultimately resulting in a processed mined product that is either ready for use or suited for further processing.</p>
-    <p>Required to prepare and classify ores before valuable constituents can be concentrated and then forwarded for use or further treatment. Also called: <b>mineral dressing, ore dressing, mineral extraction, mineral beneficiation,</b> or <b>mineral engineering</b>.</p>
-
-    <h3>Front-Row vs Back-Row Operations</h3>
-    <p>Mineral processing operations are classified into <b>front-row</b> and <b>back-row</b> operations:</p>
-    <ul>
-      <li><b>Front-row operations</b> &mdash; essentially processes leading to material severance (crushing, screening, grinding, classification)</li>
-      <li><b>Back-row operations</b> &mdash; separation of severed materials into two parts: valuable materials (concentrates) and non-valuable materials (gangue/tailings)</li>
-    </ul>
-    <p><b>Dewatering</b> forms a greater part of the whole scheme since most mineral processing operations are conducted wet.</p>
-
-    <h3>Fig. 1.2 &mdash; Mineral Processing Flowsheet</h3>
-    <div class="diagram-flow">
-      <span class="flow-step">Run-of-mine</span><span class="flow-arrow">&darr;</span>
-      <span class="flow-step">Crushing</span><span class="flow-arrow">&darr;</span>
-      <span class="flow-step">Screening</span><span class="flow-arrow">&darr;</span>
-      <span class="flow-step">Grinding</span><span class="flow-arrow">&darr;</span>
-      <span class="flow-step">Classification</span><span class="flow-arrow">&darr;</span>
-      <span class="flow-step">Input/Feed Stream</span><span class="flow-arrow">&darr;</span>
-      <span class="flow-step">Separation</span>
-    </div>
-    <p>Oversize from crushing loops back to crushing (via screening); oversize from grinding loops back to grinding (via classification). Undersize exits classification into the feed stream.</p>
-    <p>Separation splits into two paths:</p>
-    <ul>
-      <li><b>Valuable Mineral Product (Concentrate)</b> &rarr; Dewatering &rarr; Final Product (Concentrate)</li>
-      <li><b>Waste/Gangue Materials (Tailings)</b></li>
-    </ul>
-    <div class="callout"><b>Remember:</b> Front-row = severance (crush/screen/grind/classify). Back-row = separation (concentrate vs tailings) + dewatering.</div>
-  </div>
-
-  <div class="section">
-    <h2>1.1 Run-Of-Mine Material or Mineral</h2>
-    <p>Mineral processing begins when an ore is delivered from a mine site to a processing facility. At this point, the ore is called <b>run-of-mine material or mineral</b> because no treatment has been performed on it.</p>
-    <h3>Three Primary Classes of Run-of-Mine Material</h3>
-    <ol>
-      <li><b>Run-of-mine consisting of useful materials</b> &mdash; e.g. granites, building sand, limestone, coal, clays. Materials in this category are <u>not classified as minerals</u>.</li>
-      <li><b>Run-of-mine containing useful minerals</b> &mdash; unit value is low but purity is high, approaching chemical grade. Used directly for industrial applications once separated from gangue that must be low to start with (low unit value allows only marginal treatment cost). Often called <b>industrial minerals</b>: apatite, fluorite, diamonds, gemstones, vermiculite, barite, wollastonite, chromite.
-        <div class="callout">Barite is used as a weighing agent in oil-drilling mud; vermiculite is used as a sound and thermal insulator.</div>
-      </li>
-      <li><b>Run-of-mine containing value-bearing minerals</b> &mdash; the target mineral obtains its value from the contained metal. Such deposits are called <b>metaliferous ores</b> (e.g. magnetite Fe&#8323;O&#8324;). Example: ore containing <b>chalcopyrite (CuFeS&#8322;)</b> derives its value from the contained copper. Chalcopyrite itself has no direct use as a mineral &mdash; once concentrated, it requires further treatment (chemical: hydrometallurgical or pyrometallurgical methods) to extract copper.</li>
-    </ol>
-  </div>
-  `
-},
-{
-  id:"lab1a",
-  title:"2. Lab 1A &mdash; Physical Properties of Minerals",
-  tag:"LAB 1 · PART A",
-  html:`
-  <div class="section">
-    <h2>Lab 1: Minerals and Mineral Ores <span class="tag">PART A</span></h2>
-    <p>We live in a world dependent on minerals &mdash; used for aluminium/copper containers and wiring, fertilizers, manufactured products, etc. Geologists identify minerals in the field using <b>physical properties</b> and quick tests rather than expensive lab analyses, since each mineral has a distinct chemical composition and crystal structure (e.g. fluorite always consists of calcium and fluorine in a 1:2 ratio).</p>
-    <p>Usually a combination of 4&ndash;5 observations/tests is needed to identify a mineral, since few minerals are distinctive enough to identify with a single test.</p>
-  </div>
-
-  <div class="section">
-    <h2>Station 1: Color and Streak</h2>
-    <p><b>Color</b> is among the more obvious qualities of a mineral, yet it may vary considerably with slight variations in chemical composition &mdash; even trace impurities can create strong color effects. E.g. corundum is commonly white/grayish, but with chromium it's deep red (<b>ruby</b>); with iron + titanium it's deep blue (<b>sapphire</b>).</p>
-    <p><b>Streak</b> is the color of the fine powder of a mineral, observed by rubbing the mineral across unglazed porcelain (a <b>streak plate</b>). Streak is commonly <u>more reliable</u> than the color of the mineral itself.</p>
-  </div>
-
-  <div class="section">
-    <h2>Station 2: Luster</h2>
-    <p><b>Luster</b> describes how light reflects from a fresh mineral surface.</p>
-    <ul>
-      <li><b>Metallic luster</b> &mdash; appearance of metals, regardless of color</li>
-      <li><b>Nonmetallic luster</b> &mdash; described as glassy (vitreous), milky, or earthy (dull)</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Station 3: Hardness &amp; the Mohs Scale</h2>
-    <p><b>Hardness</b> is the resistance of a mineral to scratching, governed by crystal structure and bond strength &mdash; stronger bonds give a harder mineral.</p>
-    <p><b>Test procedure:</b> first try to scratch with a fingernail (soft if it works). If not, try scratching a glass plate. If it can't scratch glass, hardness is between 2 and 5. If it CAN scratch glass, the mineral is hard &mdash; the easier it scratches glass, the greater the hardness difference.</p>
-    <h3>Mohs Hardness Scale</h3>
-    <table>
-      <tr><th>#</th><th>Mineral</th><th>Common reference object</th></tr>
-      <tr><td>1</td><td>Talc</td><td>&mdash;</td></tr>
-      <tr><td>2</td><td>Gypsum</td><td>Fingernail</td></tr>
-      <tr><td>3</td><td>Calcite</td><td>Copper penny</td></tr>
-      <tr><td>4</td><td>Fluorite</td><td>&mdash;</td></tr>
-      <tr><td>5</td><td>Apatite</td><td>Knife blade / Glass plate</td></tr>
-      <tr><td>6</td><td>Potassium Feldspar</td><td>Steel file</td></tr>
-      <tr><td>7</td><td>Quartz</td><td>&mdash;</td></tr>
-      <tr><td>8</td><td>Topaz</td><td>&mdash;</td></tr>
-      <tr><td>9</td><td>Corundum</td><td>&mdash;</td></tr>
-      <tr><td>10</td><td>Diamond</td><td>&mdash;</td></tr>
-    </table>
-    <div class="callout"><b>Key fact:</b> A mineral scratched by quartz (7) but not by potassium feldspar (6) has a hardness between 6 and 7. 10 = hardest (diamond), 1 = softest (talc).</div>
-  </div>
-
-  <div class="section">
-    <h2>Station 4: Cleavage and Fracture</h2>
-    <p><b>Cleavage</b> is the tendency of minerals to break along flat surfaces &mdash; planes of weakness in the crystal structure. Some minerals (e.g. mica) have one set of parallel cleavage planes and repeatedly peel into smaller sheets. Others have two, three, or more cleavage planes, ranging from excellent to poor quality.</p>
-    <p>Three things to evaluate when assessing cleavage:</p>
-    <ol>
-      <li>Number of different (non-parallel) cleavage planes</li>
-      <li>The angle at which planes intersect</li>
-      <li>Quality of cleavage: excellent, perfect, good, fair, poor</li>
-    </ol>
-    <p><b>Fracture</b> is the pattern in which a mineral breaks <u>other than</u> along cleavage planes &mdash; occurs when there are no planes of weak bonds. <b>Conchoidal fracture</b> creates smooth, curved surfaces and is common in <b>quartz</b>. Others fracture into splintery/fibrous fragments, or irregular shapes.</p>
-  </div>
-
-  <div class="section">
-    <h2>Station 5: Density</h2>
-    <p><b>Density</b> (mass per unit volume) determines how light or heavy a mineral feels. High-density minerals (e.g. gold) have closely packed atoms; low-density minerals (e.g. ice) have loosely packed atoms. Density relative to water is reported as <b>specific gravity (S.G.)</b>.</p>
-    <p>Most common minerals: 2.5&ndash;3.0 g/cm&sup3;. Metallic minerals are higher:</p>
-    <table>
-      <tr><th>Mineral</th><th>Density</th></tr>
-      <tr><td>Gold (Au)</td><td>19.3 g/cm&sup3;</td></tr>
-      <tr><td>Silver (Ag)</td><td>10.5 g/cm&sup3;</td></tr>
-      <tr><td>Copper (Cu)</td><td>8.9 g/cm&sup3;</td></tr>
-      <tr><td>Galena (PbS)</td><td>7.5 g/cm&sup3;</td></tr>
-    </table>
-    <p>Density can be judged by <b>hefting</b> (holding) similarly-sized minerals and comparing weight.</p>
-  </div>
-
-  <div class="section">
-    <h2>Station 6: Magnetism</h2>
-    <p>Iron-bearing minerals often exhibit magnetism. <b>Magnetite</b> is strongly attracted to a magnet; <b>ilmenite</b> and <b>hematite</b> show weak attraction. Test: suspend a bar magnet on a string and slowly bring the mineral into its vicinity.</p>
-  </div>
-
-  <div class="section">
-    <h2>Station 7: Reaction to Acid</h2>
-    <p><b>Carbonate minerals</b> (containing the CO&#8323;&sup2;&#8315; anion) <b>effervesce (fizz)</b> when dilute HCl is applied &mdash; releasing CO&#8322; gas. <b>Calcite</b> effervesces vigorously; <b>dolomite</b> only effervesces if first powdered/scratched.</p>
-    <div class="callout">If there's no reaction or a very slow one, scratch the mineral to powder and reapply the acid test.</div>
-  </div>
-  `
-},
-{
-  id:"lab1b",
-  title:"3. Lab 1B &mdash; Mineral Ores",
-  tag:"LAB 1 · PART B",
-  html:`
-  <div class="section">
-    <h2>Part B: Mineral Ores</h2>
-    <p>Our technological world runs on mineral resources &mdash; everything not grown must be extracted from earth's upper crust and processed.</p>
-    <p>Earth's mineral resources come from <b>rocks</b>, formed by three geologic processes: <b>igneous, sedimentary, and metamorphic</b>. Rocks are made of <b>minerals</b> &mdash; solid, inorganic chemical compounds. There are over <b>5,000 different mineral species</b> on Earth; some (like quartz) are extremely common, others are rare. A typical rock contains anywhere from <b>5&ndash;8 minerals</b>.</p>
-    <h3>What Makes a Mineral an "Ore"?</h3>
-    <p>To obtain a chemical element (e.g. aluminium) we must mine rock containing the relevant mineral (e.g. <b>bauxite</b>), then process it further to separate out the element. Although aluminium occurs in hundreds of minerals, only a few (like bauxite) contain it in high enough concentration to make extraction economical/feasible.</p>
-    <div class="callout"><b>Mineral ores</b> = minerals that contain high concentrations of a desired chemical element.</div>
-    <p>Not all minerals are ores &mdash; ore minerals form in special geologic situations and are rare in time and space, even though rocks (and minerals generally) are abundant.</p>
-  </div>
-  `
-},
-{
-  id:"ch8intro",
-  title:"4. Extraction of Metals &mdash; Introduction",
-  tag:"CHAPTER 8",
-  html:`
-  <div class="section">
-    <h2>Extraction of Metals</h2>
-    <p>Metals have been part of human life for about <b>8000 years</b>. Civilized society began with tools made of metals. Metals like <b>iron, copper, and aluminium</b> form the basis of modern industry and technology.</p>
-    <p>Metals are found in nature either in <b>elemental form</b> or as <b>compounds</b> with other materials. Compounds from which metals are separated are called <b>ores</b>. After removing impurities, pure metal is extracted from the compounds.</p>
-    <p>The <b>least reactive metals</b> &mdash; gold, silver, platinum &mdash; occur in the <b>free (elemental) state</b>. More reactive metals form compounds with electronegative elements or radicals.</p>
-    <p>Extraction is done by the <b>most simple method using the least amount of chemicals</b>, considering: availability of the ore, quantity of metal contained, and simplicity of the production method.</p>
-
-    <h3>Table 8.1 &mdash; Metals, Ores &amp; Compositions</h3>
-    <table>
-      <tr><th>Metal</th><th>Compound</th><th>Formula</th></tr>
-      <tr><td rowspan="2">Sodium</td><td>Rock salt</td><td class="chem">NaCl</td></tr>
-      <tr><td>Chile salt petre</td><td class="chem">NaNO&#8323;</td></tr>
-      <tr><td rowspan="2">Potassium</td><td>Carnalyte</td><td class="chem">KCl&middot;MgCl&#8322;&middot;6H&#8322;O</td></tr>
-      <tr><td>Sylvin</td><td class="chem">KCl</td></tr>
-      <tr><td rowspan="2">Magnesium</td><td>Magnetite</td><td class="chem">MgCO&#8323;</td></tr>
-      <tr><td>Dolomite</td><td class="chem">MgCO&#8323;&middot;CaCO&#8323;</td></tr>
-      <tr><td rowspan="2">Calcium</td><td>Gypsum</td><td class="chem">CaSO&#8324;&middot;2H&#8322;O</td></tr>
-      <tr><td>Limestone/marble</td><td class="chem">CaCO&#8323;</td></tr>
-      <tr><td rowspan="2">Aluminium</td><td>Bauxite</td><td class="chem">Al&#8322;O&#8323;&middot;2H&#8322;O</td></tr>
-      <tr><td>Cryolite</td><td class="chem">Na&#8323;AlF&#8326;</td></tr>
-      <tr><td rowspan="3">Iron</td><td>Magnetite</td><td class="chem">Fe&#8323;O&#8324;</td></tr>
-      <tr><td>Haematite</td><td class="chem">Fe&#8322;O&#8323;</td></tr>
-      <tr><td>Iron pyrites</td><td class="chem">FeS&#8322;</td></tr>
-      <tr><td rowspan="3">Copper</td><td>Copper pyrites</td><td class="chem">CuFeS&#8322;</td></tr>
-      <tr><td>Malachite</td><td class="chem">Cu(OH)&#8322;&middot;CuCO&#8323;</td></tr>
-      <tr><td>Cuprite</td><td class="chem">Cu&#8322;O</td></tr>
-      <tr><td rowspan="2">Zinc</td><td>Zinc blende</td><td class="chem">ZnS</td></tr>
-      <tr><td>Calamine</td><td class="chem">ZnCO&#8323;</td></tr>
-    </table>
-  </div>
-  `
-},
-{
-  id:"concentration",
-  title:"5. Concentration of Ore",
-  tag:"CHAPTER 8",
-  html:`
-  <div class="section">
-    <h2>Concentration of the Ore</h2>
-    <p>Ores obtained from the earth's crust contain gravel, sand, and earthy impurities known as <b>gangue</b>. Gangue must be removed to get pure metal &mdash; this process is <b>concentration of ores</b>. The method depends on the nature of ore and gangue.</p>
-
-    <h3>1. Washing in a Stream of Water</h3>
-    <p>Used when the <b>density of impurities is less than that of the ore</b>. Powdered ore is washed in a stream of water; floating impurities are washed away, and the (denser) ore remains underneath.</p>
-
-    <h3>2. Froth Floatation</h3>
-    <p>Used when the <b>density of the ore is less than that of impurities</b>. Powdered ore is added to a mixture of pine oil and water, stirred by a strong current of air. Pine oil forms <b>froth</b>, and the ore wetted by pine oil floats with it &mdash; easily removed. This method is used for concentration of <b>sulphide ores</b>.</p>
-
-    <h3>3. Magnetic Separation</h3>
-    <p>If the ore is <b>magnetic</b>, it can be separated from impurities by passing it through a magnetic field (magnetic roller) &mdash; the magnetic ore is attracted towards the magnet, while non-magnetic impurities fall away separately.</p>
-
-    <h3>4. Leaching</h3>
-    <p>Used when impurities are <b>insoluble</b> but the ore is <b>soluble</b> in a solvent. Powdered ore reacts with the solvent; impurities remain unaffected. This concentration method is used for <b>bauxite</b>:</p>
-    <div class="eqn">Al&#8322;O&#8323;&middot;2H&#8322;O + 2NaOH &rarr; 2NaAlO&#8322; + 3H&#8322;O</div>
-    <p>Bauxite reacts with sodium hydroxide to form <b>sodium aluminate</b>.</p>
-    <h4 style="color:var(--gold-bright);font-size:13.5px;margin:10px 0 4px;">Table 8.2 &mdash; Method of Concentration by Ore</h4>
-    <table>
-      <tr><th>Ore</th><th>Method of Concentration</th></tr>
-      <tr><td>Copper glance</td><td>Froth floatation (sulphide ore)</td></tr>
-      <tr><td>Bauxite</td><td>Leaching</td></tr>
-      <tr><td>Haematite</td><td>Magnetic separation</td></tr>
-      <tr><td>Zinc blende</td><td>Froth floatation (sulphide ore)</td></tr>
-    </table>
-
-    <h3>5. Roasting</h3>
-    <p>Ore is crushed and heated in a strong blast of air, converting it to <b>oxides</b> &mdash; oxidised by oxygen in the air:</p>
-    <div class="eqn">2PbS + 3O&#8322; &rarr; 2PbO + 2SO&#8322;<br>2ZnS + 3O&#8322; &rarr; 2ZnO + 2SO&#8322;</div>
-
-    <h3>6. Calcination</h3>
-    <p>Ores such as calcium carbonate are heated either in the absence of air or in a controlled air stream. Volatile impurities are removed by this method:</p>
-    <div class="eqn">CaCO&#8323; &rarr; CaO + CO&#8322;</div>
-  </div>
-  `
-},
-{
-  id:"extraction",
-  title:"6. Extraction &amp; Refining of Metals",
-  tag:"CHAPTER 8",
-  html:`
-  <div class="section">
-    <h2>Extraction of Metals (from Concentrated Ore)</h2>
-    <p>Depending on the nature of the ore, different methods are used for extraction:</p>
-
-    <h3>1. Smelting</h3>
-    <p>The roasted/calcined ore is mixed with <b>coke or charcoal</b> and heated strongly. Used for metals like <b>zinc, iron, nickel, lead, tin</b>.</p>
-    <div class="eqn">SnO&#8322; + C &rarr; Sn + CO&#8322;</div>
-    <p>Remaining impurities are removed by adding <b>flux</b>:</p>
-    <ul>
-      <li>If gangue is <b>acidic</b> (e.g. SiO&#8322;) &rarr; use a <b>basic flux</b> such as lime (CaO)</li>
-      <li>If gangue is <b>basic</b> (e.g. SeO) &rarr; use an <b>acidic flux</b> (e.g. SiO&#8322;)</li>
-    </ul>
-    <p>Flux reacts with gangue to form <b>slag</b>, which floats over the molten metal (lower density) and is removed:</p>
-    <div class="eqn">CaO + SiO&#8322; &rarr; CaSiO&#8323; (flux + gangue &rarr; slag)<br>P&#8324;O&#8321;&#8320; + 6CaO &rarr; 2Ca&#8323;(PO&#8324;)&#8322; (tricalcium phosphate)</div>
-
-    <h3>2. Reduction with Aluminium</h3>
-    <p>Metals like <b>manganese, chromium, vanadium</b> cannot be extracted by heating with carbon (they form carbides instead). These metals can be prepared by reducing their oxides with aluminium:</p>
-    <div class="eqn">Cr&#8322;O&#8323; + 2Al &rarr; Al&#8322;O&#8323; + 2Cr</div>
-    <p>Used for metals <b>less electropositive than aluminium</b>.</p>
-
-    <h3>3. Reduction with Hydrogen</h3>
-    <p>Used if other reducing agents aren't effective. E.g. tungsten:</p>
-    <div class="eqn">WO&#8323; + 3H&#8322; &rarr; W + 3H&#8322;O</div>
-  </div>
-
-  <div class="section">
-    <h2>Refining of Metals</h2>
-    <p>Metals produced above still contain impurities. Removal of impurities from a <b>crude metal</b> is the <b>third step</b> in metal production.</p>
-
-    <h3>1. Liquation</h3>
-    <p>Metals with a <b>low melting point</b> (e.g. lead, tin) are heated on the <b>sloping hearth</b> of a furnace, allowing molten metal to flow away from infusible (solid) impurities. (Fig. 8.3: powdered raw metal &rarr; hopper &rarr; slanted plane &rarr; filter removes solid impurities &rarr; refined metal collected; residue impurities and gas outlet also shown.)</p>
-
-    <h3>2. Distillation</h3>
-    <p><b>Volatile metals</b> (e.g. mercury, zinc) are heated strongly and <b>distilled over</b>, leaving impurities behind.</p>
-
-    <h3>3. Electrolysis</h3>
-    <p>Highly electropositive metals are refined by electrolysis:</p>
-    <ul>
-      <li>Impure metal &rarr; <b>anode</b></li>
-      <li>Any suitable substance &rarr; <b>cathode</b></li>
-      <li>A compound of the metal &rarr; <b>electrolyte</b></li>
-    </ul>
-    <p>Pure metal deposits on the cathode.</p>
-    <div class="eqn">At anode:   M &rarr; M&#8314; + e&#8315;<br>At cathode: M&#8314; + e&#8315; &rarr; M</div>
-    <div class="callout"><b>Refining copper &mdash; example:</b><br>Anode: impure copper &nbsp;&bull;&nbsp; Cathode: pure copper &nbsp;&bull;&nbsp; Electrolyte: copper sulphate solution</div>
-  </div>
-  `
-},
-{
-  id:"aluminium",
-  title:"7. Extraction of Aluminium",
-  tag:"CHAPTER 8",
-  html:`
-  <div class="section">
-    <h2>Extraction of Aluminium</h2>
-    <p><b>Bauxite</b> is the ore of aluminium &mdash; it is an oxide of aluminium. This ore is concentrated by <b>leaching</b> (using NaOH as the solvent):</p>
-    <div class="eqn">Al&#8322;O&#8323;&middot;2H&#8322;O + 2NaOH &rarr; 2NaAlO&#8322; + 3H&#8322;O</div>
-    <p>The compound formed is <b>sodium aluminate (NaAlO&#8322;)</b>, which is soluble in water. This solution is filtered and a little aluminium hydroxide is added &mdash; Al(OH)&#8323; precipitates out:</p>
-    <div class="eqn">NaAlO&#8322; + 2H&#8322;O &rarr; Al(OH)&#8323; + NaOH</div>
-    <p>The Al(OH)&#8323; is then heated strongly to get unhydrous <b>alumina (Al&#8322;O&#8323;)</b>:</p>
-    <div class="eqn">2Al(OH)&#8323; &rarr; Al&#8322;O&#8323; + 3H&#8322;O</div>
-    <p>Aluminium is obtained by <b>electrolysis of alumina</b> dissolved in fused <b>cryolite</b> (Fig. 8.5: Hall-H&eacute;roult-type cell):</p>
-    <ul>
-      <li><b>Carbon rods</b> &mdash; anode (+)</li>
-      <li><b>Carbon lining</b> &mdash; cathode (&minus;)</li>
-      <li>Iron tank contains molten aluminium oxide + cryolite; molten aluminium collects at the bottom and is drained via a plug</li>
-    </ul>
-    <div class="eqn">Al&#8322;O&#8323; &rarr; 2Al&sup3;&#8314; + 3O&sup2;&#8315;</div>
-    <p>Al&sup3;&#8314; ions are attracted to the cathode (aluminium metal deposits there); O&sup2;&#8315; ions are attracted to the anode, where they react with the carbon anode (which is gradually consumed, forming CO&#8322;).</p>
-    <div class="callout"><b>Why electrolysis?</b> Aluminium is highly electropositive and sits high in the reactivity series &mdash; it cannot be reduced by carbon (forms aluminium carbide instead), so electrolysis of molten alumina/cryolite is required.</div>
-
-    <h3>Properties of Aluminium</h3>
-    <ul>
-      <li>Silvery white in colour</li>
-      <li>Density 2.6 g/cm&sup3;</li>
-      <li>Comparatively less hard</li>
-      <li>Reducing property</li>
-      <li>Conducts heat</li>
-      <li>Reflects heat and light</li>
-      <li>Conducts electricity</li>
-    </ul>
-
-    <h3>Uses of Aluminium</h3>
-    <ul>
-      <li>To make utensils</li>
-      <li>To make automobile parts</li>
-      <li>To make ice cube trays</li>
-      <li>To make electrical wires</li>
-      <li>To make roofs</li>
-      <li>To use in reflecting telescopes</li>
-      <li>To obtain metals from Cr&#8322;O&#8323;, Mn&#8322;O&#8323; (as a reducing agent)</li>
-    </ul>
-  </div>
-  `
-},
-{
-  id:"iron",
-  title:"8. Extraction of Iron (Blast Furnace)",
-  tag:"CHAPTER 8",
-  html:`
-  <div class="section">
-    <h2>Extraction of Iron</h2>
-    <p>Iron is the most important metal among the transition elements, and the most abundantly produced metal today. Ores of iron: <b>magnetite</b> and <b>haematite</b> (magnetic substances) &mdash; concentrated by <b>magnetic separation</b>.</p>
-    <p>Iron ore is converted into iron in the <b>blast furnace</b>, reduced from Fe&#8322;O&#8323; using <b>coke</b>. The gangue in iron ore is usually <b>silica (SiO&#8322;)</b>; the flux used to remove it is <b>limestone (CaCO&#8323;)</b>:</p>
-    <div class="eqn">CaCO&#8323; &rarr; CaO + CO&#8322;<br>CaO + SiO&#8322; &rarr; CaSiO&#8323; (slag)</div>
-
-    <h3>Reactions Inside the Blast Furnace (Fig. 8.6)</h3>
-    <table>
-      <tr><th>Zone / Temp</th><th>Reactions</th></tr>
-      <tr><td><b>500 K</b><br>Region where reduction takes place</td><td class="chem">3Fe&#8322;O&#8323; + CO &rarr; 2Fe&#8323;O&#8324; + CO&#8322;</td></tr>
-      <tr><td><b>1000 K</b></td><td class="chem">CaCO&#8323; &rarr; CaO + CO&#8322;<br>Fe&#8323;O&#8324; + CO &rarr; 3FeO + CO&#8322;</td></tr>
-      <tr><td><b>1500 K</b><br>Region where absorption takes place</td><td class="chem">C + CO&#8322; &rarr; 2CO<br>FeO + CO &rarr; Fe + CO&#8322;</td></tr>
-      <tr><td><b>1800 K</b></td><td>Slag is formed; phosphates and silicates convert to phosphorous and silicon, dissolving into molten iron</td></tr>
-      <tr><td><b>2000 K</b><br>Melting area</td><td class="chem">2C + O&#8322; &rarr; 2CO</td></tr>
-    </table>
-    <div class="callout">
-      <b>Highest temperature:</b> the melting area (2000 K), near the hot air blasts at the base.<br>
-      <b>Reducing agent:</b> Carbon monoxide (CO), formed from coke + O&#8322; (2C + O&#8322; &rarr; 2CO), and via C + CO&#8322; &rarr; 2CO.
-    </div>
-    <p>Hot air blasts enter from both sides at the base of the furnace, driving combustion of coke and generating the reducing gas CO that rises through the furnace to reduce the iron oxides.</p>
-  </div>
-  `
-},
-{
-  id:"steel",
-  title:"9. Steel, Heat Treatment &amp; Rusting",
-  tag:"CHAPTER 8",
-  html:`
-  <div class="section">
-    <h2>Pig Iron &amp; Steel</h2>
-    <p>The large chunks of iron obtained from the blast furnace are called <b>pig iron</b>, which may contain impurities like carbon, sulphur, phosphorous, etc.</p>
-    <p>To make <b>steel</b>: impurities in pig iron are first removed, then the required amount of other elements (e.g. carbon) is added to produce different types of steel.</p>
-
-    <h3>Table 8.3 &mdash; Types of Steel</h3>
-    <table>
-      <tr><th>Type</th><th>% Carbon</th><th>Use</th></tr>
-      <tr><td>Mild steel</td><td>0.05% &ndash; 0.2%</td><td>Wires, tubes, agricultural implements, rods</td></tr>
-      <tr><td>Medium steel</td><td>0.21% &ndash; 0.6%</td><td>Railway tracks, girders, plates</td></tr>
-      <tr><td>High carbon steel</td><td>0.61% &ndash; 1.5%</td><td>Surgical implements, springs, knife, drill</td></tr>
-    </table>
-  </div>
-
-  <div class="section">
-    <h2>Heat Treatment of Steel</h2>
-    <p>Properties of steel (hardness, strength, ductility, malleability, corrosion resistance) can be varied by heating and cooling under certain conditions &mdash; this is <b>heat treatment</b>.</p>
-    <ul>
-      <li><b>Annealing</b> &mdash; steel is heated until bright red hot, then allowed to cool <b>slowly in air</b>. Makes steel <u>soft</u>.</li>
-      <li><b>Hardening</b> &mdash; increases hardness. Red hot steel is plunged into <b>cold water or oil</b> as quickly as possible.</li>
-      <li><b>Tempering</b> &mdash; hardened steel is reheated, then allowed to cool slowly in air.</li>
-    </ul>
-    <div class="callout"><b>Alloys vs pure metals:</b> alloys (like steel) are generally more useful than pure metals because their composition can be tuned to control hardness, strength, corrosion-resistance, and workability &mdash; properties pure iron alone cannot offer across all applications.</div>
-  </div>
-
-  <div class="section">
-    <h2>Rusting of Iron</h2>
-    <p>Rusting requires both <b>moisture (water) and oxygen (air)</b> &mdash; both promote/accelerate the rusting of iron poles.</p>
-    <ul>
-      <li><b>Painting prevents rusting</b> by forming a protective barrier that keeps air and moisture away from the metal surface.</li>
-      <li>The part of a steel pole <b>in contact with the earth (soil)</b> rusts faster because soil retains moisture and can contain corrosive salts/acids in constant contact with the metal, plus poor aeration/drainage sustaining the electrochemical corrosion process.</li>
-      <li>Other rust-prevention methods: galvanizing (zinc coating), greasing/oiling, alloying (stainless steel), electroplating, cathodic protection (sacrificial anode).</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Table 8.4 &mdash; Compounds of Some Metals</h2>
-    <table>
-      <tr><th>Compound</th><th>Formula</th><th>Key Uses</th></tr>
-      <tr><td>Common salt</td><td class="chem">NaCl</td><td>Flavouring food, freezing mixtures, melting ice/snow, salting out soap from glycerine, manufacture of HCl, NaOH, Na&#8322;CO&#8323;</td></tr>
-      <tr><td>Washing soda</td><td class="chem">Na&#8322;CO&#8323;&middot;10H&#8322;O</td><td>Washing soda; manufacture of caustic soda, glass</td></tr>
-      <tr><td>Baking soda</td><td class="chem">NaHCO&#8323;</td><td>Baking powder; portable fire extinguishers</td></tr>
-      <tr><td>Salt peter</td><td class="chem">KCl</td><td>Used by hypertension patients in food; makes potassium nitrate</td></tr>
-      <tr><td>Nitre</td><td class="chem">KNO&#8323;</td><td>Making gunpowder</td></tr>
-      <tr><td>Marble</td><td class="chem">CaCO&#8323;</td><td>Glass, cement, quick lime, pottery; flux in iron manufacture; toothpaste; calcium manufacture</td></tr>
-      <tr><td>Quick lime</td><td class="chem">CaO</td><td>Flux in extraction of metals; drying agent; soda lime</td></tr>
-      <tr><td>Slaked lime</td><td class="chem">Ca(OH)&#8322;</td><td>Mortar &amp; lime plaster; removes acidity from soil; bleaching powder manufacture</td></tr>
-      <tr><td>Gypsum</td><td class="chem">CaSO&#8324;&middot;2H&#8322;O</td><td>Controls cement setting time; paper filler</td></tr>
-      <tr><td>Plaster of paris</td><td class="chem">(CaSO&#8324;)&#8322;&middot;H&#8322;O</td><td>Surgical bandages/casts; decorating walls/ceilings</td></tr>
-      <tr><td>Alum</td><td class="chem">K&#8322;SO&#8324;&middot;Al&#8322;(SO&#8324;)&#8323;&middot;24H&#8322;O</td><td>Mordant; water purification; foam fire extinguisher</td></tr>
-      <tr><td>Copper sulphate</td><td class="chem">CuSO&#8324;&middot;5H&#8322;O</td><td>Fungicide in Bordeaux mixture; electrolyte</td></tr>
-      <tr><td>Zinc oxide</td><td class="chem">ZnO</td><td>Pigments in paints; rubber filler; cosmetics</td></tr>
-      <tr><td>Calamine</td><td class="chem">ZnCO&#8323;</td><td>Ingredient of calamine lotion</td></tr>
-    </table>
-    <div class="callout">
-      <b>Why NaCl melts ice/snow?</b> It depresses the freezing point of water (freezing-point depression).<br><br>
-      <b>Why KNO&#8323; is used in gunpowder?</b> It decomposes on heating to release O&#8322; (2KNO&#8323; &rarr; 2KNO&#8322; + O&#8322;), which supports rapid combustion.<br><br>
-      <b>NaHCO&#8323; + alum in foam fire extinguishers:</b> Al&#8322;(SO&#8324;)&#8323; + 3Na&#8322;CO&#8323; + 3H&#8322;O &rarr; 2Al(OH)&#8323; + 3Na&#8322;SO&#8324; + 3CO&#8322; &mdash; the CO&#8322; gas produced generates foam that smothers the fire, while Al(OH)&#8323; stabilizes the foam.<br><br>
-      <b>Test tube scenarios (reactivity series):</b> Zinc (more reactive) displaces silver from silver nitrate &mdash; zinc dissolves, silver deposits. Silver (less reactive) does NOT displace zinc from zinc sulphate &mdash; no reaction. Copper does NOT displace silver... wait: copper is more reactive than silver, so copper DOES displace silver from silver nitrate. Zinc (more reactive than magnesium is false; Mg is more reactive) so zinc rod in magnesium sulphate &mdash; no reaction.
-    </div>
-  </div>
-  `
-}
-];
-
-/* ============================================================
-   FLASHCARD DATA
-   ============================================================ */
-const flashData = [
-  {f:"Define Metallurgy", b:"The study of the physical & chemical behavior of metallic elements and their mixtures (alloys); or the processes of extracting metals from ore, refining, and preparing them for use."},
-  {f:"Two broad divisions of Metallurgy", b:"Extractive metallurgy and Physical metallurgy."},
-  {f:"Four sub-divisions of Extractive Metallurgy", b:"Mineral processing (beneficiation), Electrometallurgy, Hydrometallurgy, Pyrometallurgy."},
-  {f:"Four sub-divisions of Physical Metallurgy", b:"Mechanical metallurgy, Chemical metallurgy, Powder metallurgy, Engineering metallurgy."},
-  {f:"What is Mineral Processing?", b:"Physical/chemical processing of mined ore to prepare and classify it before valuable constituents are concentrated. Also called ore/mineral dressing, mineral extraction, or mineral beneficiation."},
-  {f:"Front-row vs Back-row operations", b:"Front-row = material severance (crushing, screening, grinding, classification). Back-row = separation into concentrate (valuable) and tailings (gangue), plus dewatering."},
-  {f:"Order of steps in the mineral processing flowsheet", b:"Run-of-mine → Crushing → Screening → Grinding → Classification → Feed Stream → Separation → Concentrate (→Dewatering→Final Product) / Tailings."},
-  {f:"What is 'run-of-mine' material?", b:"Ore as delivered from the mine site to the processing facility, before any treatment has been performed on it."},
-  {f:"Three classes of run-of-mine material", b:"1) Useful materials (not classed as minerals, e.g. granite, sand). 2) Useful minerals / industrial minerals (e.g. apatite, fluorite, barite). 3) Value-bearing minerals / metaliferous ores (e.g. chalcopyrite for copper)."},
-  {f:"Give an example of a value-bearing mineral and what it's mined for", b:"Chalcopyrite (CuFeS₂) — mined for its contained copper; has no direct use as a mineral itself."},
-  {f:"What is Streak, and why is it more reliable than color?", b:"The color of a mineral's fine powder (tested on an unglazed porcelain streak plate). More reliable than color because color varies with trace impurities while streak is more consistent."},
-  {f:"Metallic vs nonmetallic luster", b:"Metallic = appearance of metals regardless of color. Nonmetallic = glassy (vitreous), milky, or earthy (dull)."},
-  {f:"How do you test mineral hardness?", b:"Try scratching with a fingernail (soft if scratched); if not, try a glass plate; if it can't scratch glass, hardness is 2–5; if it can, it's hard (compare ease of scratching to gauge how much harder)."},
-  {f:"Mohs Hardness Scale 1–10", b:"1 Talc, 2 Gypsum, 3 Calcite, 4 Fluorite, 5 Apatite, 6 Potassium Feldspar, 7 Quartz, 8 Topaz, 9 Corundum, 10 Diamond."},
-  {f:"What can scratch glass on the Mohs scale?", b:"Minerals with hardness above ~5.5 (glass ≈ 5.5); e.g. quartz (7) scratches glass but potassium feldspar (6) is borderline/close."},
-  {f:"Cleavage vs Fracture", b:"Cleavage = breaking along flat planes of weakness in crystal structure. Fracture = breaking in any pattern OTHER than cleavage planes (e.g. conchoidal fracture in quartz)."},
-  {f:"Three things to evaluate for cleavage", b:"1) Number of non-parallel cleavage planes. 2) Angle at which planes intersect. 3) Quality: excellent, perfect, good, fair, poor."},
-  {f:"What is Density / Specific Gravity?", b:"Density = mass per unit volume. Specific gravity = density relative to an equal volume of water. Most minerals: 2.5–3.0 g/cm³; metals higher (gold 19.3, silver 10.5, copper 8.9 g/cm³)."},
-  {f:"Which minerals show strong vs weak magnetism?", b:"Magnetite = strongly magnetic. Ilmenite and hematite = weakly magnetic."},
-  {f:"What causes carbonate minerals to fizz with HCl?", b:"Effervescence is the release of CO₂ gas from the carbonate (CO₃²⁻) reacting with dilute hydrochloric acid."},
-  {f:"Calcite vs dolomite acid reaction", b:"Calcite effervesces vigorously with dilute HCl. Dolomite only effervesces if it's first powdered/scratched."},
-  {f:"What is a mineral ore?", b:"A mineral that contains a desired chemical element in a high enough concentration to make extraction economically feasible."},
-  {f:"Ore of Aluminium & its formula", b:"Bauxite, Al₂O₃·2H₂O (also cryolite Na₃AlF₆ used in the electrolysis step)."},
-  {f:"Ores of Iron & their formulas", b:"Magnetite (Fe₃O₄), Haematite (Fe₂O₃), Iron pyrites (FeS₂)."},
-  {f:"Ores of Copper & their formulas", b:"Copper pyrites (CuFeS₂), Malachite (Cu(OH)₂·CuCO₃), Cuprite (Cu₂O)."},
-  {f:"Ores of Zinc & their formulas", b:"Zinc blende (ZnS), Calamine (ZnCO₃)."},
-  {f:"What is Gangue?", b:"The gravel, sand, and earthy impurities present in an ore obtained from the earth's crust."},
-  {f:"Washing in a stream of water — when is it used?", b:"When the density of impurities is LESS than the density of the ore; floating impurities wash away, ore remains underneath."},
-  {f:"Froth Floatation — when is it used & for what ores?", b:"Used when density of the ORE is less than impurities. Powdered ore + pine oil + water, stirred with air → froth forms, ore floats. Used for sulphide ores."},
-  {f:"Magnetic Separation — when is it used?", b:"When the ore itself is magnetic — passed through a magnetic field/roller; magnetic ore is attracted to the magnet, non-magnetic impurities fall separately."},
-  {f:"Leaching — when is it used? Give an example.", b:"Used when impurities are insoluble but the ore is soluble in a solvent. Example: bauxite + NaOH → sodium aluminate (concentration of aluminium ore)."},
-  {f:"Equation: Leaching of bauxite", b:"Al₂O₃·2H₂O + 2NaOH → 2NaAlO₂ + 3H₂O"},
-  {f:"Roasting — what does it do? Give an equation.", b:"Ore is crushed and heated in a strong air blast, oxidising it to its oxide. E.g. 2ZnS + 3O₂ → 2ZnO + 2SO₂."},
-  {f:"Calcination — what does it do? Give an equation.", b:"Heating an ore (e.g. carbonate) in absence of air or controlled air to remove volatile impurities. E.g. CaCO₃ → CaO + CO₂."},
-  {f:"Smelting — what is it and which metals use it?", b:"Roasted/calcined ore mixed with coke/charcoal and heated strongly to reduce it to the metal. Used for zinc, iron, nickel, lead, tin."},
-  {f:"What is Flux, and the two types?", b:"A substance added to react with gangue and form slag. Acidic gangue → basic flux (e.g. CaO, lime). Basic gangue → acidic flux (e.g. SiO₂)."},
-  {f:"What is Slag?", b:"The compound formed when flux reacts with gangue (e.g. CaO + SiO₂ → CaSiO₃); floats over molten metal (lower density) and is removed."},
-  {f:"Reduction with Aluminium — used for which metals, and why?", b:"Used for metals less electropositive than aluminium that form carbides with carbon (so carbon can't reduce them) — e.g. manganese, chromium, vanadium. E.g. Cr₂O₃ + 2Al → Al₂O₃ + 2Cr."},
-  {f:"Reduction with Hydrogen — give an example", b:"Used when other reducing agents aren't effective, e.g. WO₃ + 3H₂ → W + 3H₂O (tungsten)."},
-  {f:"Three methods of Refining metals", b:"Liquation, Distillation, Electrolysis."},
-  {f:"Liquation — used for which metals?", b:"Metals with a low melting point (e.g. lead, tin) — heated on a sloping furnace hearth so molten metal flows away from infusible impurities."},
-  {f:"Distillation — used for which metals?", b:"Volatile metals (e.g. mercury, zinc) — heated strongly and distilled over, leaving impurities behind."},
-  {f:"Electrolytic refining — anode, cathode, electrolyte roles", b:"Impure metal = anode; suitable substance = cathode; a compound of the metal = electrolyte. Pure metal deposits on the cathode."},
-  {f:"Electrolytic refining of copper — anode/cathode/electrolyte", b:"Anode: impure copper. Cathode: pure copper. Electrolyte: copper sulphate solution."},
-  {f:"Why is electrolysis used to extract aluminium?", b:"Aluminium is highly electropositive (high in reactivity series) and can't be reduced by carbon (forms carbide instead) — so molten alumina dissolved in cryolite is electrolysed instead."},
-  {f:"Extraction of Aluminium — full sequence", b:"Bauxite → leach with NaOH → NaAlO₂ → +H₂O → Al(OH)₃ precipitate → heat → Al₂O₃ (alumina) → electrolysis in molten cryolite → Al metal."},
-  {f:"Role of cryolite in aluminium extraction", b:"Cryolite (Na₃AlF₆) lowers the melting point of alumina, allowing electrolysis to occur at a more practical/economical temperature."},
-  {f:"Anode & cathode materials in aluminium electrolysis", b:"Anode: carbon rods. Cathode: carbon lining of the iron tank."},
-  {f:"What happens at the carbon anode during aluminium electrolysis?", b:"Oxygen liberated at the anode reacts with the carbon anode, forming CO₂ — gradually consuming the anode."},
-  {f:"Give 4 properties of Aluminium", b:"Silvery white; density 2.6 g/cm³; comparatively less hard; good conductor of heat and electricity; reflects heat and light; reducing agent."},
-  {f:"Give 3 uses of Aluminium", b:"Utensils, automobile parts, electrical wires, ice cube trays, roofing, reflecting telescopes, and as a reducing agent to obtain metals from Cr₂O₃/Mn₂O₃."},
-  {f:"Ores of Iron used industrially, and why?", b:"Magnetite and Haematite — both are magnetic, so they are concentrated by magnetic separation."},
-  {f:"How is iron oxide reduced in the blast furnace?", b:"Reduced by carbon monoxide (CO), generated from coke reacting with oxygen (2C + O₂ → 2CO) and via C + CO₂ → 2CO."},
-  {f:"Why is limestone added to the blast furnace?", b:"It decomposes to CaO (CaCO₃ → CaO + CO₂), which reacts with silica gangue (CaO + SiO₂ → CaSiO₃) to form slag, removing the gangue."},
-  {f:"Which part of the blast furnace has the highest temperature?", b:"The melting area at the base (~2000 K), near the hot air blasts."},
-  {f:"What is Pig Iron?", b:"The large chunks of impure iron obtained directly from the blast furnace, containing impurities like carbon, sulphur, and phosphorous."},
-  {f:"How is steel made from pig iron?", b:"Impurities in pig iron are removed, then a controlled amount of other elements (e.g. carbon) is added to give the desired type of steel."},
-  {f:"Mild steel — carbon % and uses", b:"0.05%–0.2% carbon; used for wires, tubes, agricultural implements, rods."},
-  {f:"Medium steel — carbon % and uses", b:"0.21%–0.6% carbon; used for railway tracks, girders, plates."},
-  {f:"High carbon steel — carbon % and uses", b:"0.61%–1.5% carbon; used for surgical implements, springs, knives, drills."},
-  {f:"Annealing — process and effect", b:"Heat steel until bright red hot, then cool SLOWLY in air. Makes the steel soft."},
-  {f:"Hardening — process and effect", b:"Plunge red hot steel into cold water or oil as quickly as possible. Increases hardness."},
-  {f:"Tempering — process and effect", b:"Reheat hardened steel, then allow it to cool slowly in air — reduces brittleness while retaining useful hardness."},
-  {f:"What two things does rusting of iron require?", b:"Both moisture (water) AND oxygen (air) — either alone is not sufficient."},
-  {f:"How does painting prevent rusting?", b:"It forms a protective barrier that keeps air and moisture away from the metal surface."},
-  {f:"Why does the part of a steel pole in the soil rust faster?", b:"Soil retains moisture and may contain corrosive salts/acids in constant contact with the metal, sustaining electrochemical corrosion."},
-  {f:"Give two alternative methods to prevent rusting besides painting", b:"Galvanizing (zinc coating), greasing/oiling, alloying (e.g. stainless steel), electroplating, or cathodic (sacrificial anode) protection."},
-  {f:"Formula & main use of Quick lime", b:"CaO — used as a flux in extraction of metals, a drying agent, and to make soda lime."},
-  {f:"Formula & main use of Slaked lime", b:"Ca(OH)₂ — used for mortar and lime plaster, removing soil acidity, and manufacturing bleaching powder."},
-  {f:"Formula & main use of Plaster of Paris", b:"(CaSO₄)₂·H₂O — used in surgical bandages/casts and for decorating walls/ceilings."},
-  {f:"Formula & main use of Alum", b:"K₂SO₄·Al₂(SO₄)₃·24H₂O — used as a mordant, in water purification, and in foam fire extinguishers."},
-  {f:"Why is NaCl used to melt ice/snow on roads?", b:"It causes freezing-point depression of water, lowering the temperature at which water freezes."},
-  {f:"Why is KNO₃ used in gunpowder?", b:"On heating it decomposes to release oxygen gas (2KNO₃ → 2KNO₂ + O₂), supporting rapid combustion."},
-  {f:"Why is NaHCO₃ used with alum in foam fire extinguishers?", b:"Their reaction (Al₂(SO₄)₃ + 3Na₂CO₃ + 3H₂O → 2Al(OH)₃ + 3Na₂SO₄ + 3CO₂) produces CO₂ gas that forms smothering foam, stabilized by Al(OH)₃."},
-  {f:"Formula & main use of Zinc Oxide", b:"ZnO — used as a pigment in paints, filler in rubber, and in cosmetic powders/creams."},
-  {f:"Formula & main use of Calamine (compound)", b:"ZnCO₃ — used as an ingredient of calamine lotion."}
-];
-
-/* ============================================================
-   QUIZ DATA
-   ============================================================ */
-const quizData = [
-{q:"Metallurgy is broadly divided into which two branches?", opts:["Extractive metallurgy and Physical metallurgy","Chemical and Mechanical metallurgy","Mineral processing and Powder metallurgy","Engineering and Powder metallurgy"], a:0, e:"The text states metallurgy is broadly divided into extractive metallurgy and physical metallurgy, each with further sub-divisions."},
-{q:"Which of these is NOT a sub-division of extractive metallurgy?", opts:["Hydrometallurgy","Pyrometallurgy","Powder metallurgy","Mineral processing (beneficiation)"], a:2, e:"Powder metallurgy is a sub-division of PHYSICAL metallurgy, not extractive metallurgy."},
-{q:"In the mineral processing flowsheet, which operations are 'front-row' operations?", opts:["Separation and dewatering","Crushing, screening, grinding, classification","Concentrate and tailings handling","Leaching and roasting"], a:1, e:"Front-row operations are the material severance steps: crushing, screening, grinding, and classification."},
-{q:"What is 'run-of-mine' material?", opts:["Refined pure metal","Ore delivered from the mine site with no treatment performed yet","Waste tailings only","Ore after smelting"], a:1, e:"Run-of-mine material/mineral is ore as delivered from the mine to the processing facility, before any treatment."},
-{q:"Chalcopyrite (CuFeS₂) is an example of which class of run-of-mine material?", opts:["Useful materials (not minerals)","Useful/industrial minerals","Value-bearing minerals (metaliferous ore)","Gangue material"], a:2, e:"Chalcopyrite derives its value from the contained copper — a value-bearing / metaliferous mineral."},
-{q:"Which physical property is tested using a streak plate?", opts:["Hardness","Luster","Streak","Cleavage"], a:2, e:"Streak is observed by rubbing the mineral on unglazed porcelain (a streak plate)."},
-{q:"On the Mohs Hardness Scale, which mineral represents hardness 10 (the hardest)?", opts:["Quartz","Corundum","Diamond","Topaz"], a:2, e:"Diamond (10) is the hardest mineral on the Mohs scale; talc (1) is the softest."},
-{q:"A mineral that can be scratched by quartz but NOT by potassium feldspar has a hardness of approximately:", opts:["Between 1 and 2","Between 6 and 7","Between 8 and 9","Exactly 10"], a:1, e:"Quartz = 7, Potassium feldspar = 6, so such a mineral falls between hardness 6 and 7."},
-{q:"Conchoidal fracture — smooth, curved breakage — is especially common in which mineral?", opts:["Mica","Quartz","Calcite","Talc"], a:1, e:"Conchoidal fracture creates smooth curved surfaces and is common in quartz."},
-{q:"Which mineral is strongly attracted to a magnet?", opts:["Hematite","Ilmenite","Magnetite","Calcite"], a:2, e:"Magnetite is strongly magnetic; hematite and ilmenite show only weak attraction."},
-{q:"Calcite reacts with dilute HCl by:", opts:["Turning blue","Effervescing (fizzing) vigorously, releasing CO₂","Dissolving without any gas release","Not reacting at all"], a:1, e:"Calcite is a carbonate mineral and effervesces vigorously in dilute HCl, releasing CO₂."},
-{q:"What is a 'mineral ore'?", opts:["Any rock found in the earth's crust","A mineral containing a high enough concentration of a desired element to be economically extractable","A synthetic compound made in a lab","Waste gangue material"], a:1, e:"An ore is a mineral with a high enough concentration of a desired chemical element to make extraction feasible/economical."},
-{q:"Bauxite, the ore of aluminium, has the formula:", opts:["Al₂O₃·2H₂O","Na₃AlF₆","AlCl₃","Al(OH)₃"], a:0, e:"Bauxite = Al₂O₃·2H₂O. Cryolite (Na₃AlF₆) is used later in the electrolysis step, not as the ore itself."},
-{q:"Which concentration method is used when the density of the ore is LESS than the impurities?", opts:["Washing in a stream of water","Froth floatation","Magnetic separation","Calcination"], a:1, e:"Froth floatation is used when the ore is less dense than impurities — the ore floats with pine-oil froth."},
-{q:"Froth floatation is primarily used to concentrate which type of ore?", opts:["Oxide ores","Carbonate ores","Sulphide ores","Silicate ores"], a:2, e:"Froth floatation is used for the concentration of sulphide ores."},
-{q:"Leaching of bauxite uses which solvent?", opts:["Dilute HCl","Sodium hydroxide (NaOH)","Water only","Sulphuric acid"], a:1, e:"Bauxite is leached with NaOH: Al₂O₃·2H₂O + 2NaOH → 2NaAlO₂ + 3H₂O."},
-{q:"Roasting an ore converts it into its:", opts:["Chloride","Sulphide","Oxide","Carbonate"], a:2, e:"Roasting heats the ore in a strong air blast, oxidizing it into its oxide form (e.g. 2ZnS + 3O₂ → 2ZnO + 2SO₂)."},
-{q:"Calcination differs from roasting in that it is carried out:", opts:["In a vacuum only","In absence of air or in a controlled air stream (no oxidation focus)","Underwater","At room temperature"], a:1, e:"Calcination heats the ore in the absence of air (or controlled air) mainly to remove volatile impurities, e.g. CaCO₃ → CaO + CO₂."},
-{q:"If the gangue in an ore is acidic (e.g. SiO₂), which type of flux is used?", opts:["Acidic flux","Basic flux (e.g. lime, CaO)","Neutral flux","No flux is needed"], a:1, e:"Acidic gangue requires a basic flux such as CaO to form slag."},
-{q:"Metals like manganese, chromium, and vanadium are extracted using which method?", opts:["Smelting with carbon","Reduction with aluminium","Reduction with hydrogen","Electrolysis only"], a:1, e:"These metals form carbides with carbon, so they are extracted by reduction with aluminium, e.g. Cr₂O₃ + 2Al → Al₂O₃ + 2Cr."},
-{q:"Liquation is a refining method best suited to metals with:", opts:["High melting points","Low melting points, e.g. lead, tin","High density only","Magnetic properties"], a:1, e:"Liquation exploits low melting points — the metal is heated on a sloping hearth and flows away from solid impurities."},
-{q:"In electrolytic refining of copper, the impure copper is placed at the:", opts:["Cathode","Anode","Electrolyte","Salt bridge"], a:1, e:"The metal to be refined (impure copper) is the anode; pure copper deposits on the cathode."},
-{q:"During aluminium extraction, what does heating Al(OH)₃ strongly produce?", opts:["Bauxite","Cryolite","Anhydrous alumina (Al₂O₃)","Sodium aluminate"], a:2, e:"2Al(OH)₃ → Al₂O₃ + 3H₂O gives anhydrous alumina, which is then electrolysed."},
-{q:"Why must aluminium be extracted by electrolysis rather than reduction with carbon?", opts:["Aluminium is too cheap to extract otherwise","Aluminium is highly electropositive and forms a carbide with carbon instead of being reduced","Carbon is too expensive","Aluminium has a very low melting point"], a:1, e:"Being highly electropositive, aluminium oxide isn't reduced by carbon (forms aluminium carbide instead), so electrolysis of molten alumina/cryolite is used."},
-{q:"In the electrolysis of alumina, what deposits at the cathode?", opts:["Oxygen gas","Molten aluminium metal","Carbon dioxide","Sodium metal"], a:1, e:"Al³⁺ ions migrate to the cathode and are reduced to molten aluminium metal."},
-{q:"The ores of iron used industrially (magnetite, haematite) are concentrated by which method, and why?", opts:["Froth floatation, because they are sulphides","Magnetic separation, because they are magnetic","Leaching, because they are soluble","Liquation, because they have low melting points"], a:1, e:"Magnetite and haematite are magnetic substances, so magnetic separation is used to concentrate them."},
-{q:"Inside the blast furnace, what acts as the main reducing agent for iron oxide?", opts:["Oxygen gas","Carbon monoxide (CO)","Silicon dioxide","Nitrogen gas"], a:1, e:"Carbon monoxide, generated from coke + O₂ and C + CO₂ reactions, reduces the iron oxides."},
-{q:"Why is limestone added to the blast furnace during iron extraction?", opts:["To supply extra iron","To decompose to CaO and remove silica gangue as slag","To cool the furnace down","To act as the fuel"], a:1, e:"Limestone decomposes to CaO, which reacts with SiO₂ gangue to form CaSiO₃ (slag), removing impurities."},
-{q:"Which zone of the blast furnace has the highest temperature?", opts:["The top (500 K region)","The 1000 K region","The melting area near the base (~2000 K)","There is no temperature variation"], a:2, e:"The melting area at the base, near the hot air blasts, reaches around 2000 K — the highest temperature zone."},
-{q:"The large impure iron chunks obtained directly from the blast furnace are called:", opts:["Steel","Pig iron","Slag","Cast iron ingots"], a:1, e:"This is called pig iron, which still contains impurities like carbon, sulphur, and phosphorous."},
-{q:"Which type of steel has the highest carbon content and is used for surgical implements and drills?", opts:["Mild steel","Medium steel","High carbon steel","Stainless steel"], a:2, e:"High carbon steel (0.61%–1.5% carbon) is used for surgical implements, springs, knives, and drills."},
-{q:"Annealing steel involves heating it red hot and then:", opts:["Plunging it into cold water","Cooling it slowly in air","Freezing it in liquid nitrogen","Reheating it immediately"], a:1, e:"Annealing = heat until bright red hot, then cool SLOWLY in air — this softens the steel."},
-{q:"Hardening steel involves plunging red hot steel into:", opts:["Slowly cooling air","Cold water or oil, as quickly as possible","A furnace for reheating","Molten lead"], a:1, e:"Hardening rapidly cools red hot steel in cold water or oil, increasing its hardness."},
-{q:"Tempering is best described as:", opts:["Heating raw ore for the first time","Reheating hardened steel then cooling it slowly in air","Melting steel completely","Adding carbon to pig iron"], a:1, e:"Tempering reheats already-hardened steel and allows slow air cooling to reduce brittleness."},
-{q:"Rusting of iron requires the presence of:", opts:["Only oxygen","Only water","Both water (moisture) and oxygen","Neither water nor oxygen"], a:2, e:"Rusting is an electrochemical process requiring both moisture and oxygen together."},
-{q:"Why does the buried part of a steel pole often rust faster than the painted part above ground?", opts:["Soil is always warmer","Soil retains moisture and corrosive salts, sustaining corrosion","Soil blocks all oxygen so rusting can't happen","Buried metal is a different alloy"], a:1, e:"Soil retains moisture and can contain corrosive salts, keeping the metal in prolonged contact with corrosive conditions."},
-{q:"Sodium chloride is used to melt ice and snow on roads because it:", opts:["Reacts chemically with ice to form gas","Depresses the freezing point of water","Absorbs sunlight to generate heat","Evaporates the ice directly"], a:1, e:"NaCl lowers the freezing point of water (freezing-point depression), so ice melts at lower temperatures."},
-{q:"KNO₃ is used in gunpowder because on heating it:", opts:["Turns into a solid","Releases oxygen gas, supporting rapid combustion","Absorbs heat, cooling the mixture","Produces water vapour only"], a:1, e:"2KNO₃ → 2KNO₂ + O₂ — the released oxygen supports rapid combustion."},
-{q:"NaHCO₃ is combined with alum in foam fire extinguishers because their reaction produces:", opts:["Oxygen gas that fuels the fire","CO₂ gas that forms smothering foam","Pure water only","Toxic chlorine gas"], a:1, e:"The reaction between alum and Na₂CO₃/NaHCO₃ produces CO₂ gas, which forms foam that smothers fire, stabilized by Al(OH)₃."},
-{q:"Plaster of Paris, (CaSO₄)₂·H₂O, is commonly used for:", opts:["Flavouring food","Surgical bandages/casts and decorating walls/ceilings","Making gunpowder","Refining copper"], a:1, e:"Plaster of Paris sets into a firm mass and is used for surgical casts and wall/ceiling decoration."},
-{q:"In the reactivity-series test tubes: zinc placed in silver nitrate solution results in:", opts:["No reaction at all","Zinc dissolves as zinc ions; silver deposits as metal","Silver dissolves; zinc deposits","Both metals dissolve completely"], a:1, e:"Zinc is more reactive than silver, so zinc atoms pass into solution as Zn²⁺ ions while Ag⁺ ions are reduced to silver metal."}
-];
-
-/* ============================================================
-   RENDER: NOTES
-   ============================================================ */
-const topicNav = document.getElementById('topicNav');
-const notesContent = document.getElementById('notesContent');
-
-notesData.forEach((t,i)=>{
-  const chip = document.createElement('div');
-  chip.className = 'topic-chip' + (i===0?' active':'');
-  chip.textContent = t.title;
-  chip.dataset.id = t.id;
-  chip.addEventListener('click', ()=>showTopic(t.id));
-  topicNav.appendChild(chip);
-});
-
-function showTopic(id){
-  const topic = notesData.find(t=>t.id===id);
-  notesContent.innerHTML = topic.html;
-  document.querySelectorAll('.topic-chip').forEach(c=>{
-    c.classList.toggle('active', c.dataset.id===id);
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
   });
-  window.scrollTo({top:0,behavior:'instant'});
-}
-showTopic(notesData[0].id);
 
-/* ============================================================
-   TAB SWITCHING
-   ============================================================ */
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    document.getElementById('view-'+btn.dataset.view).classList.add('active');
+  // ============ FLASHCARDS ============
+  const cards = [
+    {q:"What is a petrochemical?",a:"A chemical compound derived from petroleum or natural gas through refining/processing."},
+    {q:"Name the three categories of primary petrochemicals.",a:"Olefins, Aromatics, Synthesis gas (syngas)."},
+    {q:"Give four methods for producing primary petrochemicals.",a:"Steam cracking, catalytic cracking, catalytic reforming, gasification/partial oxidation."},
+    {q:"Why is ethylene called 'the king' of petrochemicals?",a:"Produced in highest volume, highly reactive, widest range of derivatives, cheap feedstock, simple structure."},
+    {q:"How is ethylene produced?",a:"Steam cracking of ethane/naphtha at 750–900°C, followed by quenching and fractionation."},
+    {q:"How is ethylene oxide produced?",a:"Direct oxidation of ethylene with O₂ over a silver catalyst."},
+    {q:"Give 2 uses of ethylene oxide.",a:"Ethylene glycol production; sterilising agent / surfactants."},
+    {q:"How is propylene produced?",a:"Co-product of steam cracking of propane/naphtha, separated by fractionation."},
+    {q:"Describe the chlorohydrin process for propylene oxide.",a:"Propylene + Cl₂/H₂O → propylene chlorohydrin; then treated with Ca(OH)₂ → propylene oxide + CaCl₂."},
+    {q:"Describe the hydroperoxide process for propylene oxide.",a:"Propylene reacts with an organic hydroperoxide (catalytic) → propylene oxide + alcohol by-product."},
+    {q:"Give 2 uses of propylene oxide.",a:"Polyurethane (polyols) production; propylene glycol production."},
+    {q:"Name the two polymerisation methods for polybutadiene.",a:"Solution polymerisation (Ziegler-Natta) and emulsion polymerisation (free-radical)."},
+    {q:"How is SBR produced?",a:"Copolymerisation of styrene and butadiene, usually by emulsion polymerisation."},
+    {q:"Give 3 applications of SBR.",a:"Tyres, footwear soles, adhesives/conveyor belts/gaskets."},
+    {q:"How is chloroprene converted to neoprene?",a:"Chloroprene monomer undergoes free-radical emulsion polymerisation to form neoprene (polychloroprene)."},
+    {q:"Give one key difference between SBR and neoprene.",a:"Neoprene has much better oil/chemical resistance than SBR."},
+    {q:"How is ethylbenzene produced?",a:"Alkylation of benzene with ethylene using AlCl₃ or zeolite catalyst (Friedel-Crafts)."},
+    {q:"How is styrene produced from ethylbenzene?",a:"Catalytic dehydrogenation of ethylbenzene with steam over Fe₂O₃ catalyst at ~600°C."},
+    {q:"Give 2 uses of styrene.",a:"Polystyrene production; SBR/ABS resin production."},
+    {q:"How is LABS produced?",a:"Benzene alkylated with linear olefins to form LAB, then sulfonated with SO₃ and neutralised."},
+    {q:"What is LABS mainly used for?",a:"As the active surfactant ingredient in detergents."},
+    {q:"How is TNT produced?",a:"Stepwise nitration of toluene with mixed conc. HNO₃/H₂SO₄ acid."},
+    {q:"How is TPA produced?",a:"Catalytic oxidation of p-xylene with O₂ using Co/Mn/Br catalyst."},
+    {q:"What is TPA/DMTA mainly used for?",a:"Production of PET (polyester) fibres, bottles and films."},
+  ];
+
+  let order = [...cards.keys()];
+  let idx = 0;
+  const flashcardEl = document.getElementById('flashcard');
+  const fcFront = document.getElementById('fcFront');
+  const fcBack = document.getElementById('fcBack');
+  const fcCount = document.getElementById('fcCount');
+
+  function renderCard(){
+    const c = cards[order[idx]];
+    fcFront.textContent = c.q;
+    fcBack.textContent = c.a;
+    flashcardEl.classList.remove('flipped');
+    fcCount.textContent = `Card ${idx+1} / ${cards.length}`;
+  }
+  flashcardEl.addEventListener('click',()=>flashcardEl.classList.toggle('flipped'));
+  document.getElementById('fcNext').addEventListener('click',()=>{
+    idx = (idx+1) % cards.length; renderCard();
   });
-});
-
-/* ============================================================
-   FLASHCARDS LOGIC
-   ============================================================ */
-let fcOrder = flashData.map((_,i)=>i);
-let fcIndex = 0;
-
-const flashcardEl = document.getElementById('flashcard');
-const fcFront = document.getElementById('fcFront');
-const fcBack = document.getElementById('fcBack');
-const fcProgress = document.getElementById('fcProgress');
-
-function renderCard(){
-  const card = flashData[fcOrder[fcIndex]];
-  flashcardEl.classList.remove('flipped');
-  fcFront.textContent = card.f;
-  fcBack.textContent = card.b;
-  fcProgress.textContent = `CARD ${fcIndex+1} / ${flashData.length}`;
-}
-renderCard();
-
-flashcardEl.addEventListener('click', ()=> flashcardEl.classList.toggle('flipped'));
-document.getElementById('fcFlip').addEventListener('click', ()=> flashcardEl.classList.toggle('flipped'));
-document.getElementById('fcNext').addEventListener('click', ()=>{
-  fcIndex = (fcIndex+1) % flashData.length;
+  document.getElementById('fcPrev').addEventListener('click',()=>{
+    idx = (idx-1+cards.length) % cards.length; renderCard();
+  });
+  document.getElementById('fcShuffle').addEventListener('click',()=>{
+    for(let i=order.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [order[i],order[j]]=[order[j],order[i]];
+    }
+    idx=0; renderCard();
+  });
   renderCard();
-});
-document.getElementById('fcPrev').addEventListener('click', ()=>{
-  fcIndex = (fcIndex-1+flashData.length) % flashData.length;
-  renderCard();
-});
-document.getElementById('fcShuffle').addEventListener('click', ()=>{
-  for(let i=fcOrder.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [fcOrder[i],fcOrder[j]] = [fcOrder[j],fcOrder[i]];
+
+  // ============ QUIZ ============
+  const quizData = [
+    {q:"Which of the following is NOT one of the three categories of primary petrochemicals?",
+     opts:["Olefins","Aromatics","Synthesis gas","Alcohols"], correct:3},
+    {q:"Ethylene is mainly produced by which process?",
+     opts:["Steam cracking","Nitration","Sulfonation","Esterification"], correct:0},
+    {q:"Ethylene oxide is produced by oxidation of ethylene over which catalyst?",
+     opts:["Nickel","Silver","Platinum","Iron oxide"], correct:1},
+    {q:"Which process converts propylene to propylene oxide using chlorine and water?",
+     opts:["Hydroperoxide process","Chlorohydrin process","Reforming process","Cracking process"], correct:1},
+    {q:"SBR is a copolymer of butadiene and:",
+     opts:["Styrene","Chloroprene","Ethylene","Propylene"], correct:0},
+    {q:"Neoprene is produced by polymerisation of:",
+     opts:["Butadiene only","Chloroprene","Styrene","Isoprene"], correct:1},
+    {q:"Which catalyst is typically used for benzene alkylation with ethylene to make ethylbenzene?",
+     opts:["Ag catalyst","AlCl₃ (Friedel-Crafts)","Fe₂O₃","Co/Mn acetate"], correct:1},
+    {q:"Styrene is produced from ethylbenzene by:",
+     opts:["Nitration","Sulfonation","Catalytic dehydrogenation","Hydrogenation"], correct:2},
+    {q:"LABS is primarily used in the manufacture of:",
+     opts:["Explosives","Detergents","Tyres","Polyester"], correct:1},
+    {q:"TNT is produced by nitrating which compound?",
+     opts:["Benzene","Toluene","Xylene","Ethylbenzene"], correct:1},
+    {q:"Terephthalic acid (TPA) is produced by oxidation of:",
+     opts:["Ortho-xylene","Meta-xylene","Para-xylene","Toluene"], correct:2},
+    {q:"TPA and DMTA are key raw materials for producing:",
+     opts:["Nylon","Polyethylene terephthalate (PET)","Neoprene","SBR"], correct:1},
+    {q:"Which of the following is an example of a synthesis-gas-based petrochemical?",
+     opts:["Methanol","Polystyrene","Benzene","TNT"], correct:0},
+    {q:"Catalytic reforming of naphtha mainly produces:",
+     opts:["Olefins","Aromatics (BTX)","Syngas","Polymers"], correct:1},
+    {q:"Which polymerisation method typically gives highly stereoregular cis-1,4-polybutadiene?",
+     opts:["Emulsion polymerisation","Solution polymerisation","Bulk polymerisation","Suspension polymerisation"], correct:1},
+  ];
+
+  const quizArea = document.getElementById('quizArea');
+  let userAnswers = new Array(quizData.length).fill(null);
+
+  function renderQuiz(){
+    quizArea.innerHTML = '';
+    quizData.forEach((item, qi)=>{
+      const card = document.createElement('div');
+      card.className = 'q-card';
+      const p = document.createElement('p');
+      p.className = 'question';
+      p.textContent = `${qi+1}. ${item.q}`;
+      card.appendChild(p);
+      item.opts.forEach((opt, oi)=>{
+        const b = document.createElement('button');
+        b.className = 'opt';
+        b.textContent = opt;
+        b.addEventListener('click', ()=>{
+          userAnswers[qi] = oi;
+          card.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+          b.style.borderColor = '#0a1f44';
+          b.style.background = '#e6e0c8';
+        });
+        card.appendChild(b);
+      });
+      quizArea.appendChild(card);
+    });
   }
-  fcIndex = 0;
-  renderCard();
-});
-
-/* ============================================================
-   QUIZ LOGIC
-   ============================================================ */
-let quizOrder = quizData.map((_,i)=>i);
-let quizIndex = 0;
-let quizScore = 0;
-let answered = false;
-
-const quizArea = document.getElementById('quizArea');
-
-function renderQuiz(){
-  if(quizIndex >= quizOrder.length){
-    quizArea.innerHTML = `
-      <div class="quiz-result">
-        <h2>${quizScore} / ${quizOrder.length}</h2>
-        <p>You scored ${Math.round(quizScore/quizOrder.length*100)}%</p>
-        <div class="fc-controls" style="max-width:340px;margin:20px auto 0;">
-          <button class="fc-btn primary" id="quizRestart">Restart Quiz</button>
-        </div>
-      </div>`;
-    document.getElementById('quizRestart').addEventListener('click', startQuiz);
-    return;
-  }
-  answered = false;
-  const q = quizData[quizOrder[quizIndex]];
-  quizArea.innerHTML = `
-    <div class="quiz-head">
-      <span>QUESTION ${quizIndex+1} / ${quizOrder.length}</span>
-      <span class="quiz-score">SCORE: ${quizScore}</span>
-    </div>
-    <div class="q-card">
-      <div class="q-text">${q.q}</div>
-      <div id="optsWrap"></div>
-      <div class="q-explain" id="qExplain">${q.e}</div>
-    </div>
-    <div class="quiz-nav">
-      <button class="fc-btn" id="quizNext" style="max-width:200px;">Next Question &rarr;</button>
-    </div>
-  `;
-  const optsWrap = document.getElementById('optsWrap');
-  q.opts.forEach((opt,i)=>{
-    const b = document.createElement('button');
-    b.className = 'q-opt';
-    b.textContent = opt;
-    b.addEventListener('click', ()=> selectAnswer(i, q));
-    optsWrap.appendChild(b);
-  });
-}
-
-function selectAnswer(i, q){
-  if(answered) return;
-  answered = true;
-  if(i === q.a) quizScore++;
-  document.querySelectorAll('.q-opt').forEach((el,idx)=>{
-    el.disabled = true;
-    if(idx === q.a) el.classList.add('correct');
-    else if(idx === i) el.classList.add('incorrect');
-  });
-  document.getElementById('qExplain').classList.add('show');
-}
-
-document.addEventListener('click', (e)=>{
-  if(e.target && e.target.id === 'quizNext'){
-    quizIndex++;
-    renderQuiz();
-  }
-});
-
-function startQuiz(){
-  quizOrder = quizData.map((_,i)=>i);
-  for(let i=quizOrder.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [quizOrder[i],quizOrder[j]] = [quizOrder[j],quizOrder[i]];
-  }
-  quizIndex = 0;
-  quizScore = 0;
   renderQuiz();
-}
-startQuiz();
+
+  document.getElementById('quizSubmit').addEventListener('click', ()=>{
+    let score = 0;
+    const cardsEls = quizArea.querySelectorAll('.q-card');
+    quizData.forEach((item, qi)=>{
+      const opts = cardsEls[qi].querySelectorAll('.opt');
+      opts.forEach((o, oi)=>{
+        o.disabled = true;
+        if(oi === item.correct) o.classList.add('correct');
+        else if(oi === userAnswers[qi]) o.classList.add('wrong');
+      });
+      if(userAnswers[qi] === item.correct) score++;
+    });
+    document.getElementById('quizScore').textContent = `Score: ${score} / ${quizData.length}`;
+    document.getElementById('quizSubmit').style.display = 'none';
+  });
 </script>
+
 </body>
 </html>
